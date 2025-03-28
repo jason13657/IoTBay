@@ -1,0 +1,170 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1240px;
+  padding: 20px 40px;
+  align-items: center;
+  margin: auto;
+}
+
+.header__button {
+  border: #0077b6 2px solid;
+  border-radius: 50px;
+  padding: 13px 60px;
+  background: none;
+}
+
+.header__button:hover {
+  cursor: pointer;
+}
+
+.header__button-text {
+  color: #0077b6;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.nav__container {
+  display: flex;
+  max-width: 1240px;
+  margin: auto;
+  padding: 0px 40px;
+}
+
+.nav__list {
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+
+.nav__item {
+  margin-right: 20px;
+  padding-bottom: 5px;
+  border-bottom: transparent 2px solid;
+}
+
+.nav__item:hover {
+  border-bottom: #0077b6 2px solid;
+}
+
+.nav__link {
+  margin-right: 20px;
+  text-decoration: none;
+  color: inherit;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.hero {
+  margin-top: 20px;
+}
+
+.hero__image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.featured__container {
+  max-width: 1240px;
+  margin: auto;
+  padding: 0px 40px;
+}
+
+.featured__title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.featured__products {
+  display: flex;
+  justify-content: space-between;
+}
+
+.product__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.product__card {
+  width: 33%;
+  text-align: center;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.product__card:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.product__card img {
+  width: 100%;
+  height: auto;
+  border: gray 1px solid;
+}
+
+.product__title {
+  margin-top: 13px;
+  margin-bottom: 5px;
+  font-size: 25px;
+}
+
+.product__price {
+  margin: 0px;
+}
+
+.footer {
+  margin-top: 15px;
+  background-color: #caf0f8;
+}
+
+.footer__container {
+  display: flex;
+  max-width: 1240px;
+  margin: auto;
+  padding: 5px 40px;
+  align-items: center;
+}
+
+.footer__text {
+  font-size: 13px;
+}
+
+.footer__text--bold {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.footer__left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__left img {
+  width: 150px;
+  height: auto;
+}
+
+.footer__right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
