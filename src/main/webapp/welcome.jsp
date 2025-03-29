@@ -7,6 +7,7 @@
     String email = request.getParameter("email");
     String gender =  request.getParameter("gender");
     String favcol = request.getParameter("favcol");
+    String from = request.getParameter("from");
 
     User user = new User(email, name, password, gender, favcol);
     session.setAttribute("user", user);
@@ -25,8 +26,8 @@
         <section class="hero">
             <img class="hero__image" src="images/welcome.png" alt="IoT Hero Welcome" />   
         </section>
-
         <section class="welcome__container">
+        <% if ("register".equals(from)) { %>
             <h2>Welcome, <%= name %>! <br> Your registration was successful.  </h2>
             <h3>Thank you for joining IoT Bay — your gateway to smarter living. </h3>
             <form action="index.jsp" method="post">
@@ -34,6 +35,15 @@
                     <p class="header__button-text">To home</p>
                 </button>
             </form>
+        <% } else { %>
+            <h2>Welcome back, <%= user.getName() %>! </h2>
+            <h3>You have successfully logged in to IoT Bay.<br>We are glad to see you again. </h3>
+            <form action="index.jsp" method="post">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">To home</p>
+                </button>
+            </form>
+        <% } %>
         </section>
 
         

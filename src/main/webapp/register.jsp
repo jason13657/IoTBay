@@ -28,10 +28,10 @@
                         </div>
                         <div class="tos__container">
                             <label for="tos">Terms of Service:</label>
-                            <input type="checkbox" name="tos" id="tos" />
+                            <input type="checkbox" name="tos" id="tos" required/>
                         </div>
                         <button type="submit" class="register__button">Register</button>
-
+                        <input type="hidden" name="from" value="register" />
                     </form>
                 </div>
             </div>
