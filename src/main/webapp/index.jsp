@@ -6,15 +6,7 @@
         <title>IoT Bay</title>
     </head>
     <body>
-        <header class="header">
-            <img src="images/logo.png" alt="IoT Bay logo" />
-            <form method="post">
-                <button class="header__button" type="submit">
-                <p class="header__button-text">Log In</p>
-                </button>
-            </form>
-        </header>
-
+        <jsp:include page="components/header.jsp" />
         <nav class="nav__container">
             <ul class="nav__list">
                 <li class="nav__item">
@@ -57,19 +49,6 @@
             </div>
         </section>
 
-        <footer class="footer">
-            <div class="footer__container">
-                <div class="footer__left">
-                    <img src="images/logo.png" alt="IoT Bay logo Footer" />
-                    <p class="footer__text">9999 George St, Sydney NSW 2000</p>
-                    <p class="footer__text">Copyright 2027 IoT Bay</p>
-                </div>
-                <div class="footer__right">
-                    <p class="footer__text--bold">Contact</p>
-                    <p class="footer__text">02-1234-9876</p>
-                    <p class="footer__text">seriously@good.com</p>
-                </div>
-            </div>
-        </footer>
+        <jsp:include page="components/footer.jsp" />
     </body>
 </html>
