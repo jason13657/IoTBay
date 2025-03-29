@@ -1,3 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -15,9 +17,9 @@
                 <img class="register__image" src="images/wewantyou.png" alt="Register" />
                 <div class="register__form--container">
                     <h3 class="register__form--title">Create Account</h3>
-                    <form  class="register__form" action="register.jsp" method="post" class="register__form">
+                    <form  class="register__form" action="welcome.jsp" method="post" class="register__form">
                         <input type="email" id="email" name="email" class="register__input" placeholder="Email" required />
-                        <input type="text" id="username" name="username" class="register__input" placeholder="User Name" required />
+                        <input type="text" id="name" name="name" class="register__input" placeholder="User Name" required />
                         <input type="password" id="password" name="password" class="register__input" placeholder="Password" required />
                         <input type="Gender" id="gender" name="gender" class="register__input" placeholder="Gender" required />
                         <div class="favcol__container">

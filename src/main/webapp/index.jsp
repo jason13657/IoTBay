@@ -25,7 +25,7 @@
         </nav>
 
         <section class="hero">
-            <img class="hero__image" src="images/hero.png" alt="IoT Hero" />   
+            <img class="hero__image" src="images/hero.png" alt="IoT Hero main" />   
         </section>
 
         <section class="featured__container">
