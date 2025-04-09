@@ -2,14 +2,19 @@
 <%@ page import="model.User" %>
 
 <%
-    String name = request.getParameter("name");
+    String firstName = request.getParameter("firstName");
     String password = request.getParameter("password");
     String email = request.getParameter("email");
-    String gender =  request.getParameter("gender");
+    String lastName = request.getParameter("lastName");
+    String gender = request.getParameter("gender");
     String favcol = request.getParameter("favcol");
+    String dateOfBirth = request.getParameter("dateOfBirth");
+    String createdAt = request.getParameter("createdAt");
+    String updatedAt = request.getParameter("updatedAt");
+    String role = request.getParameter("role");
     String from = request.getParameter("from");
 
-    User user = new User(email, name, password, gender, favcol);
+    User user = new User(email, firstName, lastName, password, gender, favcol, dateOfBirth, createdAt, updatedAt, role);
     session.setAttribute("user", user);
 %>
 
@@ -28,7 +33,7 @@
         </section>
         <section class="welcome__container">
         <% if ("register".equals(from)) { %>
-            <h2>Welcome, <%= name %>! <br> Your registration was successful.  </h2>
+            <h2>Welcome, <%= user.getFullName() %>! <br> Your registration was successful.  </h2>
             <h3>Thank you for joining IoT Bay — your gateway to smarter living. </h3>
             <form action="index.jsp" method="post">
                 <button class="header__button" type="submit">
