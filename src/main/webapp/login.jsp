@@ -12,7 +12,7 @@
 
         <section class="login__container">
             <h2 class="login__title">Log In</h2>
-            <form class="login__form" action="welcome.jsp">
+            <form class="login__form" method="post" action="welcome.jsp">
                 <input type="email" id="email" name="email" class="register__input" placeholder="Email" required />
                 <input type="password" id="password" name="password" class="register__input" placeholder="Password" required />
                 <button type="submit" class="register__button">Log In</button>
