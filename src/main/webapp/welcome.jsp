@@ -1,20 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="model.User" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.LocalDateTime" %>
 
 <%
     String firstName = request.getParameter("firstName");
+    String lastName = request.getParameter("lastName");
     String password = request.getParameter("password");
     String email = request.getParameter("email");
-    String lastName = request.getParameter("lastName");
     String gender = request.getParameter("gender");
     String favcol = request.getParameter("favcol");
-    String dateOfBirth = request.getParameter("dateOfBirth");
-    String createdAt = request.getParameter("createdAt");
-    String updatedAt = request.getParameter("updatedAt");
-    String role = request.getParameter("role");
+    LocalDateTime now = LocalDateTime.now();
+    LocalDate dateOfBirth = LocalDate.parse(request.getParameter("dateOfBirth"));
     String from = request.getParameter("from");
 
-    User user = new User(email, firstName, lastName, password, gender, favcol, dateOfBirth, createdAt, updatedAt, role);
+
+    User user = new User(1, email, firstName, lastName, password, gender, favcol, dateOfBirth, now, now, "customer");
     session.setAttribute("user", user);
 %>
 
@@ -41,7 +42,7 @@
                 </button>
             </form>
         <% } else { %>
-            <h2>Welcome back, <%= user.getName() %>! </h2>
+            <h2>Welcome back, <%= user.getFullName() %>! </h2>
             <h3>You have successfully logged in to IoT Bay.<br>We are glad to see you again. </h3>
             <form action="index.jsp" method="post">
                 <button class="header__button" type="submit">

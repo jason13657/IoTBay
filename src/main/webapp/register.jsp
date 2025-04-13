@@ -19,13 +19,16 @@
                     <h3 class="register__form--title">Create Account</h3>
                     <form  class="register__form" action="welcome.jsp" method="post" class="register__form">
                         <input type="email" id="email" name="email" class="register__input" placeholder="Email" required />
-                        <input type="text" id="name" name="name" class="register__input" placeholder="User Name" required />
+                        <input type="text" id="firstName" name="firstName" class="register__input" placeholder="First Name" required />
+                        <input type="text" id="lastName" name="lastName" class="register__input" placeholder="Last Name" required />
                         <input type="password" id="password" name="password" class="register__input" placeholder="Password" required />
                         <input type="Gender" id="gender" name="gender" class="register__input" placeholder="Gender" required />
                         <div class="favcol__container">
                             <label for="favcol">Favorite color</label>
                             <input type="color" id="favcol" class="register__input--favcol" name="favcol" />
                         </div>
+                        <label for="dateOfBirth">Date of Birth:</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required />
                         <div class="tos__container">
                             <label for="tos">Terms of Service:</label>
                             <input type="checkbox" name="tos" id="tos" required/>
