@@ -8,16 +8,16 @@ public class Payment implements Serializable{
     private final int orderId;
     private LocalDateTime paymentDate;
     private double amount;
-    private String paymentMethod;
+    private final int detailId;
     private String paymentStatus;
 
-    public Payment(int id, int userId, int orderId, LocalDateTime paymentDate, double amount, String paymentMethod, String paymentStatus) {
+    public Payment(int id, int userId, int orderId, LocalDateTime paymentDate, double amount, int detailId, String paymentStatus) {
         this.id = id;
         this.userId = userId;
         this.orderId = orderId;
         this.paymentDate = paymentDate != null ? paymentDate : LocalDateTime.now(); 
         this.amount = amount;
-        this.paymentMethod = paymentMethod != null ? paymentMethod : "UNKNOWN";
+        this.detailId = detailId;
         this.paymentStatus = paymentStatus != null ? paymentStatus : "PENDING";
     }
 
@@ -49,12 +49,8 @@ public class Payment implements Serializable{
         this.amount = amount;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public int getPaymentMethod() {
+        return detailId;
     }
 
     public String getPaymentStatus() {

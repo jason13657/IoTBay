@@ -32,7 +32,6 @@ public class ResetQuestion implements Serializable {
         return answer;
     }
 
-    // Method to check if the provided answer is correct
     public boolean isCorrect(String providedAnswer) {
         return this.answer != null && this.answer.equals(providedAnswer);
     }
