@@ -17,9 +17,9 @@ public class UserDAO {
         this.connection = connection;
     }
 
-    // Create
+    // CREATE
     public void createUser(User user) throws SQLException {
-        String query = "INSERT INTO users (email, first_name, last_name, password, gender, favorite_color, date_of_birth, created_at, updated_at, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO users (email, first_name, last_name, password, gender, favorite_color, date_of_birth, created_at, updated_at, role, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getFirstName());
@@ -31,11 +31,12 @@ public class UserDAO {
             statement.setObject(8, user.getCreatedAt());
             statement.setObject(9, user.getUpdatedAt());
             statement.setString(10, user.getRole());
+            statement.setBoolean(11, user.isActive());
             statement.executeUpdate();
         }
     }
 
-    // Read
+    // READ ALL
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users";
@@ -53,7 +54,8 @@ public class UserDAO {
                     resultSet.getObject("date_of_birth", LocalDate.class),
                     resultSet.getObject("created_at", LocalDateTime.class),
                     resultSet.getObject("updated_at", LocalDateTime.class),
-                    resultSet.getString("role")
+                    resultSet.getString("role"),
+                    resultSet.getBoolean("is_active")
                 );
                 users.add(user);
             }
@@ -61,6 +63,7 @@ public class UserDAO {
         return users;
     }
 
+    // READ BY ID
     public User getUserById(int id) throws SQLException {
         String query = "SELECT * FROM users WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -78,7 +81,8 @@ public class UserDAO {
                         resultSet.getObject("date_of_birth", LocalDate.class),
                         resultSet.getObject("created_at", LocalDateTime.class),
                         resultSet.getObject("updated_at", LocalDateTime.class),
-                        resultSet.getString("role")
+                        resultSet.getString("role"),
+                        resultSet.getBoolean("is_active")
                     );
                 }
             }
@@ -86,9 +90,9 @@ public class UserDAO {
         return null;
     }
 
-    // Update
+    // UPDATE
     public void updateUser(User user) throws SQLException {
-        String query = "UPDATE users SET email = ?, first_name = ?, last_name = ?, password = ?, gender = ?, favorite_color = ?, date_of_birth = ?, created_at = ?, updated_at = ?, role = ? WHERE id = ?";
+        String query = "UPDATE users SET email = ?, first_name = ?, last_name = ?, password = ?, gender = ?, favorite_color = ?, date_of_birth = ?, created_at = ?, updated_at = ?, role = ?, is_active = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getFirstName());
@@ -100,12 +104,13 @@ public class UserDAO {
             statement.setObject(8, user.getCreatedAt());
             statement.setObject(9, user.getUpdatedAt());
             statement.setString(10, user.getRole());
-            statement.setInt(11, user.getId());
+            statement.setBoolean(11, user.isActive());
+            statement.setInt(12, user.getId());
             statement.executeUpdate();
         }
     }
 
-    // Delete
+    // DELETE
     public void deleteUser(int id) throws SQLException {
         String query = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
