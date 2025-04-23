@@ -26,7 +26,7 @@ export class ProductServiceStub implements IProductService {
   ];
 
   async getProducts(): Promise<Product[]> {
-    return Promise.resolve(this.products);
+    return this.products;
   }
 
   async getProductById(id: string): Promise<Product> {
@@ -37,8 +37,16 @@ export class ProductServiceStub implements IProductService {
     return product;
   }
 
+  async getProductsByName(name: string): Promise<Product[]> {
+    const filteredProducts = this.products.filter((p) => p.name.toLowerCase().includes(name.toLowerCase()));
+    if (filteredProducts.length === 0) {
+      throw new Error(`No products found with name ${name}.`);
+    }
+    return filteredProducts;
+  }
+
   async createProduct(product: Product): Promise<Product> {
-    const newId = this.products.length + 1;
+    const newId = (this.products.length > 0 ? this.products[this.products.length - 1].id : 0) + 1;
     const newProduct = new Product(
       newId,
       product.categoryId,
@@ -53,8 +61,8 @@ export class ProductServiceStub implements IProductService {
     return newProduct;
   }
 
-  async updateProduct(id: string, product: Product): Promise<Product> {
-    const index = this.products.findIndex((p) => p.id === parseInt(id));
+  async updateProduct(id: number, product: Product): Promise<Product> {
+    const index = this.products.findIndex((p) => p.id === id);
     if (index === -1) {
       throw new Error(`Product with ID ${id} not found.`);
     }
@@ -72,8 +80,8 @@ export class ProductServiceStub implements IProductService {
     return updatedProduct;
   }
 
-  async deleteProduct(id: string): Promise<void> {
-    const index = this.products.findIndex((p) => p.id === parseInt(id));
+  async deleteProduct(id: number): Promise<void> {
+    const index = this.products.findIndex((p) => p.id === id);
     if (index === -1) {
       throw new Error(`Product with ID ${id} not found.`);
     }

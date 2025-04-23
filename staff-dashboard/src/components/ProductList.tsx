@@ -2,9 +2,11 @@ import { Product } from "../models/Product";
 
 type Props = {
   product: Product;
+  handleEdit: (product: Product) => void;
+  handleDelete: (id: number) => void;
 };
 
-const LIST_ITEM_CLASS = "lex flex md:flex-row font-bold border-b py-2";
+const LIST_ITEM_CLASS = "lex flex md:flex-row border-b py-2 text-center items-center";
 
 const ACTION_BUTTON_GAP = "w-16";
 
@@ -21,7 +23,7 @@ const HEADERS = [
 
 export function ProductTableHeader() {
   return (
-    <li className={LIST_ITEM_CLASS}>
+    <li className={LIST_ITEM_CLASS + " font-bold"}>
       {HEADERS.map((header) => (
         <div key={header.label} className={header.className}>
           {header.label}
@@ -32,9 +34,9 @@ export function ProductTableHeader() {
   );
 }
 
-export function ProductList({ product }: Props) {
+export function ProductList({ product, handleEdit, handleDelete }: Props) {
   return (
-    <li className="flex flex-col md:flex-row border-b py-2">
+    <li className={LIST_ITEM_CLASS}>
       {HEADERS.map((header) => {
         const value = (product as any)[header.key];
         let displayValue = value;
@@ -51,8 +53,23 @@ export function ProductList({ product }: Props) {
           </div>
         );
       })}
-      <div className={ACTION_BUTTON_GAP}>
-        <button className="border p-1">Edit</button>
+      <div className={ACTION_BUTTON_GAP + " flex gap-2"}>
+        <button
+          className="border p-1"
+          onClick={() => {
+            handleEdit(product);
+          }}
+        >
+          Edit
+        </button>
+        <button
+          className="border p-1"
+          onClick={() => {
+            handleDelete(product.id);
+          }}
+        >
+          Delete
+        </button>
       </div>
     </li>
   );
