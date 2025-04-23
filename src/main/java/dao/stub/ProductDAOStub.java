@@ -1,8 +1,7 @@
-package stub;
+package dao.stub;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import dao.interfaces.ProductDAO;
 import model.Product;
 

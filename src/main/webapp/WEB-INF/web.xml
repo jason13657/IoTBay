@@ -3,5 +3,14 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>IOT-BAY Web Application</display-name>
+  <servlet>
+    <servlet-name>ManageProduct</servlet-name>
+    <servlet-class>controller.ManageProductController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageProduct</servlet-name>
+    <url-pattern>/api/manage/products</url-pattern>
+  </servlet-mapping>
 </web-app>
+

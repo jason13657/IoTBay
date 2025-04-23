@@ -1,38 +1,28 @@
 package controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import com.google.gson.Gson;
 
-import db.DBConnection;
-import dao.ProductDAO;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+import dao.interfaces.ProductDAO;
+import dao.stub.ProductDAOStub;
 import model.Product;
 
-    
-import java.util.ArrayList;
-import java.util.List;
-
-
-
+@WebServlet("/api/manage/products") 
 public class ManageProductController extends HttpServlet {
     private ProductDAO productDAO;
     private final Gson gson = new Gson();
 
     @Override
     public void init() throws ServletException {
-        try {
-            Connection connection = DBConnection.getConnection();
-            productDAO = new ProductDAO(connection);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new ServletException("Failed to initialize ProductDAO: " + e.getMessage(), e);
-        }
+        productDAO = new ProductDAOStub();
     }
 
     @Override
