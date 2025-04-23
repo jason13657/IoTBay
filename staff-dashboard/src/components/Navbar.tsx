@@ -4,7 +4,7 @@ const NAVITEM_CLASS = "text-xl mb-2 text-blue-500 hover:underline transition dur
 
 export function Navbar() {
   return (
-    <nav className="flex gap-10 py-4">
+    <nav className="flex gap-10">
       <Link to="/manage/products" className={NAVITEM_CLASS}>
         Products
       </Link>
