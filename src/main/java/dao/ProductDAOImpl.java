@@ -7,12 +7,14 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import dao.interfaces.ProductDAO;
 import model.Product;
 
-public class ProductDAO {
+
+public class ProductDAOImpl implements ProductDAO {
     private final Connection connection;
 
-    public ProductDAO(Connection connection) {
+    public ProductDAOImpl(Connection connection) {
         this.connection = connection;
     }
 
