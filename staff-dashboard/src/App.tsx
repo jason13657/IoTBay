@@ -1,24 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router";
+import { MainLayout } from "./layout/MainLayout";
+import { ProductManage } from "./components/ProductManage";
+import { UserManage } from "./components/UserManage";
+import { AccessLogManage } from "./components/AccessLogManage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="max-w-screen-2xl text=center mx-auto">
+      <Routes>
+        <Route path="manage" element={<MainLayout />}>
+          <Route path="products" element={<ProductManage />} />
+          <Route path="users" element={<UserManage />} />
+          <Route path="accesslog" element={<AccessLogManage />} />s
+        </Route>
+      </Routes>
     </div>
   );
 }

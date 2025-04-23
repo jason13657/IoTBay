@@ -1,4 +1,4 @@
-import { Product } from "../../model/Product";
+import { Product } from "../../models/Product";
 import { IProductService } from "../ProductService";
 
 export class ProductServiceStub implements IProductService {

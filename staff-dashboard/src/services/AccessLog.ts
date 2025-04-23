@@ -1,4 +1,4 @@
-import { AccessLog } from "../model/AccessLog";
+import { AccessLog } from "../models/AccessLog";
 
 export interface IAccessLogService {
   getLogs(): Promise<AccessLog[]>;

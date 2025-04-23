@@ -1,4 +1,4 @@
-import { AccessLog } from "../../model/AccessLog";
+import { AccessLog } from "../../models/AccessLog";
 import { IAccessLogService } from "../AccessLog";
 
 export class AccessLogServiceStub implements IAccessLogService {

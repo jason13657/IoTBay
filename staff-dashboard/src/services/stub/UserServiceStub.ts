@@ -1,4 +1,4 @@
-import { User, UserRole } from "../../model/User";
+import { User, UserRole } from "../../models/User";
 import { IUserService } from "../UserService";
 
 export class UserServiceStub implements IUserService {
