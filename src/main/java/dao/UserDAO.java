@@ -1,0 +1,116 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import model.User;
+
+public class UserDAO {
+    private final Connection connection;
+
+    public UserDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    // Create
+    public void createUser(User user) throws SQLException {
+        String query = "INSERT INTO users (email, first_name, last_name, password, gender, favorite_color, date_of_birth, created_at, updated_at, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getFirstName());
+            statement.setString(3, user.getLastName());
+            statement.setString(4, user.getPassword());
+            statement.setString(5, user.getGender());
+            statement.setString(6, user.getFavoriteColor());
+            statement.setObject(7, user.getDateOfBirth());
+            statement.setObject(8, user.getCreatedAt());
+            statement.setObject(9, user.getUpdatedAt());
+            statement.setString(10, user.getRole());
+            statement.executeUpdate();
+        }
+    }
+
+    // Read
+    public List<User> getAllUsers() throws SQLException {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM users";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                User user = new User(
+                    resultSet.getInt("id"),
+                    resultSet.getString("email"),
+                    resultSet.getString("first_name"),
+                    resultSet.getString("last_name"),
+                    resultSet.getString("password"),
+                    resultSet.getString("gender"),
+                    resultSet.getString("favorite_color"),
+                    resultSet.getObject("date_of_birth", LocalDate.class),
+                    resultSet.getObject("created_at", LocalDateTime.class),
+                    resultSet.getObject("updated_at", LocalDateTime.class),
+                    resultSet.getString("role")
+                );
+                users.add(user);
+            }
+        }
+        return users;
+    }
+
+    public User getUserById(int id) throws SQLException {
+        String query = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("email"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("password"),
+                        resultSet.getString("gender"),
+                        resultSet.getString("favorite_color"),
+                        resultSet.getObject("date_of_birth", LocalDate.class),
+                        resultSet.getObject("created_at", LocalDateTime.class),
+                        resultSet.getObject("updated_at", LocalDateTime.class),
+                        resultSet.getString("role")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    // Update
+    public void updateUser(User user) throws SQLException {
+        String query = "UPDATE users SET email = ?, first_name = ?, last_name = ?, password = ?, gender = ?, favorite_color = ?, date_of_birth = ?, created_at = ?, updated_at = ?, role = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getFirstName());
+            statement.setString(3, user.getLastName());
+            statement.setString(4, user.getPassword());
+            statement.setString(5, user.getGender());
+            statement.setString(6, user.getFavoriteColor());
+            statement.setObject(7, user.getDateOfBirth());
+            statement.setObject(8, user.getCreatedAt());
+            statement.setObject(9, user.getUpdatedAt());
+            statement.setString(10, user.getRole());
+            statement.setInt(11, user.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    // Delete
+    public void deleteUser(int id) throws SQLException {
+        String query = "DELETE FROM users WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+    }
+}
