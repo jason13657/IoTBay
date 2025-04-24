@@ -1,5 +1,5 @@
 import { AccessLog } from "../../models/AccessLog";
-import { IAccessLogService } from "../AccessLog";
+import { IAccessLogService } from "../AccessLogService";
 
 export class AccessLogServiceStub implements IAccessLogService {
   private logs: AccessLog[] = [
@@ -8,7 +8,7 @@ export class AccessLogServiceStub implements IAccessLogService {
   ];
 
   async getLogs(): Promise<AccessLog[]> {
-    return Promise.resolve(this.logs);
+    return this.logs;
   }
 
   async getLogById(id: string): Promise<AccessLog> {
@@ -16,7 +16,7 @@ export class AccessLogServiceStub implements IAccessLogService {
     if (!log) {
       throw new Error(`Log with ID ${id} not found.`);
     }
-    return Promise.resolve(log);
+    return log;
   }
 
   async getLogsByEmail(email: string): Promise<AccessLog[]> {
@@ -24,14 +24,14 @@ export class AccessLogServiceStub implements IAccessLogService {
     if (filteredLogs.length === 0) {
       throw new Error(`No logs found for user with email ${email}.`);
     }
-    return Promise.resolve(filteredLogs);
+    return filteredLogs;
   }
 
   async createLog(log: AccessLog): Promise<AccessLog> {
     const newId = this.logs.length + 1;
     const newLog = new AccessLog(newId, log.userId, log.action, log.timestamp);
     this.logs.push(newLog);
-    return Promise.resolve(newLog);
+    return newLog;
   }
 
   async deleteLog(id: string): Promise<void> {
@@ -40,6 +40,5 @@ export class AccessLogServiceStub implements IAccessLogService {
       throw new Error(`Log with ID ${id} not found.`);
     }
     this.logs.splice(index, 1);
-    return Promise.resolve();
   }
 }

@@ -7,7 +7,7 @@ const LIST_ITEM_CLASS = "lex flex md:flex-row border-b py-2 text-center items-ce
 const HEADERS = [
   { label: "ID", key: "id", className: "w-16 px-2" },
   { label: "User ID", key: "userId", className: "w-48 px-2 text-center" },
-  { label: "Action", key: "action", className: "flex-1 px-2 overflow-x-auto whitespace-nowrap" },
+  { label: "Action", key: "action", className: "flex-1 px-2 overflow-x-auto whitespace-nowrap text-left" },
   { label: "Timestamp", key: "timestamp", className: "w-60 px-2 text-center" },
 ];
 

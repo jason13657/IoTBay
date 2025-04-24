@@ -1,8 +1,8 @@
 import { useAccessLogs } from "../hooks/useAccessLog";
-import { AccessLogList, AccessLogTableHeader } from "./AccessLogList";
-import { SearchBar } from "./SearchBar";
+import { AccessLogList, AccessLogTableHeader } from "../components/AccessLogList";
+import { SearchBar } from "../components/SearchBar";
 
-export function AccessLogManage() {
+export function AccessLogManageScreen() {
   const { accessLogs, loading, error, setSearchKey } = useAccessLogs();
 
   const handleSearch = (searchKey: string) => {

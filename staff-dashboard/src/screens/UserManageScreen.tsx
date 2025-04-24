@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useUsers } from "../hooks/useUsers";
-import { SearchBar } from "./SearchBar";
-import { UserList, UserTableHeader } from "./UserList";
-import { Modal } from "./utils/Modal";
-import { ConfirmAlert } from "./utils/ConfirmAlert";
+import { SearchBar } from "../components/SearchBar";
+import { UserList, UserTableHeader } from "../components/UserList";
+import { Modal } from "../components/utils/Modal";
+import { ConfirmAlert } from "../components/utils/ConfirmAlert";
 import { User } from "../models/User";
-import { UserForm } from "./UserForm";
+import { UserForm } from "../components/UserForm";
 
-export function UserManage() {
+export function UserManageScreen() {
   const { users, error, setSearchKey, deleteUser, updateUser } = useUsers();
   const [editUser, setEditUser] = useState<User | null>(null);
   const [deleteUserId, setDeleteUserId] = useState<number | null>(null);

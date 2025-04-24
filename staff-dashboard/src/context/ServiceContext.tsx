@@ -1,12 +1,14 @@
 import { createContext, useContext } from "react";
 import { IProductService } from "../services/ProductService";
 import { IUserService } from "../services/UserService";
-import { IAccessLogService } from "../services/AccessLog";
+import { IAccessLogService } from "../services/AccessLogService";
+import { IAuthService } from "../services/AuthService";
 
 export type ServiceContextType = {
   productService: IProductService;
   userService: IUserService;
-  accessLogService: IAccessLogService; // Replace with actual type if available
+  accessLogService: IAccessLogService;
+  authService: IAuthService;
 };
 
 export const ServiceContext = createContext<ServiceContextType | null>(null);

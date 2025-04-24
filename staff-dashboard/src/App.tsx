@@ -1,13 +1,15 @@
 import { Route, Routes } from "react-router";
 import { MainLayout } from "./layout/MainLayout";
-import { ProductManage } from "./components/ProductManage";
-import { UserManage } from "./components/UserManage";
-import { AccessLogManage } from "./components/AccessLogManage";
 import { useEffect, useState } from "react";
 import { ServiceContext, ServiceContextType } from "./context/ServiceContext";
 import { ProductServiceStub } from "./services/stub/ProductServiceStub";
 import { UserServiceStub } from "./services/stub/UserServiceStub";
 import { AccessLogServiceStub } from "./services/stub/AccessLogStub";
+import { ProductManageScreen } from "./screens/ProductManageScreen";
+import { UserManageScreen } from "./screens/UserManageScreen";
+import { AccessLogManageScreen } from "./screens/AccessLogManageScreen";
+import { AuthServiceStub } from "./services/stub/AuthServiceStub";
+import { WithStaffUser } from "./components/WithStaffUser";
 
 function App() {
   const [services, setServices] = useState<ServiceContextType | null>(null);
@@ -17,11 +19,13 @@ function App() {
     const productService = new ProductServiceStub();
     const userService = new UserServiceStub();
     const accessLogService = new AccessLogServiceStub();
+    const authService = new AuthServiceStub();
 
     setServices({
       productService,
       userService,
       accessLogService,
+      authService,
     });
   }, []);
 
@@ -30,15 +34,17 @@ function App() {
 
   return (
     <ServiceContext.Provider value={services}>
-      <div className="max-w-screen-2xl text=center mx-auto">
-        <Routes>
-          <Route path="manage" element={<MainLayout />}>
-            <Route path="products" element={<ProductManage />} />
-            <Route path="users" element={<UserManage />} />
-            <Route path="accesslog" element={<AccessLogManage />} />s
-          </Route>
-        </Routes>
-      </div>
+      <WithStaffUser>
+        <div className="max-w-screen-2xl text=center mx-auto">
+          <Routes>
+            <Route path="manage" element={<MainLayout />}>
+              <Route path="products" element={<ProductManageScreen />} />
+              <Route path="users" element={<UserManageScreen />} />
+              <Route path="accesslog" element={<AccessLogManageScreen />} />s
+            </Route>
+          </Routes>
+        </div>
+      </WithStaffUser>
     </ServiceContext.Provider>
   );
 }

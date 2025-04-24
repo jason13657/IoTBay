@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useProducts } from "../hooks/useProducts";
-import { ProductList, ProductTableHeader } from "./ProductList";
-import { SearchBar } from "./SearchBar";
+import { ProductList, ProductTableHeader } from "../components/ProductList";
+import { SearchBar } from "../components/SearchBar";
 import { Product } from "../models/Product";
-import { Modal } from "./utils/Modal";
-import { ProductForm } from "./ProductForm";
-import { ConfirmAlert } from "./utils/ConfirmAlert";
+import { Modal } from "../components/utils/Modal";
+import { ProductForm } from "../components/ProductForm";
+import { ConfirmAlert } from "../components/utils/ConfirmAlert";
 
-export function ProductManage() {
+export function ProductManageScreen() {
   const { products, loading, error, updateProduct, addProduct, deleteProduct, setSearchKey } = useProducts();
   const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [deleteProductId, setDeleteProductId] = useState<number | null>(null);
