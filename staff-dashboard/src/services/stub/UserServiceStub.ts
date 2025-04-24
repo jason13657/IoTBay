@@ -34,15 +34,23 @@ export class UserServiceStub implements IUserService {
   ];
 
   async getUsers(): Promise<User[]> {
-    return Promise.resolve(this.users);
+    return this.users;
   }
 
-  async getUserById(id: string): Promise<User> {
-    const user = this.users.find((u) => u.id === parseInt(id));
+  async getUserById(id: number): Promise<User> {
+    const user = this.users.find((u) => u.id === id);
     if (!user) {
       throw new Error(`User with ID ${id} not found.`);
     }
-    return Promise.resolve(user);
+    return user;
+  }
+
+  async getUsersByEmail(email: string): Promise<User[]> {
+    const filteredUsers = this.users.filter((u) => u.email.toLowerCase().includes(email.toLowerCase()));
+    if (filteredUsers.length === 0) {
+      throw new Error(`No users found with email ${email}.`);
+    }
+    return filteredUsers;
   }
 
   async createUser(user: User): Promise<User> {
@@ -62,11 +70,11 @@ export class UserServiceStub implements IUserService {
       user.isActive
     );
     this.users.push(newUser);
-    return Promise.resolve(newUser);
+    return newUser;
   }
 
-  async updateUser(id: string, user: User): Promise<User> {
-    const index = this.users.findIndex((u) => u.id === parseInt(id));
+  async updateUser(id: number, user: User): Promise<User> {
+    const index = this.users.findIndex((u) => u.id === id);
     if (index === -1) {
       throw new Error(`User with ID ${id} not found.`);
     }
@@ -85,11 +93,11 @@ export class UserServiceStub implements IUserService {
       user.isActive
     );
     this.users[index] = updatedUser;
-    return Promise.resolve(updatedUser);
+    return updatedUser;
   }
 
-  deleteUser(id: string): void {
-    const index = this.users.findIndex((u) => u.id === parseInt(id));
+  async deleteUser(id: number): Promise<void> {
+    const index = this.users.findIndex((u) => u.id === id);
     if (index === -1) {
       throw new Error(`User with ID ${id} not found.`);
     }

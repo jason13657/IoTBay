@@ -6,6 +6,8 @@ import { AccessLogManage } from "./components/AccessLogManage";
 import { useEffect, useState } from "react";
 import { ServiceContext, ServiceContextType } from "./context/ServiceContext";
 import { ProductServiceStub } from "./services/stub/ProductServiceStub";
+import { UserServiceStub } from "./services/stub/UserServiceStub";
+import { AccessLogServiceStub } from "./services/stub/AccessLogStub";
 
 function App() {
   const [services, setServices] = useState<ServiceContextType | null>(null);
@@ -13,9 +15,13 @@ function App() {
 
   useEffect(() => {
     const productService = new ProductServiceStub();
+    const userService = new UserServiceStub();
+    const accessLogService = new AccessLogServiceStub();
 
     setServices({
       productService,
+      userService,
+      accessLogService,
     });
   }, []);
 

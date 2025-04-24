@@ -19,6 +19,14 @@ export class AccessLogServiceStub implements IAccessLogService {
     return Promise.resolve(log);
   }
 
+  async getLogsByEmail(email: string): Promise<AccessLog[]> {
+    const filteredLogs = this.logs.filter((l) => l.userId.toString().includes(email));
+    if (filteredLogs.length === 0) {
+      throw new Error(`No logs found for user with email ${email}.`);
+    }
+    return Promise.resolve(filteredLogs);
+  }
+
   async createLog(log: AccessLog): Promise<AccessLog> {
     const newId = this.logs.length + 1;
     const newLog = new AccessLog(newId, log.userId, log.action, log.timestamp);

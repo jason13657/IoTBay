@@ -110,5 +110,5 @@ export function useProducts() {
     [productService]
   );
 
-  return { products, loading, error, updateProduct, addProduct, deleteProduct, fetchProductsByName, setSearchKey };
+  return { products, loading, error, updateProduct, addProduct, deleteProduct, setSearchKey };
 }
