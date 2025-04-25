@@ -28,7 +28,6 @@ dao/ResetQuestionDao.class
 db/DBConnection.class
 dao/WishlistProductDao.class
 model/Category.class
-dao/UserDAO.class
 model/User.class
 dao/CartItemDAO.class
 model/PaymentDetail.class

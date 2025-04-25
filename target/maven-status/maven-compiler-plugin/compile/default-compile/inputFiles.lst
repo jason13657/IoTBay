@@ -1,4 +1,5 @@
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/controller/ManageProductController.java
+/Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/controller/ManageUserController.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/AccessLogDAO.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/AddressDetailDAO.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/CartItemDAO.java
@@ -11,11 +12,13 @@
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/ResetQuestionDao.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/ReviewDAO.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/ShipmentDAO.java
-/Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/UserDAO.java
+/Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/UserDAOImpl.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/WishlistDao.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/WishlistProductDao.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/interfaces/ProductDAO.java
+/Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/interfaces/UserDAO.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/stub/ProductDAOStub.java
+/Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/dao/stub/UserDAOStub.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/db/DBConnection.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/model/AccessLog.java
 /Users/jongseonseo/Desktop/Uni/SID/iot-bay/src/main/java/model/AddressDetail.java
