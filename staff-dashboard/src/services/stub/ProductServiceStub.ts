@@ -29,8 +29,8 @@ export class ProductServiceStub implements IProductService {
     return this.products;
   }
 
-  async getProductById(id: string): Promise<Product> {
-    const product = this.products.find((p) => p.id === parseInt(id));
+  async getProductById(id: number): Promise<Product> {
+    const product = this.products.find((p) => p.id === id);
     if (!product) {
       throw new Error(`Product with ID ${id} not found.`);
     }
