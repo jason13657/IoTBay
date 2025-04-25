@@ -29,7 +29,7 @@ public class User implements Serializable {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.role = role;
-        this.isActive = true;
+        this.isActive = isActive;
     }
 
     public int getId() {

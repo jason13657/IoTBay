@@ -1,8 +1,10 @@
 package controller;
 
 import com.google.gson.Gson;
+
+import dao.AccessLogDAOImpl;
 import dao.interfaces.AccessLogDAO;
-import dao.stub.AccessLogDAOStub;
+import db.DBConnection;
 import model.AccessLog;
 
 import javax.servlet.ServletException;
@@ -10,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,7 +23,14 @@ public class ManageAccessLogController extends HttpServlet {
 
     @Override
     public void init() {
-        accessLogDAO = new AccessLogDAOStub();
+        try {
+            Connection connection = DBConnection.getConnection();
+            accessLogDAO = new AccessLogDAOImpl(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to initialize database connection", e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Database driver not found", e);
+        }
     }
 
     @Override

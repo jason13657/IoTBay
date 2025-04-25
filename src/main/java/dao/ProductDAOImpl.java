@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import dao.interfaces.ProductDAO;
 import model.Product;
+import utils.DateTimeParser;
 
 
 public class ProductDAOImpl implements ProductDAO {
@@ -18,136 +19,111 @@ public class ProductDAOImpl implements ProductDAO {
         this.connection = connection;
     }
 
-    // CREATE
+    @Override
     public void createProduct(Product product) throws SQLException {
-        String query = "INSERT INTO product (category_id, name, description, price, stock_quantity, image_url, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO products (category_id, name, description, price, stock_quantity, image_url, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, product.getCategoryId());
-            statement.setString(2, product.getName());
-            statement.setString(3, product.getDescription());
-            statement.setDouble(4, product.getPrice());
-            statement.setInt(5, product.getStockQuantity());
-            statement.setString(6, product.getImageUrl());
-            statement.setObject(7, product.getCreatedAt());
+            setProductParams(statement, product);
             statement.executeUpdate();
         }
     }
 
-    // READ ALL products
+    @Override
     public List<Product> getAllProducts() throws SQLException {
-        String query = "SELECT * FROM product";
+        String query = "SELECT * FROM products";
         List<Product> products = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                products.add(new Product(
-                    resultSet.getInt("id"),
-                    resultSet.getInt("category_id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("description"),
-                    resultSet.getDouble("price"),
-                    resultSet.getInt("stock_quantity"),
-                    resultSet.getString("image_url"),
-                    resultSet.getObject("created_at", LocalDate.class)
-                ));
+             ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                products.add(mapResultSetToProduct(rs));
             }
         }
         return products;
     }
 
-    // READ products by name
-    public List<Product> getProductsByName(String name) throws SQLException {
-        String query = "SELECT * FROM product WHERE name LIKE ?";
-        List<Product> products = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, "%" + name + "%");
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    products.add(new Product(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("category_id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("description"),
-                        resultSet.getDouble("price"),
-                        resultSet.getInt("stock_quantity"),
-                        resultSet.getString("image_url"),
-                        resultSet.getObject("created_at", LocalDate.class)
-                    ));
-                }
-            }
-        }
-        return products;
-    }
-
-    // READ products by category ID
-    public List<Product> getProductsByCategoryId(int categoryId) throws SQLException {
-        String query = "SELECT * FROM product WHERE category_id = ?";
-        List<Product> products = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, categoryId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    products.add(new Product(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("category_id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("description"),
-                        resultSet.getDouble("price"),
-                        resultSet.getInt("stock_quantity"),
-                        resultSet.getString("image_url"),
-                        resultSet.getObject("created_at", LocalDate.class)
-                    ));
-                }
-            }
-        }
-        return products;
-    }
-
-    // READ product by ID
+    @Override
     public Product getProductById(int id) throws SQLException {
-        String query = "SELECT * FROM product WHERE id = ?";
+        String query = "SELECT * FROM products WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new Product(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("category_id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("description"),
-                        resultSet.getDouble("price"),
-                        resultSet.getInt("stock_quantity"),
-                        resultSet.getString("image_url"),
-                        resultSet.getObject("created_at", LocalDate.class)
-                    );
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToProduct(rs);
                 }
             }
         }
         return null;
     }
 
-    // UPDATE product
-    public void updateProduct(int id, Product product) throws SQLException {
-        String query = "UPDATE product SET category_id = ?, name = ?, description = ?, price = ?, stock_quantity = ?, image_url = ?, created_at = ? WHERE id = ?";
+    @Override
+    public List<Product> getProductsByName(String name) throws SQLException {
+        String query = "SELECT * FROM products WHERE name LIKE ?";
+        List<Product> products = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, product.getCategoryId());
-            statement.setString(2, product.getName());
-            statement.setString(3, product.getDescription());
-            statement.setDouble(4, product.getPrice());
-            statement.setInt(5, product.getStockQuantity());
-            statement.setString(6, product.getImageUrl());
-            statement.setObject(7, product.getCreatedAt());
-            statement.setInt(8, id);
+            statement.setString(1, "%" + name + "%");
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    products.add(mapResultSetToProduct(rs));
+                }
+            }
+        }
+        return products;
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryId(int categoryId) throws SQLException {
+        String query = "SELECT * FROM products WHERE category_id = ?";
+        List<Product> products = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, categoryId);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    products.add(mapResultSetToProduct(rs));
+                }
+            }
+        }
+        return products;
+    }
+
+    @Override
+    public void updateProduct(int id, Product product) throws SQLException {
+        String query = "UPDATE products SET category_id = ?, name = ?, description = ?, price = ?, stock_quantity = ?, image_url = ?, created_at = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            setProductParams(statement, product);
+            statement.setInt(8, id); // Only the last param is different
             statement.executeUpdate();
         }
     }
 
-    // DELETE product by ID
+    @Override
     public void deleteProduct(int id) throws SQLException {
-        String query = "DELETE FROM product WHERE id = ?";
+        String query = "DELETE FROM products WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.executeUpdate();
         }
+    }
+
+    private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
+        return new Product(
+            rs.getInt("id"),
+            rs.getInt("category_id"),
+            rs.getString("name"),
+            rs.getString("description"),
+            rs.getDouble("price"),
+            rs.getInt("stock_quantity"),
+            rs.getString("image_url"),
+            DateTimeParser.parseLocalDate(rs.getString("created_at"))
+        );
+    }
+
+    private void setProductParams(PreparedStatement statement, Product product) throws SQLException {
+        statement.setInt(1, product.getCategoryId());
+        statement.setString(2, product.getName());
+        statement.setString(3, product.getDescription());
+        statement.setDouble(4, product.getPrice());
+        statement.setInt(5, product.getStockQuantity());
+        statement.setString(6, product.getImageUrl());
+        statement.setString(7, DateTimeParser.toText(product.getCreatedAt()));
     }
 }

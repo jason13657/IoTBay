@@ -2,6 +2,7 @@ package controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+
+import dao.ProductDAOImpl;
 import dao.interfaces.ProductDAO;
-import dao.stub.ProductDAOStub;
+import db.DBConnection;
 import model.Product;
 
 @WebServlet("/api/manage/products") 
@@ -23,7 +26,14 @@ public class ManageProductController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        productDAO = new ProductDAOStub();
+        try {
+            Connection connection = DBConnection.getConnection();
+            productDAO = new ProductDAOImpl(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to initialize database connection", e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Database driver not found", e);
+        }
     }
 
     @Override

@@ -4,149 +4,118 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.interfaces.UserDAO;
 import model.User;
+import utils.DateTimeParser;
 
-public class UserDAOImpl implements UserDAO{
+public class UserDAOImpl implements UserDAO {
     private final Connection connection;
 
     public UserDAOImpl(Connection connection) {
         this.connection = connection;
     }
 
-    // CREATE
+    @Override
     public void createUser(User user) throws SQLException {
         String query = "INSERT INTO users (email, first_name, last_name, password, gender, favorite_color, date_of_birth, created_at, updated_at, role, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getFirstName());
-            statement.setString(3, user.getLastName());
-            statement.setString(4, user.getPassword());
-            statement.setString(5, user.getGender());
-            statement.setString(6, user.getFavoriteColor());
-            statement.setObject(7, user.getDateOfBirth());
-            statement.setObject(8, user.getCreatedAt());
-            statement.setObject(9, user.getUpdatedAt());
-            statement.setString(10, user.getRole());
-            statement.setBoolean(11, user.isActive());
+            setUserParams(statement, user);
             statement.executeUpdate();
         }
     }
 
-    // READ ALL
+    @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users";
         try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                User user = new User(
-                    resultSet.getInt("id"),
-                    resultSet.getString("email"),
-                    resultSet.getString("first_name"),
-                    resultSet.getString("last_name"),
-                    resultSet.getString("password"),
-                    resultSet.getString("gender"),
-                    resultSet.getString("favorite_color"),
-                    resultSet.getObject("date_of_birth", LocalDate.class),
-                    resultSet.getObject("created_at", LocalDateTime.class),
-                    resultSet.getObject("updated_at", LocalDateTime.class),
-                    resultSet.getString("role"),
-                    resultSet.getBoolean("is_active")
-                );
-                users.add(user);
+             ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                users.add(mapResultSetToUser(rs));
             }
         }
         return users;
     }
 
-    // READ BY ID
+    @Override
     public User getUserById(int id) throws SQLException {
         String query = "SELECT * FROM users WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("email"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("password"),
-                        resultSet.getString("gender"),
-                        resultSet.getString("favorite_color"),
-                        resultSet.getObject("date_of_birth", LocalDate.class),
-                        resultSet.getObject("created_at", LocalDateTime.class),
-                        resultSet.getObject("updated_at", LocalDateTime.class),
-                        resultSet.getString("role"),
-                        resultSet.getBoolean("is_active")
-                    );
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToUser(rs);
                 }
             }
         }
         return null;
     }
 
-    // READ BY EMAIL
+    @Override
     public List<User> getUsersByEmail(String email) throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE email Like ?";
+        String query = "SELECT * FROM users WHERE email LIKE ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    User user = new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("email"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("password"),
-                        resultSet.getString("gender"),
-                        resultSet.getString("favorite_color"),
-                        resultSet.getObject("date_of_birth", LocalDate.class),
-                        resultSet.getObject("created_at", LocalDateTime.class),
-                        resultSet.getObject("updated_at", LocalDateTime.class),
-                        resultSet.getString("role"),
-                        resultSet.getBoolean("is_active")
-                    );
-                users.add(user);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    users.add(mapResultSetToUser(rs));
+                }
             }
         }
         return users;
-        }
     }
 
-    // UPDATE
+    @Override
     public void updateUser(int id, User user) throws SQLException {
         String query = "UPDATE users SET email = ?, first_name = ?, last_name = ?, password = ?, gender = ?, favorite_color = ?, date_of_birth = ?, created_at = ?, updated_at = ?, role = ?, is_active = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getFirstName());
-            statement.setString(3, user.getLastName());
-            statement.setString(4, user.getPassword());
-            statement.setString(5, user.getGender());
-            statement.setString(6, user.getFavoriteColor());
-            statement.setObject(7, user.getDateOfBirth());
-            statement.setObject(8, user.getCreatedAt());
-            statement.setObject(9, user.getUpdatedAt());
-            statement.setString(10, user.getRole());
-            statement.setBoolean(11, user.isActive());
-            statement.setInt(12, id);
+            setUserParams(statement, user);
+            statement.setInt(12, id); // Only the last param is different
             statement.executeUpdate();
         }
     }
 
-    // DELETE
+    @Override
     public void deleteUser(int id) throws SQLException {
         String query = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.executeUpdate();
         }
+    }
+
+    private User mapResultSetToUser(ResultSet rs) throws SQLException {
+        return new User(
+            rs.getInt("id"),
+            rs.getString("email"),
+            rs.getString("first_name"),
+            rs.getString("last_name"),
+            rs.getString("password"),
+            rs.getString("gender"),
+            rs.getString("favorite_color"),
+            DateTimeParser.parseLocalDate(rs.getString("date_of_birth")),
+            DateTimeParser.parseLocalDateTime(rs.getString("created_at")),
+            DateTimeParser.parseLocalDateTime(rs.getString("updated_at")),
+            rs.getString("role"),
+            rs.getInt("is_active") != 0
+        );
+    }
+
+    private void setUserParams(PreparedStatement statement, User user) throws SQLException {
+        statement.setString(1, user.getEmail());
+        statement.setString(2, user.getFirstName());
+        statement.setString(3, user.getLastName());
+        statement.setString(4, user.getPassword());
+        statement.setString(5, user.getGender());
+        statement.setString(6, user.getFavoriteColor());
+        statement.setString(7, DateTimeParser.toText(user.getDateOfBirth()));
+        statement.setString(8, DateTimeParser.toText(user.getCreatedAt()));
+        statement.setString(9, DateTimeParser.toText(user.getUpdatedAt()));
+        statement.setString(10, user.getRole());
+        statement.setBoolean(11, user.isActive());
     }
 }

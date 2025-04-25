@@ -2,6 +2,7 @@ package controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -13,8 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
+import dao.UserDAOImpl;
 import dao.interfaces.UserDAO;
-import dao.stub.UserDAOStub;
+import db.DBConnection;
 import model.User;
 
 @WebServlet("/api/manage/users")
@@ -24,7 +26,14 @@ public class ManageUserController extends HttpServlet{
 
     @Override
     public void init() {
-        userDAO = new UserDAOStub();
+        try {
+            Connection connection = DBConnection.getConnection();
+            userDAO = new UserDAOImpl(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to initialize database connection", e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Database driver not found", e);
+        }
     }
 
     @Override

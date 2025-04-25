@@ -9,9 +9,6 @@ public class AccessLog implements Serializable {
     private String action;
     private LocalDateTime timestamp;
 
-    public AccessLog() {
-    }
-
     public AccessLog(int id, int userId, String action, LocalDateTime timestamp) {
         this.id = id;
         this.userId = userId;

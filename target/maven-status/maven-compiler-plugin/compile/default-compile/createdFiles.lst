@@ -11,7 +11,6 @@ model/Wishlist.class
 dao/PaymentDetailDAO.class
 model/AddressDetail.class
 model/OrderProduct.class
-controller/ManageProductController.class
 model/Review.class
 dao/interfaces/ProductDAO.class
 dao/CategoryDAO.class
