@@ -1,3 +1,5 @@
+import { parseLocalDate, parseLocalDateTime, toLocalDateJson, toLocalDateTimeJson } from "../utils/DateParser";
+
 export enum UserRole {
   STAFF = "staff",
   CUSTOMER = "customer",
@@ -54,9 +56,9 @@ export class User {
       json.password,
       json.gender,
       json.favoriteColor,
-      new Date(json.dateOfBirth),
-      new Date(json.createdAt),
-      new Date(json.updatedAt),
+      parseLocalDate(json.dateOfBirth),
+      parseLocalDateTime(json.createdAt),
+      parseLocalDateTime(json.updatedAt),
       User.parseRole(json.role),
       json.isActive !== undefined ? json.isActive : true
     );
@@ -71,9 +73,9 @@ export class User {
       password: this.password,
       gender: this.gender,
       favoriteColor: this.favoriteColor,
-      dateOfBirth: this.dateOfBirth.toISOString().split("T")[0],
-      createdAt: this.createdAt.toISOString(),
-      updatedAt: this.updatedAt.toISOString(),
+      dateOfBirth: toLocalDateJson(this.dateOfBirth),
+      createdAt: toLocalDateTimeJson(this.createdAt),
+      updatedAt: toLocalDateTimeJson(this.updatedAt),
       role: this.role,
       isActive: this.isActive,
     };

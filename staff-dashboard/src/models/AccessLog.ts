@@ -1,3 +1,5 @@
+import { parseLocalDateTime, toLocalDateTimeJson } from "../utils/DateParser";
+
 export class AccessLog {
   id: number;
   userId: number;
@@ -12,7 +14,7 @@ export class AccessLog {
   }
 
   static fromJson(json: any): AccessLog {
-    return new AccessLog(json.id, json.userId, json.action, new Date(json.timestamp));
+    return new AccessLog(json.id, json.userId, json.action, parseLocalDateTime(json.timestamp));
   }
 
   toJson(): Record<string, any> {
@@ -20,7 +22,7 @@ export class AccessLog {
       id: this.id,
       userId: this.userId,
       action: this.action,
-      timestamp: this.timestamp.toISOString(),
+      timestamp: toLocalDateTimeJson(this.timestamp),
     };
   }
 }

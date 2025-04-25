@@ -10,13 +10,17 @@ import { UserManageScreen } from "./screens/UserManageScreen";
 import { AccessLogManageScreen } from "./screens/AccessLogManageScreen";
 import { AuthServiceStub } from "./services/stub/AuthServiceStub";
 import { WithStaffUser } from "./components/WithStaffUser";
+import { HttpClient } from "./network/HttpClient";
+import { ProductService } from "./services/ProductService";
 
 function App() {
   const [services, setServices] = useState<ServiceContextType | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const productService = new ProductServiceStub();
+    const httpClient = new HttpClient("/api/manage");
+
+    const productService = new ProductService(httpClient);
     const userService = new UserServiceStub();
     const accessLogService = new AccessLogServiceStub();
     const authService = new AuthServiceStub();

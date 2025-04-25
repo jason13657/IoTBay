@@ -1,3 +1,5 @@
+import { parseLocalDate, toLocalDateJson } from "../utils/DateParser";
+
 export class Product {
   id: number;
   categoryId: number;
@@ -37,7 +39,7 @@ export class Product {
       json.price,
       json.stockQuantity,
       json.imageUrl,
-      new Date(json.createdAt)
+      parseLocalDate(json.dateOfBirth)
     );
   }
 
@@ -50,7 +52,7 @@ export class Product {
       price: this.price,
       stockQuantity: this.stockQuantity,
       imageUrl: this.imageUrl,
-      createdAt: this.createdAt.toISOString(),
+      createdAt: toLocalDateJson(this.createdAt),
     };
   }
 }

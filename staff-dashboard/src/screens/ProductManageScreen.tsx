@@ -45,7 +45,6 @@ export function ProductManageScreen() {
   };
 
   if (loading) return <p>Loading products...</p>;
-  if (products.length === 0) return <p>No products available.</p>;
 
   return (
     <div className="flex flex-col">
