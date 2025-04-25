@@ -12,4 +12,13 @@
     <servlet-name>ManageProduct</servlet-name>
     <url-pattern>/api/manage/products</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ManageUser</servlet-name>
+    <servlet-class>controller.ManageUserController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageUser</servlet-name>
+    <url-pattern>/api/manage/users</url-pattern>
+  </servlet-mapping>
 </web-app>
