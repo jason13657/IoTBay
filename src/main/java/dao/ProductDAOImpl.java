@@ -55,6 +55,54 @@ public class ProductDAOImpl implements ProductDAO {
         return products;
     }
 
+    // READ products by name
+    public List<Product> getProductsByName(String name) throws SQLException {
+        String query = "SELECT * FROM product WHERE name LIKE ?";
+        List<Product> products = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, "%" + name + "%");
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    products.add(new Product(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("category_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getDouble("price"),
+                        resultSet.getInt("stock_quantity"),
+                        resultSet.getString("image_url"),
+                        resultSet.getObject("created_at", LocalDate.class)
+                    ));
+                }
+            }
+        }
+        return products;
+    }
+
+    // READ products by category ID
+    public List<Product> getProductsByCategoryId(int categoryId) throws SQLException {
+        String query = "SELECT * FROM product WHERE category_id = ?";
+        List<Product> products = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, categoryId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    products.add(new Product(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("category_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getDouble("price"),
+                        resultSet.getInt("stock_quantity"),
+                        resultSet.getString("image_url"),
+                        resultSet.getObject("created_at", LocalDate.class)
+                    ));
+                }
+            }
+        }
+        return products;
+    }
+
     // READ product by ID
     public Product getProductById(int id) throws SQLException {
         String query = "SELECT * FROM product WHERE id = ?";
@@ -79,7 +127,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     // UPDATE product
-    public void updateProduct(Product product) throws SQLException {
+    public void updateProduct(int id, Product product) throws SQLException {
         String query = "UPDATE product SET category_id = ?, name = ?, description = ?, price = ?, stock_quantity = ?, image_url = ?, created_at = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, product.getCategoryId());
@@ -89,7 +137,7 @@ public class ProductDAOImpl implements ProductDAO {
             statement.setInt(5, product.getStockQuantity());
             statement.setString(6, product.getImageUrl());
             statement.setObject(7, product.getCreatedAt());
-            statement.setInt(8, product.getId());
+            statement.setInt(8, id);
             statement.executeUpdate();
         }
     }

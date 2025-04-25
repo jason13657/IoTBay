@@ -34,9 +34,29 @@ public class ProductDAOStub implements ProductDAO {
         return null;
     }
     @Override
-    public void updateProduct(Product product) {
+    public ArrayList<Product> getProductsByName(String name) {
+        ArrayList<Product> result = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getName().toLowerCase().contains(name.toLowerCase())) {
+                result.add(product);
+            }
+        }
+        return result;
+    }
+    @Override
+    public ArrayList<Product> getProductsByCategoryId(int categoryId) {
+        ArrayList<Product> result = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getCategoryId() == categoryId) {
+                result.add(product);
+            }
+        }
+        return result;
+    }
+    @Override
+    public void updateProduct(int id, Product product) {
         for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getId() == product.getId()) {
+            if (products.get(i).getId() == id) {
                 products.set(i, product);
                 return;
             }

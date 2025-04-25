@@ -13,4 +13,3 @@
     <url-pattern>/api/manage/products</url-pattern>
   </servlet-mapping>
 </web-app>
-

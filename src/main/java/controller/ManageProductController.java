@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,13 +29,77 @@ public class ManageProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            List<Product> products = productDAO.getAllProducts();
-            String json = gson.toJson(products);
+        String idParam = request.getParameter("id");
+        String nameParam = request.getParameter("name");
+        String categoryIdParam = request.getParameter("categoryId");
 
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(json);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        try {
+            if (idParam != null) {
+                int id = Integer.parseInt(idParam);
+                Product product = productDAO.getProductById(id);
+                if (product != null) {
+                    response.getWriter().write(gson.toJson(product));
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    response.getWriter().write("{\"error\": \"Product not found\"}");
+                }
+            } else if (nameParam != null) { 
+                List<Product> products = productDAO.getProductsByName(nameParam);
+                response.getWriter().write(gson.toJson(products));
+            } else if (categoryIdParam != null) { 
+                int categoryId = Integer.parseInt(categoryIdParam);
+                List<Product> products = productDAO.getProductsByCategoryId(categoryId);
+                response.getWriter().write(gson.toJson(products));
+            } else { 
+                List<Product> products = productDAO.getAllProducts();
+                response.getWriter().write(gson.toJson(products));
+            }
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            BufferedReader reader = request.getReader();
+            Product product = gson.fromJson(reader, Product.class);
+            productDAO.createProduct(product);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            response.getWriter().write(gson.toJson(product));
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            BufferedReader reader = request.getReader();
+            Product product = gson.fromJson(reader, Product.class);
+            productDAO.updateProduct(id, product);
+            response.getWriter().write("{\"message\": \"Product updated successfully\"}");
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            productDAO.deleteProduct(id);
+            response.getWriter().write("{\"message\": \"Product deleted successfully\"}");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
