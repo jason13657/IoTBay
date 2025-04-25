@@ -7,7 +7,7 @@ export function useAccessLogs() {
   const [accessLogs, setAccessLogs] = useState<AccessLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchKey, setSearchKey] = useState("");
+  const [searchKey, setSearchKey] = useState<string>("");
 
   useEffect(() => {
     fetchAccessLogs();
@@ -17,7 +17,7 @@ export function useAccessLogs() {
     setLoading(true);
     setError(null);
     if (searchKey != "") {
-      fetchAccessLogsByName(searchKey);
+      fetchAccessLogsByUserId(searchKey);
     } else {
       fetchAllAccessLogs();
     }
@@ -38,12 +38,18 @@ export function useAccessLogs() {
       });
   }, [accessLogService]);
 
-  const fetchAccessLogsByName = useCallback(
-    (email: string) => {
+  const fetchAccessLogsByUserId = useCallback(
+    (userId: string) => {
+      const userIdNumber = parseInt(userId);
+      if (isNaN(userIdNumber)) {
+        setError("Invalid user ID");
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       setError(null);
       accessLogService
-        .getLogsByEmail(email)
+        .getLogsByUserId(userIdNumber)
         .then((data) => {
           setAccessLogs(data);
           setLoading(false);

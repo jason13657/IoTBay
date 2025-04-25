@@ -6,7 +6,7 @@ export interface IProductService {
   getProductById(id: number): Promise<Product>;
   getProductsByName(name: string): Promise<Product[]>;
   createProduct(product: Product): Promise<Product>;
-  updateProduct(id: number, product: Product): Promise<Product>;
+  updateProduct(id: number, product: Product): Promise<void>;
   deleteProduct(id: number): Promise<void>;
 }
 
@@ -37,9 +37,8 @@ export class ProductService implements IProductService {
     return Product.fromJson(data);
   }
 
-  async updateProduct(id: number, product: Product): Promise<Product> {
+  async updateProduct(id: number, product: Product): Promise<void> {
     const data = await this.httpClient.put<Product>(`/products?id=${id}`, product.toJson());
-    return Product.fromJson(data);
   }
 
   async deleteProduct(id: number): Promise<void> {

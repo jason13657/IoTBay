@@ -73,7 +73,7 @@ export class UserServiceStub implements IUserService {
     return newUser;
   }
 
-  async updateUser(id: number, user: User): Promise<User> {
+  async updateUser(id: number, user: User): Promise<void> {
     const index = this.users.findIndex((u) => u.id === id);
     if (index === -1) {
       throw new Error(`User with ID ${id} not found.`);
@@ -93,7 +93,6 @@ export class UserServiceStub implements IUserService {
       user.isActive
     );
     this.users[index] = updatedUser;
-    return updatedUser;
   }
 
   async deleteUser(id: number): Promise<void> {

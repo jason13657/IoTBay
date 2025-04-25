@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccessLogDAO {
+public class AccessLogDAOImpl {
     private final Connection connection;
 
-    public AccessLogDAO(Connection connection) {
+    public AccessLogDAOImpl(Connection connection) {
         this.connection = connection;
     }
 

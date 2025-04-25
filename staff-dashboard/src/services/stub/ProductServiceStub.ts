@@ -61,7 +61,7 @@ export class ProductServiceStub implements IProductService {
     return newProduct;
   }
 
-  async updateProduct(id: number, product: Product): Promise<Product> {
+  async updateProduct(id: number, product: Product): Promise<void> {
     const index = this.products.findIndex((p) => p.id === id);
     if (index === -1) {
       throw new Error(`Product with ID ${id} not found.`);
@@ -77,7 +77,6 @@ export class ProductServiceStub implements IProductService {
       product.createdAt
     );
     this.products[index] = updatedProduct;
-    return updatedProduct;
   }
 
   async deleteProduct(id: number): Promise<void> {

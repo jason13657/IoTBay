@@ -17,7 +17,7 @@ export function SearchBar({ onSearch }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex">
+    <div className="flex">
       <input
         type="text"
         placeholder="Search..."
@@ -25,9 +25,9 @@ export function SearchBar({ onSearch }: Props) {
         onChange={handleInputChange}
         style={{ padding: "0.5rem", flex: 1 }}
       />
-      <button type="submit" className="p-2">
+      <button onClick={handleSubmit} className="p-2">
         Search
       </button>
-    </form>
+    </div>
   );
 }

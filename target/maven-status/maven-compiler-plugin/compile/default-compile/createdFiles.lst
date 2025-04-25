@@ -22,7 +22,6 @@ dao/OrderDAO.class
 model/Order.class
 dao/WishlistDao.class
 model/ResetQuestion.class
-dao/AccessLogDAO.class
 dao/ReviewDAO.class
 dao/ResetQuestionDao.class
 db/DBConnection.class

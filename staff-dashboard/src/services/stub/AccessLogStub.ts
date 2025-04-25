@@ -11,18 +11,18 @@ export class AccessLogServiceStub implements IAccessLogService {
     return this.logs;
   }
 
-  async getLogById(id: string): Promise<AccessLog> {
-    const log = this.logs.find((l) => l.id === parseInt(id));
+  async getLogById(id: number): Promise<AccessLog> {
+    const log = this.logs.find((l) => l.id === id);
     if (!log) {
       throw new Error(`Log with ID ${id} not found.`);
     }
     return log;
   }
 
-  async getLogsByEmail(email: string): Promise<AccessLog[]> {
-    const filteredLogs = this.logs.filter((l) => l.userId.toString().includes(email));
+  async getLogsByUserId(userId: number): Promise<AccessLog[]> {
+    const filteredLogs = this.logs.filter((l) => l.userId == userId);
     if (filteredLogs.length === 0) {
-      throw new Error(`No logs found for user with email ${email}.`);
+      throw new Error(`No logs found for user with user id ${userId}.`);
     }
     return filteredLogs;
   }
@@ -34,8 +34,8 @@ export class AccessLogServiceStub implements IAccessLogService {
     return newLog;
   }
 
-  async deleteLog(id: string): Promise<void> {
-    const index = this.logs.findIndex((l) => l.id === parseInt(id));
+  async deleteLog(id: number): Promise<void> {
+    const index = this.logs.findIndex((l) => l.id === id);
     if (index === -1) {
       throw new Error(`Log with ID ${id} not found.`);
     }

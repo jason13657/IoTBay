@@ -31,6 +31,7 @@ export class Product {
   }
 
   static fromJson(json: any): Product {
+    console.log("Parsing Product JSON:", json);
     return new Product(
       json.id,
       json.categoryId,
@@ -39,7 +40,7 @@ export class Product {
       json.price,
       json.stockQuantity,
       json.imageUrl,
-      parseLocalDate(json.dateOfBirth)
+      parseLocalDate(json.createdAt)
     );
   }
 

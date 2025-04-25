@@ -2,9 +2,6 @@ import { Route, Routes } from "react-router";
 import { MainLayout } from "./layout/MainLayout";
 import { useEffect, useState } from "react";
 import { ServiceContext, ServiceContextType } from "./context/ServiceContext";
-import { ProductServiceStub } from "./services/stub/ProductServiceStub";
-import { UserServiceStub } from "./services/stub/UserServiceStub";
-import { AccessLogServiceStub } from "./services/stub/AccessLogStub";
 import { ProductManageScreen } from "./screens/ProductManageScreen";
 import { UserManageScreen } from "./screens/UserManageScreen";
 import { AccessLogManageScreen } from "./screens/AccessLogManageScreen";
@@ -12,6 +9,8 @@ import { AuthServiceStub } from "./services/stub/AuthServiceStub";
 import { WithStaffUser } from "./components/WithStaffUser";
 import { HttpClient } from "./network/HttpClient";
 import { ProductService } from "./services/ProductService";
+import { UserService } from "./services/UserService";
+import { AccessLogService } from "./services/AccessLogService";
 
 function App() {
   const [services, setServices] = useState<ServiceContextType | null>(null);
@@ -21,8 +20,8 @@ function App() {
     const httpClient = new HttpClient("/api/manage");
 
     const productService = new ProductService(httpClient);
-    const userService = new UserServiceStub();
-    const accessLogService = new AccessLogServiceStub();
+    const userService = new UserService(httpClient);
+    const accessLogService = new AccessLogService(httpClient);
     const authService = new AuthServiceStub();
 
     setServices({
