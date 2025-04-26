@@ -7,9 +7,16 @@
 
 
 <header class="header">
-    <a href="index.jsp">
-        <img src="images/logo.png" alt="IoT Bay logo" />
-    </a>
+    <div class="header__top">
+        <a href="index.jsp">
+            <img src="images/logo.png" alt="IoT Bay logo" />
+        </a>
+        <form action="browse.jsp" method="get" id="searchForm">
+            <input type="text" name="query" placeholder="Search..." id="searchInput" onkeyup="showSuggestions(this.value)">
+            <button type="submit">Search</button>
+            <div id="suggestions" style="display:none; border: 1px solid #ccc; max-width: 200px; background-color: white; position: absolute; z-index: 10;"></div>
+        </form>
+    </div>
     <% if (user == null) { %>
     <div class="header__container">
         <form action="register.jsp" method="post">
