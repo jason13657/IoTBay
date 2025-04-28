@@ -1,17 +1,15 @@
 package model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class AccessLog implements Serializable {
     private int id;
     private int userId;
     private String action;
-    private String timestamp;
+    private LocalDateTime timestamp;
 
-    public AccessLog() {
-    }
-
-    public AccessLog(int id, int userId, String action, String timestamp) {
+    public AccessLog(int id, int userId, String action, LocalDateTime timestamp) {
         this.id = id;
         this.userId = userId;
         this.action = action;
@@ -34,16 +32,16 @@ public class AccessLog implements Serializable {
         this.action = action;
     }
 
-    public String getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
     public String getFormattedTimestamp() {
-        return timestamp.replace("T", " ").replace("Z", "");
+        return timestamp.toString();
     }
 
     @Override

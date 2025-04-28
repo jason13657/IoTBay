@@ -15,8 +15,9 @@ public class User implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String role;
+    private boolean isActive;
 
-    public User(int id, String email, String firstName, String lastName, String password, String gender, String favoriteColor, LocalDate dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, String role) {
+    public User(int id, String email, String firstName, String lastName, String password, String gender, String favoriteColor, LocalDate dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, String role, boolean isActive) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -28,6 +29,7 @@ public class User implements Serializable {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.role = role;
+        this.isActive = isActive;
     }
 
     public int getId() {
@@ -112,6 +114,18 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public void deactivate() {
+        this.isActive = false;
     }
 
     public String getFullName() {
