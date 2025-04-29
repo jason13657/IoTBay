@@ -1,10 +1,14 @@
 package dao;
 
-import model.Order;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.Order;
 
 public class OrderDAO {
     private final Connection connection;
@@ -81,6 +85,22 @@ public class OrderDAO {
     // DELETE: Delete order by ID
     public void deleteOrder(int orderId) throws SQLException {
         String query = "DELETE FROM \"order\" WHERE order_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, orderId);
+            statement.executeUpdate();
+        }
+    }
+
+    public void cancelOrdersByUserId(int userId) throws SQLException {
+        String query = "UPDATE \"order\" SET status = '취소됨' WHERE user_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            statement.executeUpdate();
+        }
+    }
+
+    public void cancelOrder(int orderId) throws SQLException {
+        String query = "UPDATE \"order\" SET status = '취소됨' WHERE order_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, orderId);
             statement.executeUpdate();

@@ -119,3 +119,27 @@ public class UserDAOImpl implements UserDAO {
         statement.setBoolean(11, user.isActive());
     }
 }
+
+//==================the code that Jungwook added ===================
+@Override
+    public boolean isEmailExists(String email) throws SQLException {
+        String query = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteUser(int userId) throws SQLException {
+        // 주문 취소 로직 추가 (트랜잭션 관리 필요)
+        String deleteUserQuery = "DELETE FROM users WHERE user_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteUserQuery)) {
+            statement.setInt(1, userId);
+            return statement.executeUpdate() > 0;
+        }
+    }
+}
