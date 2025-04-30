@@ -90,4 +90,23 @@ public class AccessLogDAOImpl implements AccessLogDAO {
             rs.getString("ip_address")
         );
     }
+
+    public List<AccessLog> findByUserIdAndDate(int userId, java.sql.Date date) throws SQLException {
+        String query = "SELECT * FROM access_logs WHERE user_id = ? AND DATE(login_time) = ?";
+        List<AccessLog> logs = new ArrayList<>();
+    
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            statement.setDate(2, date);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    logs.add(mapResultSetToAccessLog(rs));
+                }
+            }
+        }
+    
+        return logs;
+    }
+    
+
 }
