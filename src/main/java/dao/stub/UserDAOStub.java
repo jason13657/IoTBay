@@ -1,14 +1,14 @@
 package dao.stub;
 
-import model.User;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import dao.interfaces.UserDAO;
+import model.User;
 
 public class UserDAOStub implements UserDAO {
     private final List<User> users = new ArrayList<>();
@@ -109,7 +109,12 @@ public class UserDAOStub implements UserDAO {
     }
 
     @Override
-    public void deleteUser(int id) throws SQLException {
-        users.removeIf(user -> user.getId() == id);
+    public boolean deleteUser(int id) throws SQLException {
+        return users.removeIf(user -> user.getId() == id);
+    }
+
+    @Override
+    public boolean isEmailExists(String email) throws SQLException {
+        return users.stream().anyMatch(user -> user.getEmail().equals(email));
     }
 }

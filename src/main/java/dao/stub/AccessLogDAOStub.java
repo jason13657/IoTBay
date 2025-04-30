@@ -1,23 +1,24 @@
 package dao.stub;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import model.AccessLog;
+
 import dao.interfaces.AccessLogDAO;
+import model.AccessLog;
 
 public class AccessLogDAOStub implements AccessLogDAO {
     private final List<AccessLog> logs = new ArrayList<>();
 
     public AccessLogDAOStub() {
-        // Example initial data
-        logs.add(new AccessLog(1, 1, "LOGIN", LocalDateTime.now().minusDays(1)));
-        logs.add(new AccessLog(2, 2, "LOGOUT", LocalDateTime.now()));
+        // 예시 초기 데이터
+        logs.add(new AccessLog(1, 1, Timestamp.valueOf("2024-04-29 09:00:00"), null, "127.0.0.1"));
+        logs.add(new AccessLog(2, 2, Timestamp.valueOf("2024-04-30 10:00:00"), Timestamp.valueOf("2024-04-30 12:00:00"), "192.168.0.2"));
     }
 
     private int getNextId() {
-        return logs.isEmpty() ? 1 : logs.get(logs.size() - 1).getId() + 1;
+        return logs.isEmpty() ? 1 : logs.get(logs.size() - 1).getLogId() + 1;
     }
 
     @Override
@@ -25,8 +26,9 @@ public class AccessLogDAOStub implements AccessLogDAO {
         AccessLog newLog = new AccessLog(
             getNextId(),
             log.getUserId(),
-            log.getAction(),
-            log.getTimestamp()
+            log.getLoginTime(),
+            log.getLogoutTime(),
+            log.getIpAddress()
         );
         logs.add(newLog);
     }
@@ -34,7 +36,7 @@ public class AccessLogDAOStub implements AccessLogDAO {
     @Override
     public AccessLog getAccessLogById(int id) throws SQLException {
         return logs.stream()
-                .filter(log -> log.getId() == id)
+                .filter(log -> log.getLogId() == id)
                 .findFirst()
                 .orElse(null);
     }
@@ -57,6 +59,6 @@ public class AccessLogDAOStub implements AccessLogDAO {
 
     @Override
     public void deleteAccessLog(int id) throws SQLException {
-        logs.removeIf(log -> log.getId() == id);
+        logs.removeIf(log -> log.getLogId() == id);
     }
 }
