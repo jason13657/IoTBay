@@ -1,0 +1,38 @@
+.accesslog__container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px 40px;
+    background: #f8fafc;
+    border-radius: 20px;
+    box-shadow: 0 4px 18px 0 rgba(0,0,0,0.06);
+  }
+  
+  .accesslog__title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0077b6;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+  
+  .accesslog__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .accesslog__row:nth-child(even) {
+    background: #e0f7fa;
+  }
+  
+  .accesslog__cell, .accesslog__header {
+    padding: 14px 12px;
+    border-bottom: 1px solid #b2ebf2;
+    font-size: 17px;
+  }
+  
+  .accesslog__header {
+    background: #caf0f8;
+    color: #0077b6;
+    font-weight: bold;
+  }
+  
