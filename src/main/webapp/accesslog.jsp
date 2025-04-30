@@ -4,14 +4,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>로그인 기록 - IoTBay</title>
+    <title>Login History - IoTBay</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
     <jsp:include page="/WEB-INF/views/common/header.jsp" />
     
     <div class="container">
-        <h1>내 로그인 기록</h1>
+        <h1>My Login History</h1>
         
         <% if (request.getAttribute("error") != null) { %>
             <div class="alert alert-danger">
@@ -21,26 +21,26 @@
         
         <form action="${pageContext.request.contextPath}/accessLogs" method="get" class="search-form">
             <div class="form-group">
-                <label for="searchDate">날짜로 검색</label>
+                <label for="searchDate">Search by Date</label>
                 <input type="date" id="searchDate" name="searchDate" value="${searchDate}">
-                <button type="submit" class="btn secondary">검색</button>
-                <a href="${pageContext.request.contextPath}/accessLogs" class="btn link">전체 보기</a>
+                <button type="submit" class="btn secondary">Search</button>
+                <a href="${pageContext.request.contextPath}/accessLogs" class="btn link">View All</a>
             </div>
         </form>
         
         <div class="table-container">
             <c:choose>
                 <c:when test="${empty logs}">
-                    <p>로그인 기록이 없습니다.</p>
+                    <p>No login history found.</p>
                 </c:when>
                 <c:otherwise>
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>로그인 시간</th>
-                                <th>로그아웃 시간</th>
-                                <th>IP 주소</th>
+                                <th>No.</th>
+                                <th>Login Time</th>
+                                <th>Logout Time</th>
+                                <th>IP Address</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,7 +51,7 @@
                                     <td>
                                         <c:choose>
                                             <c:when test="${empty log.logoutTime}">
-                                                <span class="badge badge-info">진행 중</span>
+                                                <span class="badge badge-info">Ongoing</span>
                                             </c:when>
                                             <c:otherwise>
                                                 <fmt:formatDate value="${log.logoutTime}" pattern="yyyy-MM-dd HH:mm:ss" />
@@ -68,7 +68,7 @@
         </div>
         
         <div class="form-group">
-            <a href="${pageContext.request.contextPath}/profile" class="btn secondary">내 정보로 돌아가기</a>
+            <a href="${pageContext.request.contextPath}/profile" class="btn secondary">Back to Profile</a>
         </div>
     </div>
     

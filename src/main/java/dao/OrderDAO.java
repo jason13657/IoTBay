@@ -90,7 +90,7 @@ public class OrderDAO {
             statement.executeUpdate();
         }
     }
-
+    // the code jungwook added ==========================
     public void cancelOrdersByUserId(int userId) throws SQLException {
         String query = "UPDATE \"order\" SET status = '취소됨' WHERE user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
