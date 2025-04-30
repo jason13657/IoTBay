@@ -1,9 +1,8 @@
 CREATE TABLE access_logs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    action TEXT NOT NULL,
-    timestamp TEXT NOT NULL,
-    -- Assuming that login attempts are stored as actions
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    login_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    logout_time TIMESTAMP NULL,
     ip_address VARCHAR(45) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

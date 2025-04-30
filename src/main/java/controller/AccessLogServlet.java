@@ -2,7 +2,6 @@ package controller;
 
 import dao.AccessLogDAOImpl;
 import model.AccessLog;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
