@@ -12,4 +12,9 @@ public class PasswordUtil {
         }
         return hexString.toString();
     }
+
+    public static boolean verifyPassword(String password, String hashedPassword) throws Exception {
+        String hashedInput = hashPassword(password);
+        return hashedInput.equals(hashedPassword);
+    }
 }

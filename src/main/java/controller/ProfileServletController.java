@@ -4,20 +4,23 @@ import dao.UserDAOImpl;
 import model.User;
 import utils.PasswordUtil;
 import utils.ValidationUtil;
+import utils.DBUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.Connection;
 
 @WebServlet("/profile")
 public class ProfileServletController extends HttpServlet {
-    
+
     private UserDAOImpl userDAO;
 
     @Override
     public void init() {
-        userDAO = new UserDAOImpl();
+        Connection conn = DBUtil.getConnection();
+        userDAO = new UserDAOImpl(conn);
     }
 
     @Override
@@ -42,13 +45,15 @@ public class ProfileServletController extends HttpServlet {
 
         User user = (User) session.getAttribute("user");
 
-        String fullName = req.getParameter("fullName");
+        String firstName = req.getParameter("firstName");
+        String lastName = req.getParameter("lastName");
         String phone = req.getParameter("phone");
         String currentPassword = req.getParameter("currentPassword");
         String newPassword = req.getParameter("newPassword");
         String confirmPassword = req.getParameter("confirmPassword");
 
-        String error = ValidationUtil.validateProfileUpdate(fullName, phone);
+        // 유효성 검사
+        String error = ValidationUtil.validateProfileUpdate(firstName, lastName, phone);
         if (error != null) {
             req.setAttribute("error", error);
             req.setAttribute("user", user);
@@ -57,7 +62,8 @@ public class ProfileServletController extends HttpServlet {
         }
 
         try {
-            user.setFullName(fullName);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
             user.setPhone(phone);
 
             if (currentPassword != null && !currentPassword.isEmpty()) {
@@ -79,7 +85,7 @@ public class ProfileServletController extends HttpServlet {
                 user.setPassword(PasswordUtil.hashPassword(newPassword));
             }
 
-            userDAO.update(user);
+            userDAO.updateUser(user.getId(), user);
             session.setAttribute("user", user);
 
             req.setAttribute("message", "정보가 성공적으로 업데이트되었습니다.");
