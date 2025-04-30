@@ -2,8 +2,8 @@ package controller;
 
 import dao.UserDAOImpl;
 import model.User;
-import util.PasswordUtil;
-import util.ValidationUtil;
+import utils.PasswordUtil;
+import utils.ValidationUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

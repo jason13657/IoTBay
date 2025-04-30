@@ -96,6 +96,19 @@ public class UserDAOImpl implements UserDAO {
         }
         return false;
     }
+@Override
+public User findByEmail(String email) throws SQLException {
+    String query = "SELECT * FROM users WHERE email = ?";
+    try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setString(1, email);
+        try (ResultSet rs = statement.executeQuery()) {
+            if (rs.next()) {
+                return mapResultSetToUser(rs);
+            }
+        }
+    }
+    return null; // 이메일에 해당하는 사용자가 없으면 null 반환
+}
 
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         return new User(
@@ -127,4 +140,7 @@ public class UserDAOImpl implements UserDAO {
         statement.setString(10, user.getRole());
         statement.setBoolean(11, user.isActive());
     }
-}
+    
+    
+}   
+

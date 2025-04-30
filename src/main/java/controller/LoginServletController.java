@@ -5,13 +5,14 @@ import dao.UserDAOImpl;
 import model.AccessLog;
 import model.User;
 import utils.PasswordUtil;
-import utils.DBUtil;
+import db.DBConnection; // Import the DBConnection class
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 @WebServlet("/login")
@@ -22,10 +23,15 @@ public class LoginServletController extends HttpServlet {
 
     @Override
     public void init() {
-        // DB 커넥션 생성 (DBUtil.getConnection()은 예시입니다. 실제 환경에 맞게 수정하세요)
-        Connection conn = DBUtil.getConnection();
-        userDAO = new UserDAOImpl(conn);
-        accessLogDAO = new AccessLogDAOImpl(conn);
+        try {
+            // DB 커넥션 생성
+            Connection conn = DBConnection.getConnection(); // Use DBConnection here
+            userDAO = new UserDAOImpl(conn);
+            accessLogDAO = new AccessLogDAOImpl(conn);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            // Log the error or throw a ServletException if connection fails
+        }
     }
 
     @Override
@@ -59,9 +65,10 @@ public class LoginServletController extends HttpServlet {
             AccessLog log = new AccessLog();
             log.setUserId(user.getId());
             log.setLoginTime(new Timestamp(System.currentTimeMillis()));
-            log.setLogoutTime(null);
+            log.setLogoutTime(null); // 로그인 로그에는 로그아웃 시간이 없음
             log.setIpAddress(req.getRemoteAddr());
 
+            // 로그인 기록 저장
             int logId = accessLogDAO.createLoginLog(log);
             session.setAttribute("currentLogId", logId);
 
