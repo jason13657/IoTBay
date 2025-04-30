@@ -1,56 +1,60 @@
 package model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class AccessLog implements Serializable {
-    private int id;
+    private int logId;          // 필드명 변경 (id → logId)
     private int userId;
-    private String action;
-    private LocalDateTime timestamp;
+    private Timestamp loginTime;  // 추가
+    private Timestamp logoutTime; // 추가
+    private String ipAddress;     // 추가
 
-    public AccessLog(int id, int userId, String action, LocalDateTime timestamp) {
-        this.id = id;
+    // 기본 생성자
+    public AccessLog() {}
+
+    // 전체 필드 생성자
+    public AccessLog(int logId, int userId, Timestamp loginTime, Timestamp logoutTime, String ipAddress) {
+        this.logId = logId;
         this.userId = userId;
-        this.action = action;
-        this.timestamp = timestamp;
+        this.loginTime = loginTime;
+        this.logoutTime = logoutTime;
+        this.ipAddress = ipAddress;
     }
 
-    public int getId() {
-        return id;
+    // Getter & Setter
+    public int getLogId() { return logId; }
+    public void setLogId(int logId) { this.logId = logId; }
+
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+
+    public Timestamp getLoginTime() { return loginTime; }
+    public void setLoginTime(Timestamp loginTime) { this.loginTime = loginTime; }
+
+    public Timestamp getLogoutTime() { return logoutTime; }
+    public void setLogoutTime(Timestamp logoutTime) { this.logoutTime = logoutTime; }
+
+    public String getIpAddress() { return ipAddress; }
+    public void setIpAddress(String ipAddress) { this.ipAddress = ipAddress; }
+
+    // 포맷팅된 시간 반환 (옵션)
+    public String getFormattedLoginTime() {
+        return loginTime != null ? loginTime.toString() : "N/A";
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getFormattedTimestamp() {
-        return timestamp.toString();
+    public String getFormattedLogoutTime() {
+        return logoutTime != null ? logoutTime.toString() : "Ongoing";
     }
 
     @Override
     public String toString() {
         return "AccessLog{" +
-                "id=" + id +
+                "logId=" + logId +
                 ", userId=" + userId +
-                ", action='" + action + '\'' +
-                ", timestamp='" + timestamp + '\'' +
+                ", loginTime=" + loginTime +
+                ", logoutTime=" + logoutTime +
+                ", ipAddress='" + ipAddress + '\'' +
                 '}';
     }
 }
