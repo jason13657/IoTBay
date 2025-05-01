@@ -87,6 +87,15 @@ public class UserDAOStub implements UserDAO {
                 .filter(user -> user.getEmail().contains(email))
                 .collect(Collectors.toList());
     }
+    
+    @Override
+    public User getUserByEmail(String email) throws SQLException {
+    return users.stream()
+            .filter(user -> user.getEmail().equals(email))
+            .findFirst()
+            .orElse(null);
+    }
+
 
     @Override
     public void updateUser(int id, User updatedUser) throws SQLException {
