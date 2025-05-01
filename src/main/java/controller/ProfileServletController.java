@@ -1,16 +1,21 @@
 package controller;
 
-import dao.UserDAOImpl;
-import model.User;
-import utils.PasswordUtil;
-import utils.ValidationUtil;
-import db.DBConnection;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.sql.Connection;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import dao.UserDAOImpl;
+import db.DBConnection;
+import model.User;
+import utils.PasswordUtil;
+import utils.ValidationUtil;
 
 @WebServlet("/profile")
 public class ProfileServletController extends HttpServlet {
@@ -19,8 +24,13 @@ public class ProfileServletController extends HttpServlet {
 
     @Override
     public void init() {
-        Connection conn = DBUtil.getConnection();
-        userDAO = new UserDAOImpl(conn);
+        try {
+            Connection conn = DBConnection.getConnection();
+            userDAO = new UserDAOImpl(conn);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            // 필요하다면: throw new RuntimeException(e);
+        }
     }
 
     @Override

@@ -1,21 +1,33 @@
 package controller;
 
-import dao.AccessLogDAOImpl;
+import java.io.IOException;
+import java.sql.Connection; // DBConnection import
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.util.Date;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import dao.AccessLogDAOImpl;
+import db.DBConnection;
 
 @WebServlet("/logout")
 public class LogoutServletController extends HttpServlet {
-    
+
     private AccessLogDAOImpl accessLogDAO;
 
     @Override
     public void init() {
-        accessLogDAO = new AccessLogDAOImpl();
+        try {
+            Connection conn = DBConnection.getConnection();
+            accessLogDAO = new AccessLogDAOImpl(conn);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 필요시: throw new ServletException(e);
+        }
     }
 
     @Override
@@ -25,7 +37,8 @@ public class LogoutServletController extends HttpServlet {
             Integer logId = (Integer) session.getAttribute("currentLogId");
             if (logId != null) {
                 try {
-                    accessLogDAO.updateLogoutTime(logId, new Date());
+                    // Timestamp로 현재 시간 전달
+                    accessLogDAO.updateLogoutTime(logId, new Timestamp(System.currentTimeMillis()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
