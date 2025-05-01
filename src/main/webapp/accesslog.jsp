@@ -13,12 +13,14 @@
     <div class="container">
         <h1>My Login History</h1>
         
-        <% if (request.getAttribute("error") != null) { %>
+        <%-- 에러 메시지 출력 --%>
+        <c:if test="${not empty error}">
             <div class="alert alert-danger">
-                <%= request.getAttribute("error") %>
+                ${error}
             </div>
-        <% } %>
+        </c:if>
         
+        <%-- 날짜 검색 폼 --%>
         <form action="${pageContext.request.contextPath}/accessLogs" method="get" class="search-form">
             <div class="form-group">
                 <label for="searchDate">Search by Date</label>
@@ -28,6 +30,7 @@
             </div>
         </form>
         
+        <%-- 로그인 기록 테이블 --%>
         <div class="table-container">
             <c:choose>
                 <c:when test="${empty logs}">
