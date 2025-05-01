@@ -11,8 +11,8 @@
         <a href="index.jsp">
             <img src="images/logo.png" alt="IoT Bay logo" />
         </a>
-        <form action="browse.jsp" method="get" id="searchForm">
-            <input type="text" name="query" placeholder="Search..." id="searchInput" onkeyup="showSuggestions(this.value)">
+        <form action="search" method="get" id="searchForm">
+            <input type="text" name="query" placeholder="Search Products..." id="searchInput" onkeyup="showSuggestions(this.value)" autocomplete="off">
             <button type="submit">Search</button>
             <div id="suggestions" style="display:none; border: 1px solid #ccc; max-width: 200px; background-color: white; position: absolute; z-index: 10;"></div>
         </form>
@@ -37,4 +37,11 @@
             </button>
         </form>
     <% } %>
+    <script>
+        if (window.location.pathname === '/index.jsp' || window.location.pathname === '/') {
+            document.getElementById('searchForm').style.display = 'flex';
+        } else {
+            document.getElementById('searchForm').style.display = 'none';
+        }
+    </script>
 </header>

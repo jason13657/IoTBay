@@ -345,7 +345,7 @@ input[type="color"].register__input--favcol {
 }
 
 #searchForm {
-  display: flex;
+  display: none;
   justify-content: center;
   margin-top: 20px;
   margin-left: 20px;
