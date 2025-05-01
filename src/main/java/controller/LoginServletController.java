@@ -1,19 +1,23 @@
 package controller;
 
-import dao.AccessLogDAOImpl;
-import dao.UserDAOImpl;
-import model.AccessLog;
-import model.User;
-import utils.PasswordUtil;
-import db.DBConnection; // Import the DBConnection class
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet; // Import the DBConnection class
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import dao.AccessLogDAOImpl;
+import dao.UserDAOImpl;
+import db.DBConnection;
+import model.AccessLog;
+import model.User;
+import utils.PasswordUtil;
 
 @WebServlet("/login")
 public class LoginServletController extends HttpServlet {
@@ -50,7 +54,7 @@ public class LoginServletController extends HttpServlet {
 
         try {
             // 이메일로 사용자 찾기
-            User user = userDAO.findByEmail(email);
+            User user = userDAO.getUserByEmail(email);
             if (user == null || !PasswordUtil.verifyPassword(password, user.getPassword())) {
                 req.setAttribute("error", "이메일 또는 비밀번호가 올바르지 않습니다.");
                 req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);

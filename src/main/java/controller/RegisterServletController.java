@@ -1,17 +1,20 @@
 package controller;
 
-import dao.UserDAOImpl;
-import model.User;
-import utils.PasswordUtil;
-import utils.ValidationUtil;
-import db.DBConnection;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dao.UserDAOImpl;
+import db.DBConnection;
+import model.User;
+import utils.PasswordUtil;
+import utils.ValidationUtil;
 
 @WebServlet("/register")
 public class RegisterServletController extends HttpServlet {
@@ -25,7 +28,6 @@ public class RegisterServletController extends HttpServlet {
             userDAO = new UserDAOImpl(conn);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            // 필요시 throw new ServletException(e);
         }
     }
 
@@ -43,8 +45,8 @@ public class RegisterServletController extends HttpServlet {
         String phone = req.getParameter("phone");
         String userType = req.getParameter("userType");
 
-        // 서버측 검증 (ValidationUtil 메서드 시그니처에 맞게 수정)
-        String error = ValidationUtil.validateRegistration(fullName, email, password, confirmPassword, phone, userType);
+        // 서버측 검증 (userType은 검증 메서드에 넘기지 않음)
+        String error = ValidationUtil.validateRegistration(fullName, email, password, confirmPassword, phone);
         if (error != null) {
             req.setAttribute("error", error);
             req.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(req, resp);
@@ -52,7 +54,7 @@ public class RegisterServletController extends HttpServlet {
         }
 
         try {
-            // findByEmail 또는 getUserByEmail 등 실제 메서드명에 맞게 수정
+            // 메서드명은 실제 UserDAOImpl에 맞게 수정 (예: findByEmail)
             if (userDAO.getUserByEmail(email) != null) {
                 req.setAttribute("error", "이미 존재하는 이메일입니다.");
                 req.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(req, resp);
@@ -68,7 +70,6 @@ public class RegisterServletController extends HttpServlet {
             user.setPhone(phone);
             user.setRole(userType);
 
-            // createUser로 메서드명 변경 (UserDAOImpl에 맞게)
             userDAO.createUser(user);
 
             resp.sendRedirect(req.getContextPath() + "/login?registered=true");
