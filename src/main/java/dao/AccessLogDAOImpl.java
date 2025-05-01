@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,35 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         this.connection = connection;
     }
 
+    // 1. 로그인 로그 생성(로그인 시점, log_id 반환)
+    public int createLoginLog(AccessLog log) throws SQLException {
+        String query = "INSERT INTO access_logs (user_id, login_time, ip_address) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, log.getUserId());
+            statement.setTimestamp(2, log.getLoginTime());
+            statement.setString(3, log.getIpAddress());
+            statement.executeUpdate();
+
+            try (ResultSet rs = statement.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // 생성된 log_id 반환
+                }
+            }
+        }
+        throw new SQLException("로그인 로그 생성 실패");
+    }
+
+    // 2. 로그아웃 시 로그아웃 시간 업데이트
+    public void updateLogoutTime(int logId, Timestamp logoutTime) throws SQLException {
+        String query = "UPDATE access_logs SET logout_time = ? WHERE log_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setTimestamp(1, logoutTime);
+            statement.setInt(2, logId);
+            statement.executeUpdate();
+        }
+    }
+
+    // 기존 createAccessLog (원한다면 유지)
     @Override
     public void createAccessLog(AccessLog log) throws SQLException {
         String query = "INSERT INTO access_logs (user_id, login_time, logout_time, ip_address) VALUES (?, ?, ?, ?)";
@@ -94,7 +125,6 @@ public class AccessLogDAOImpl implements AccessLogDAO {
     public List<AccessLog> findByUserIdAndDate(int userId, java.sql.Date date) throws SQLException {
         String query = "SELECT * FROM access_logs WHERE user_id = ? AND DATE(login_time) = ?";
         List<AccessLog> logs = new ArrayList<>();
-    
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
             statement.setDate(2, date);
@@ -104,9 +134,6 @@ public class AccessLogDAOImpl implements AccessLogDAO {
                 }
             }
         }
-    
         return logs;
     }
-    
-
 }
