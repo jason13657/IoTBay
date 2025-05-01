@@ -10,6 +10,7 @@ public interface UserDAO {
     List<User> getAllUsers() throws SQLException;
     User getUserById(int id) throws SQLException;
     List<User> getUsersByEmail(String email) throws SQLException;
+    User getUserByEmail(String email) throws SQLException; // ★ 추가
     void updateUser(int id, User user) throws SQLException;
     boolean deleteUser(int id) throws SQLException;
     boolean isEmailExists(String email) throws SQLException;
