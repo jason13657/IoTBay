@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.OrderDAO;
 import dao.UserDAOImpl;
+import dao.interfaces.UserDAO;
 import db.DBConnection;
 import model.User;
 import utils.PasswordUtil;
@@ -45,6 +47,8 @@ public class ProfileServletController extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
     }
 
+    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
@@ -54,6 +58,13 @@ public class ProfileServletController extends HttpServlet {
         }
 
         User user = (User) session.getAttribute("user");
+
+        // [추가] 회원 탈퇴 액션 체크
+        String action = req.getParameter("action");
+        if ("delete".equals(action)) {
+        handleDeleteRequest(req, resp, user, session);
+        return;
+    }
 
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
@@ -108,4 +119,61 @@ public class ProfileServletController extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
         }
     }
+
+    private void handleDeleteRequest(HttpServletRequest req, HttpServletResponse resp, 
+                                User user, HttpSession session) 
+        throws ServletException, IOException {
+    
+    // 1. 비밀번호 확인
+    String deletePassword = req.getParameter("deletePassword");
+    if (!PasswordUtil.verifyPassword(deletePassword, user.getPassword())) {
+        req.setAttribute("error", "비밀번호가 일치하지 않습니다.");
+        req.setAttribute("user", user);
+        req.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
+        return;
+    }
+
+    Connection conn = null;
+    try {
+        // 2. 트랜잭션 시작
+        conn = DBConnection.getConnection();
+        conn.setAutoCommit(false);
+
+        // 3. 주문 상태 변경
+        OrderDAO orderDAO = new OrderDAOImpl(conn);
+        orderDAO.cancelAllOrdersByUserId(user.getId());
+
+        // 4. 사용자 삭제
+        UserDAO userDAO = new UserDAOImpl(conn);
+        boolean isDeleted = userDAO.deleteUser(user.getId());
+        
+        if (!isDeleted) {
+            throw new SQLException("사용자 삭제 실패");
+        }
+
+        // 5. 트랜잭션 커밋
+        conn.commit();
+
+        // 6. 세션 무효화 및 리다이렉트
+        session.invalidate();
+        resp.sendRedirect(req.getContextPath() + "/");
+
+    } catch (SQLException | ClassNotFoundException e) {
+        // 트랜잭션 롤백
+        try { if (conn != null) conn.rollback(); } 
+        catch (SQLException ex) { ex.printStackTrace(); }
+        
+        req.setAttribute("error", "탈퇴 처리 중 오류가 발생했습니다.");
+        req.setAttribute("user", user);
+        req.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
+    } finally {
+        // 리소스 정리
+        try { 
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+}
 }
