@@ -14,13 +14,14 @@ public class UserDAOStub implements UserDAO {
     private final List<User> users = new ArrayList<>();
 
     public UserDAOStub() {
-        // Sample dummy data
+        // Sample dummy data (User 생성자 파라미터 순서에 맞춤)
         users.add(new User(
                 1,
                 "john.doe@example.com",
                 "John",
                 "Doe",
                 "password123",
+                "010-1111-2222", // phone
                 "Male",
                 "Blue",
                 LocalDate.of(1990, 1, 1),
@@ -35,6 +36,7 @@ public class UserDAOStub implements UserDAO {
                 "Jane",
                 "Smith",
                 "password456",
+                "010-3333-4444", // phone
                 "Female",
                 "Red",
                 LocalDate.of(1992, 5, 15),
@@ -54,6 +56,7 @@ public class UserDAOStub implements UserDAO {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getPassword(),
+                user.getPhone(),
                 user.getGender(),
                 user.getFavoriteColor(),
                 user.getDateOfBirth(),
@@ -95,11 +98,12 @@ public class UserDAOStub implements UserDAO {
                         updatedUser.getFirstName(),
                         updatedUser.getLastName(),
                         updatedUser.getPassword(),
+                        updatedUser.getPhone(),
                         updatedUser.getGender(),
                         updatedUser.getFavoriteColor(),
                         updatedUser.getDateOfBirth(),
-                        users.get(i).getCreatedAt(), 
-                        LocalDateTime.now(),      
+                        users.get(i).getCreatedAt(),
+                        LocalDateTime.now(),
                         updatedUser.getRole(),
                         updatedUser.isActive()
                 ));
