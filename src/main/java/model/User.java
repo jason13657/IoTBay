@@ -125,6 +125,11 @@ public class User implements Serializable {
     public String getRole() {
         return role;
     }
+    /**
+     * 사용자 역할 (예: ADMIN, USER 등)
+     */ 
+    //Enum으로 변경 가능 
+    
     public void setRole(String role) {
         this.role = role;
     }

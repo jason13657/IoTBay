@@ -1,14 +1,9 @@
 CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  email TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  first_name TEXT,
-  last_name TEXT,
-  gender TEXT,
-  favorite_color TEXT,
-  date_of_birth TEXT,
-  created_at TEXT,
-  updated_at TEXT,
-  role TEXT,
-  is_active BOOLEAN
+  role TEXT NOT NULL DEFAULT 'user',
+  is_active BOOLEAN NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

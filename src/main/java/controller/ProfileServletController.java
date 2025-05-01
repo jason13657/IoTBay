@@ -4,7 +4,7 @@ import dao.UserDAOImpl;
 import model.User;
 import utils.PasswordUtil;
 import utils.ValidationUtil;
-import utils.DBUtil;
+import db.DBConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
