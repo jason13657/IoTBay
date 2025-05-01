@@ -24,15 +24,17 @@ public class BrowseProductController extends HttpServlet {
             Connection connection = DBConnection.getConnection();
             productDAO = new ProductDAOImpl(connection);
         } catch (SQLException e) {
-            throw new RuntimeException("Faild to init");
+            throw new RuntimeException("Failed to init");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Faild to init");
+            throw new RuntimeException("Failed to init");
         }
     } 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String keyword = request.getParameter("query");
+
+
         try {
             List<Product> products = productDAO.getProductsByName(keyword);
             request.setAttribute("results", products);
@@ -41,12 +43,12 @@ public class BrowseProductController extends HttpServlet {
             try {
                 request.getRequestDispatcher("browse.jsp").forward(request, response);
             } catch (ServletException e) {
-                throw new RuntimeException("Faild to get products");
+                throw new RuntimeException(e);
             } catch (IOException e) {
-                throw new RuntimeException("Faild to get products");
+                throw new RuntimeException(e);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Faild to get products");
+            throw new RuntimeException(e);
         }
         
 

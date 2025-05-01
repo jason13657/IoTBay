@@ -1,5 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Product" %>
+<%
+    List<model.Product> products = (List<model.Product>) request.getAttribute("results");
+    String keyword = (String) request.getAttribute("keyword");
+%>
+
+
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -8,16 +14,32 @@
     </head>
     <body>
         <jsp:include page="components/header.jsp" />
-        <div class="product__container">
-            <c:forEach var="product" items="${results}">
-                <p>${product.name}</p>
-            </c:forEach>
-        </div>
+
+        <section class="base__container">
+            <h2>Results for "<%= keyword %>"</h2>
+            <div class="product__container">
+                <%
+                    if (products != null && !products.isEmpty()) {
+                        for (Product p : products) {
+                %>
+                            <div class="product__card">
+                                <img class="product__image" src="<%= p.getImageUrl() %>" alt="<%= p.getName() %>" />
+                                <h4 class="product__title"><%= p.getName() %></h4>
+                                <p class="product__price">$<%= p.getPrice() %></p>
+                            </div>
+                <%
+                        }
+                    } else {
+                %>
+                        <p>No results found.</p>
+                <%
+                    }
+                %>
+            </div>
+        </section>
+    </body>
+    </div>
+        </section>
+
     </body>
 </html>
-
-<!--                 <div class="product__card">
-                    <img class="product__image" src="images/sample1.png" alt="Sample 1" />
-                    <h4 class="product__title">Sensor</h4>
-                    <p class="product__price">$459</p>
-                </div> -->

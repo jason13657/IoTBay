@@ -93,7 +93,7 @@ form {
   display: block;
 }
 
-.featured__container {
+.base__container {
   max-width: 1240px;
   margin: auto;
   padding: 0px 40px;
@@ -340,7 +340,7 @@ input[type="color"].register__input--favcol {
 .header__top {
   display: flex;
   align-items: center;
-  
+
   gap: 20px;
 }
 
@@ -363,13 +363,13 @@ input[type="color"].register__input--favcol {
 }
 
 #searchInput:focus {
-  border-color: #007BFF;
+  border-color: #007bff;
 }
 
 #searchForm button {
   padding: 10px 15px;
   border: none;
-  background-color: #007BFF;
+  background-color: #007bff;
   color: white;
   font-size: 16px;
   border-radius: 0 4px 4px 0;
@@ -405,4 +405,3 @@ input[type="color"].register__input--favcol {
 #suggestions div:hover {
   background-color: #f0f0f0;
 }
-

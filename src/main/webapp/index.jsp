@@ -28,7 +28,7 @@
             <img class="hero__image" src="images/hero.png" alt="IoT Hero main"/>
         </section>
 
-        <section class="featured__container">
+        <section class="base__container">
             <h3 class="featured__title">Featured Products</h3>
             <div class="product__container">
                 <div class="product__card">
