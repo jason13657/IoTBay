@@ -53,6 +53,18 @@ public class AccessLogDAOStub implements AccessLogDAO {
     }
 
     @Override
+    public void updateLogoutTime(int userId, Timestamp logoutTime) throws SQLException {
+        // 가장 마지막 로그인 로그의 로그아웃 시간만 갱신
+        for (int i = logs.size() - 1; i >= 0; i--) {
+            AccessLog log = logs.get(i);
+            if (log.getUserId() == userId && log.getLogoutTime() == null) {
+                log.setLogoutTime(logoutTime);
+                break;
+            }
+        }
+    }
+
+    @Override
     public List<AccessLog> getAllAccessLogs() throws SQLException {
         return new ArrayList<>(logs);
     }
