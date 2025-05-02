@@ -5,5 +5,9 @@ CREATE TABLE user_profiles (
   gender TEXT,
   favorite_color TEXT,
   date_of_birth TEXT,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE 
+  --- ON UPDATE CASCADE
+  -- ON DELETE SET NULL, -- 사용자가 삭제될 때 프로필도 삭제
+  
 );
