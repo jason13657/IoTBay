@@ -7,9 +7,16 @@
 
 
 <header class="header">
-    <a href="index.jsp">
-        <img src="images/logo.png" alt="IoT Bay logo" />
-    </a>
+    <div class="header__top">
+        <a href="index.jsp">
+            <img src="images/logo.png" alt="IoT Bay logo" />
+        </a>
+        <form action="search" method="get" id="searchForm">
+            <input type="text" name="query" placeholder="Search Products..." id="searchInput" onkeyup="showSuggestions(this.value)" autocomplete="off">
+            <button type="submit">Search</button>
+            <div id="suggestions" style="display:none; border: 1px solid #ccc; max-width: 200px; background-color: white; position: absolute; z-index: 10;"></div>
+        </form>
+    </div>
     <% if (user == null) { %>
     <div class="header__container">
         <form action="register.jsp" method="post">
@@ -30,4 +37,18 @@
             </button>
         </form>
     <% } %>
+    <script>
+    const path = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+
+    if (
+        path === '/index.jsp' ||
+        path === '/' ||
+        (path === '/search' && params.has('query'))
+    ) {
+        document.getElementById('searchForm').style.display = 'flex';
+    } else {
+        document.getElementById('searchForm').style.display = 'none';
+    }
+    </script>
 </header>
