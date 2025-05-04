@@ -49,38 +49,5 @@
             </div>
         </section>
         <jsp:include page="components/footer.jsp" />
-
-        <script>
-            function showSuggestions(query) {
-              const suggestions = document.getElementById("suggestions");
-              
-              if (query.length === 0) {
-                suggestions.style.display = "none";
-                return;
-              }
-              // IoTBay Products
-              const productList = ["Sensor", "Cables", "Battery", "Drone"];
-              const filteredProducts = productList.filter(product => product.toLowerCase().includes(query.toLowerCase()));
-              
-              suggestions.innerHTML = "";
-              
-              if (filteredProducts.length > 0) {
-                filteredProducts.forEach(product => {
-                  const div = document.createElement("div");
-                  div.textContent = product;
-                  div.style.padding = "10px";
-                  div.style.cursor = "pointer";
-                  div.onclick = function() {
-                    document.getElementById("searchInput").value = product;
-                    suggestions.style.display = "none";
-                  };
-                  suggestions.appendChild(div);
-                });
-                suggestions.style.display = "block";
-              } else {
-                suggestions.style.display = "none";
-              }
-            }
-        </script>
     </body>
 </html>

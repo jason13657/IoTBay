@@ -381,27 +381,4 @@ input[type="color"].register__input--favcol {
   background-color: #0056b3;
 }
 
-#suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  z-index: 10;
-  display: none;
-  max-height: 200px;
-  overflow-y: auto;
-}
 
-#suggestions div {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-#suggestions div:hover {
-  background-color: #f0f0f0;
-}
