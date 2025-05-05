@@ -2,6 +2,7 @@ package dao.stub;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ public class AccessLogDAOStub implements AccessLogDAO {
 
     public AccessLogDAOStub() {
         // 예시 초기 데이터
+
+        //Example data for testing 
         logs.add(new AccessLog(1, 1, Timestamp.valueOf("2024-04-29 09:00:00"), null, "127.0.0.1"));
         logs.add(new AccessLog(2, 2, Timestamp.valueOf("2024-04-30 10:00:00"), Timestamp.valueOf("2024-04-30 12:00:00"), "192.168.0.2"));
     }
@@ -52,17 +55,6 @@ public class AccessLogDAOStub implements AccessLogDAO {
         return result;
     }
 
-    @Override
-    public void updateLogoutTime(int userId, Timestamp logoutTime) throws SQLException {
-        // 가장 마지막 로그인 로그의 로그아웃 시간만 갱신
-        for (int i = logs.size() - 1; i >= 0; i--) {
-            AccessLog log = logs.get(i);
-            if (log.getUserId() == userId && log.getLogoutTime() == null) {
-                log.setLogoutTime(logoutTime);
-                break;
-            }
-        }
-    }
 
     @Override
     public List<AccessLog> getAllAccessLogs() throws SQLException {
@@ -73,4 +65,19 @@ public class AccessLogDAOStub implements AccessLogDAO {
     public void deleteAccessLog(int id) throws SQLException {
         logs.removeIf(log -> log.getLogId() == id);
     }
+
+    @Override
+public List<AccessLog> getAccessLogsByUserIdAndDate(int userId, LocalDate date) throws SQLException {
+    List<AccessLog> result = new ArrayList<>();
+    for (AccessLog log : logs) {
+        if (log.getUserId() == userId && 
+            log.getLoginTime() != null && 
+            log.getLoginTime().toLocalDateTime().toLocalDate().equals(date)) {
+            result.add(log);
+        }
+    }
+    return result;
 }
+
+}
+
