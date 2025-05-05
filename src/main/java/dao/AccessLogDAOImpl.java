@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.interfaces.AccessLogDAO;
 import model.AccessLog;
+
 
 public class AccessLogDAOImpl implements AccessLogDAO {
     private final Connection connection;
@@ -20,6 +22,11 @@ public class AccessLogDAOImpl implements AccessLogDAO {
     }
 
     // 1. 로그인 로그 생성(로그인 시점, log_id 반환)
+    // 이 메서드는 로그인 시점에 호출되어야 하며, 로그아웃 시점은 null로 설정됩니다.
+    // 로그아웃 시점은 updateLogoutTime 메서드를 사용하여 업데이트합니다.
+    // create access log with login time and return the generated log_id
+    // This method is used to create a login log and return the generated log_id   
+
     public int createLoginLog(AccessLog log) throws SQLException {
         String query = "INSERT INTO access_logs (user_id, login_time, ip_address) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -76,18 +83,18 @@ public class AccessLogDAOImpl implements AccessLogDAO {
 
     @Override
     public List<AccessLog> getAccessLogsByUserId(int userId) throws SQLException {
-        String query = "SELECT * FROM access_logs WHERE user_id = ?";
-        List<AccessLog> logs = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, userId);
-            try (ResultSet rs = statement.executeQuery()) {
-                while (rs.next()) {
-                    logs.add(mapResultSetToAccessLog(rs));
-                }
+        String sql = "SELECT * FROM access_logs WHERE user_id = ? ORDER BY login_time DESC";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            List<AccessLog> logs = new ArrayList<>();
+            while (rs.next()) {
+                logs.add(map(rs));
             }
+            return logs;
         }
-        return logs;
     }
+
 
     @Override
     public List<AccessLog> getAllAccessLogs() throws SQLException {
@@ -136,4 +143,46 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         }
         return logs;
     }
+
+
+
+    @Override
+    public List<AccessLog> getAccessLogsByUserIdAndDate(int userId, LocalDate date) throws Exception {
+        String sql = "SELECT * FROM access_logs WHERE user_id = ? AND DATE(login_time) = ? ORDER BY login_time DESC";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.setDate(2, java.sql.Date.valueOf(date));
+            ResultSet rs = stmt.executeQuery();
+            List<AccessLog> logs = new ArrayList<>();
+            while (rs.next()) {
+                logs.add(map(rs));
+            }
+            return logs;
+        }
+    }
+
+    private AccessLog map(ResultSet rs) throws SQLException {
+        return new AccessLog(
+            rs.getInt("id"),
+            rs.getInt("user_id"),
+            rs.getTimestamp("login_time"),
+            rs.getTimestamp("logout_time"),
+            rs.getString("ip_address")  
+            // ← 이 필드도 필요함
+        );
+    }
+    
 }
+
+// 로그아웃 시 로그아웃 시간 업데이트
+// public void updateLogoutTime(int userId, Timestamp logoutTime) throws SQLException {
+//     // 가장 마지막 로그인 로그의 로그아웃 시간만 갱신
+//     for (int i = logs.size() - 1; i >= 0; i--) {
+//         AccessLog log = logs.get(i);
+//         if (log.getUserId() == userId && log.getLogoutTime() == null) {
+//             log.setLogoutTime(logoutTime);
+//             break;
+//         }
+//     }
+// }
+
