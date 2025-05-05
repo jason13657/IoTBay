@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.OrderDAO;
-import dao.OrderDAOImpl;
+// import dao.OrderDAOImpl;
+// comment out OrderDAOImpl is not ready yet
 import dao.UserDAOImpl;
 import dao.interfaces.UserDAO;
 import dao.interfaces.AccessLogDAO; // 접근 로그 DAO 인터페이스
@@ -147,19 +148,27 @@ public class ProfileServletController extends HttpServlet {
         throws ServletException, IOException {
 
         String deletePassword = req.getParameter("deletePassword");
-        if (!PasswordUtil.verifyPassword(deletePassword, user.getPassword())) {
-            req.setAttribute("error", "비밀번호가 일치하지 않습니다.");
+        try {
+            if (!PasswordUtil.verifyPassword(deletePassword, user.getPassword())) {
+                req.setAttribute("error", "비밀번호가 일치하지 않습니다.");
+                req.setAttribute("user", user);
+                req.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
+                return;
+            }
+        } catch (Exception e) {
+            req.setAttribute("error", "비밀번호 확인 중 오류가 발생했습니다.");
             req.setAttribute("user", user);
-            doGet(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
             return;
         }
+        
 
         Connection conn = null;
         try {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
 
-            OrderDAO orderDAO = new OrderDAOImpl(conn);
+            OrderDAO orderDAO = new OrderDAO(conn);
             orderDAO.cancelAllOrdersByUserId(user.getId());
 
             UserDAO userDAO = new UserDAOImpl(conn);
