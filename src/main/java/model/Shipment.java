@@ -2,17 +2,17 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Shipment implements Serializable{
+public class Shipment implements Serializable {
     private final int id;
     private final int orderId;
-    private String shippingAddress;
+    private final int addressId;
     private LocalDateTime shippingDate;
     private String shippingStatus;
 
-    public Shipment(int id, int orderId, String shippingAddress, LocalDateTime shippingDate, String shippingStatus) {
+    public Shipment(int id, int orderId, int addressId, LocalDateTime shippingDate, String shippingStatus) {
         this.id = id;
         this.orderId = orderId;
-        this.shippingAddress = shippingAddress;
+        this.addressId = addressId;
         this.shippingDate = shippingDate;
         this.shippingStatus = shippingStatus;
     }
@@ -25,12 +25,8 @@ public class Shipment implements Serializable{
         return orderId;
     }
 
-    public String getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(String shippingAddress) {
-        this.shippingAddress = shippingAddress;
+    public int getAddressId() {
+        return addressId;
     }
 
     public LocalDateTime getShippingDate() {

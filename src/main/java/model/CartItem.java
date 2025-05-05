@@ -3,15 +3,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class CartItem implements Serializable {
-    private final int id;
-    private int userId;
-    private int productId;
+    private final int userId;
+    private final int productId;
     private int quantity;
     private LocalDateTime addedAt;
 
-    // Constructor to initialize all fields
-    public CartItem(int id, int userId, int productId, int quantity, LocalDateTime addedAt) {
-        this.id = id;
+    // Constructor
+    public CartItem(int userId, int productId, int quantity, LocalDateTime addedAt) {
         this.userId = userId;
         this.productId = productId;
         this.quantity = quantity;
@@ -19,24 +17,12 @@ public class CartItem implements Serializable {
     }
 
     // Getters and setters
-    public int getId() {
-        return id;
-    }
-
     public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public int getProductId() {
         return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
     }
 
     public int getQuantity() {
