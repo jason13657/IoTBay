@@ -13,17 +13,20 @@
   </properties>
 
   <dependencies>
+    <!-- Servlet API dependency -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
       <version>4.0.1</version>
-      <scope>test</scope>
+      <scope>provided</scope>
     </dependency>
+
+    <!-- JUnit Dependency (for testing) -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
-      <scope>test/java/uts/isd/model</scope>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
