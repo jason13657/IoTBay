@@ -84,6 +84,17 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public boolean isEmailExists(String email) throws SQLException {
+        String query = "SELECT 1 FROM User WHERE email = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            try (ResultSet rs = statement.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    @Override
     public void updateUser(int id, User user) throws SQLException {
         String query = "UPDATE User SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?, dateOfBirth = ?, role = ?, updatedAt = ? WHERE userID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -94,29 +105,37 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void deleteUser(int id) throws SQLException {
+    public boolean deleteUser(int id) throws SQLException {
         String query = "DELETE FROM User WHERE userID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
-            statement.executeUpdate();
+            int affected = statement.executeUpdate();
+            return affected > 0;
         }
     }
 
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
+        // 아래는 예시입니다. User 생성자와 DB 컬럼에 맞게 수정하세요.
         return new User(
             rs.getInt("userID"),
+            rs.getString("email"),
+            null, // hashedPassword (DB에 컬럼 있으면 rs.getString("password"))
             rs.getString("firstName"),
             rs.getString("lastName"),
-            rs.getString("email"),
             rs.getString("phoneNumber"),
+            rs.getString("postalCode"),      // 컬럼 존재 시
+            rs.getString("addressLine1"),    // 컬럼 존재 시
+            rs.getString("addressLine2"),    // 컬럼 존재 시
             DateTimeParser.parseLocalDate(rs.getString("dateOfBirth")),
-            rs.getString("role"),
+            null, // paymentMethod (컬럼 존재 시)
             DateTimeParser.parseLocalDateTime(rs.getString("createdAt")),
-            DateTimeParser.parseLocalDateTime(rs.getString("updatedAt"))
+            DateTimeParser.parseLocalDateTime(rs.getString("updatedAt")),
+            rs.getString("role"),
+            true // isActive (컬럼 존재 시 rs.getBoolean("isActive"))
         );
     }
 
-     /**
+    /**
      * @param statement PreparedStatement
      * @param user      User object
      * @param isUpdate  true if for UPDATE (skip createdAt)
