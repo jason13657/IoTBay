@@ -76,6 +76,17 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         }
     }
 
+    @Override
+    public void addAccessLog(AccessLog log) throws SQLException {
+        String query = "INSERT INTO access_logs (user_id, action, timestamp) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, log.getUserId());
+            statement.setString(2, log.getAction());
+            statement.setString(3, DateTimeParser.toText(log.getTimestamp())); // Serialize LocalDateTime to text
+            statement.executeUpdate();
+        }
+    }
+
     private void setAccessLogParams(PreparedStatement statement, AccessLog log) throws SQLException {
         statement.setInt(1, log.getUserId());
         statement.setString(2, log.getAction());
