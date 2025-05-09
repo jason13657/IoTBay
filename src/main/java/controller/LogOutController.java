@@ -48,8 +48,8 @@ public class LogOutController extends HttpServlet {
             // 로그 생성자 수정: logId를 0 또는 적절한 기본값으로 설정
             AccessLog accessLog = new AccessLog(0, userId, "Logout successful", LocalDateTime.now());
 
-            // DAO 메서드 수정: 실제 정의된 메서드를 사용하거나 새로 구현
             accessLogDAO.addAccessLog(accessLog); // 또는 addAccessLog → 실제 메서드명 확인 필요
+            //it still has a issue with wmethod name, it needs to be fixed 
 
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("{\"message\": \"Logout successful\"}");
