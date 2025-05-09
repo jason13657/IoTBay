@@ -8,7 +8,8 @@ public class User implements Serializable {
     private final int id;
     private String email;
     private String password;
-    private String fullName;
+    private String firstName;
+    private String lastName;
 
     // ============== Added fields ================================
     private String phone;
@@ -24,7 +25,7 @@ public class User implements Serializable {
     private String role;
     private boolean isActive;
 
-    public User(int id, String email, String password, String fullName,
+    public User(int id, String email, String password, String firstName, String lastName,
                 String phone, String postalCode, String addressLine1, String addressLine2,
                 LocalDate dateOfBirth, String paymentMethod,
                 LocalDateTime createdAt, LocalDateTime updatedAt,
@@ -32,7 +33,8 @@ public class User implements Serializable {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phone = phone;
         this.postalCode = postalCode;
         this.addressLine1 = addressLine1;
@@ -66,12 +68,25 @@ public class User implements Serializable {
     }
 
     public String getFullName() {
-        return fullName;
+        return firstName + " " + lastName;  
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getFirstName() {
+        return firstName;
     }
+    
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    public String getLastName() {
+        return lastName;
+    }
+    
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
 
     public String getPhone() {
         return phone;

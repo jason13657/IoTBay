@@ -4,6 +4,7 @@ import model.AccessLog;
 import utils.DateTimeParser;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,28 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         }
         return logs;
     }
+
+    @Override
+public List<AccessLog> getAccessLogsByUserIdAndDate(int userId, LocalDate date) throws Exception {
+    List<AccessLog> logs = new ArrayList<>();
+    String sql = "SELECT * FROM AccessLog WHERE userID = ? AND DATE(timestamp) = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, userId);
+        stmt.setDate(2, java.sql.Date.valueOf(date));
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                logs.add(new AccessLog(
+                    rs.getInt("logID"),
+                    rs.getInt("userID"),
+                    rs.getString("action"),
+                    rs.getTimestamp("timestamp").toLocalDateTime()
+                ));
+            }
+        }
+    }
+    return logs;
+}
+
 
     @Override
     public void deleteAccessLog(int id) throws SQLException {
