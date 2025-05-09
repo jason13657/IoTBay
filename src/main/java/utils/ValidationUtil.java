@@ -5,6 +5,8 @@ import java.time.format.DateTimeParseException;
 
 public class ValidationUtil {
 
+
+    
     // 이름 유효성 검사 (영문, 한글, 공백, 하이픈 허용)
     public static String validateName(String name, String fieldName) {
         if (name == null || name.trim().isEmpty()) {
@@ -157,5 +159,7 @@ public class ValidationUtil {
 
     return null;
 }
+
+
 
 }
