@@ -1,6 +1,5 @@
 package model;
 
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,36 +7,42 @@ import java.time.LocalDateTime;
 public class User implements Serializable {
     private final int id;
     private String email;
-    private String firstName;
-    private String lastName;
     private String password;
-    // ========gender is not necessary for the IoT bay proejct======
-    // private String gender;
-    // private String favoriteColor;
-    //===================================================================
+    private String fullName;
+
+    // ============== Added fields ================================
+    private String phone;
+    private String postalCode;
+    private String addressLine1;
+    private String addressLine2;
     private LocalDate dateOfBirth;
+    private String paymentMethod;
+    // ==============================================================
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String role;
     private boolean isActive;
-    //============== //Added phone field
-    private String phone;
-    // //
 
-    public User(int id, String email, String firstName, String lastName, String password, String gender, String favoriteColor, LocalDate dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, String role, boolean isActive) {
+    public User(int id, String email, String password, String fullName,
+                String phone, String postalCode, String addressLine1, String addressLine2,
+                LocalDate dateOfBirth, String paymentMethod,
+                LocalDateTime createdAt, LocalDateTime updatedAt,
+                String role, boolean isActive) {
         this.id = id;
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.password = password;
-        this.gender = gender;
-        this.favoriteColor = favoriteColor;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.postalCode = postalCode;
+        this.addressLine1 = addressLine1;
+        this.addressLine2 = addressLine2;
         this.dateOfBirth = dateOfBirth;
+        this.paymentMethod = paymentMethod;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.role = role;
         this.isActive = isActive;
-        // this.phone = phone;
     }
 
     public int getId() {
@@ -52,22 +57,6 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -76,26 +65,44 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    // public void setPhone(String phone) {
-    //     // Assuming phone is a field in the User class
-    //     // this.phone = phone;
-    //     this.phone = phone;
-    // }
-
-    public String getGender() {
-        return gender;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getFavoriteColor() {
-        return favoriteColor;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setFavoriteColor(String favoriteColor) {
-        this.favoriteColor = favoriteColor;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getAddressLine1() {
+        return addressLine1;
+    }
+
+    public void setAddressLine1(String addressLine1) {
+        this.addressLine1 = addressLine1;
+    }
+
+    public String getAddressLine2() {
+        return addressLine2;
+    }
+
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
     }
 
     public LocalDate getDateOfBirth() {
@@ -104,6 +111,14 @@ public class User implements Serializable {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -140,13 +155,5 @@ public class User implements Serializable {
 
     public void deactivate() {
         this.isActive = false;
-    }
-
-    public String getFullName() {
-        return firstName + " " + lastName;
-    }
-
-    public String getDateOfBirthAsString() {
-        return dateOfBirth != null ? dateOfBirth.toString() : null;
     }
 }
