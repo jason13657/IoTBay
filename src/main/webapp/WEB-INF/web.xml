@@ -27,6 +27,7 @@
         <servlet-name>ManageAccessLog</servlet-name>
         <servlet-class>controller.ManageAccessLogController</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>ManageAccessLog</servlet-name>
         <url-pattern>/api/manage/access-logs</url-pattern>
@@ -49,4 +50,46 @@
         <servlet-name>Login</servlet-name>
         <url-pattern>/api/login</url-pattern>
     </servlet-mapping>
+<!-- =======================New Mappings from feature==================== -->
+    <servlet>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>controller.LogoutController</servlet-class>
+    </servlet>
+
+    <servlet-mapping> 
+    <!-- this will be used to map the logout servlet
+    logout will be simple, remove the all the session attributes -->
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>controller.RegisterController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/api/register</url-pattern>
+    </servlet-mapping>
+
+    <serevlet>
+        <servlet-name>Profile</servlet-name>
+        <servlet-class>controller.ProfileController</servlet-class>
+    </serevlet>
+    <servlet-mapping>
+        <servlet-name>Profile</servlet-name>
+        <url-pattern>/api/profile</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+      <servlet-name>DeleteRegistration</servlet-name>
+      <servlet-class>controller.DeleteAccountController</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+      <servlet-name>DeleteAccountController</servlet-name>
+      <url-pattern>/api/user/deleteAccount</url-pattern>
+  </servlet-mapping>
+
+
 </web-app>
