@@ -36,38 +36,44 @@ public class RegisterController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String email = request.getParameter("email");
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
         String password = request.getParameter("password");
-        String gender = request.getParameter("gender");
-        String favoriteColor = request.getParameter("favcol");
+        String confirmPassword = request.getParameter("confirmPassword");
+        String fullName = request.getParameter("fullName");
+        String phone = request.getParameter("phone");
+
+        // 주소 정보
+        String postalCode = request.getParameter("postalCode");
+        String addressLine1 = request.getParameter("addressLine1");
+        String addressLine2 = request.getParameter("addressLine2");
+
+        // 선택 정보
         String dobString = request.getParameter("dateOfBirth");
+        String paymentMethod = request.getParameter("paymentMethod");
 
-        // Validate required fields
-        if (email == null || email.trim().isEmpty() ||
-            firstName == null || firstName.trim().isEmpty() ||
-            lastName == null || lastName.trim().isEmpty() ||
-            password == null || password.trim().isEmpty() ||
-            dobString == null || dobString.trim().isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "All fields are required.");
+        // 1. 필수 정보 유효성 검사
+        String profileError = ValidationUtil.validateOrderUserProfile(fullName, phone, postalCode, addressLine1);
+        if (profileError != null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, profileError);
             return;
         }
 
-        // Validate email format
-        if (!ValidationUtil.isValidEmail(email)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid email format.");
+        // 2. 이메일 유효성 검사
+        String emailError = ValidationUtil.validateEmail(email);
+        if (emailError != null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, emailError);
             return;
         }
 
-        // Validate password strength
-        if (!ValidationUtil.isValidPassword(password)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Password is too weak.");
+        // 3. 비밀번호 및 확인 비밀번호 유효성 검사
+        String passwordError = ValidationUtil.validatePasswordChange(password, confirmPassword);
+        if (passwordError != null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, passwordError);
             return;
         }
 
-        // Check if email already exists
+        // 4. 중복 이메일 검사
         try {
-            if (userDAO.findByEmail(email) != null) {
+            if (userDAO.getUserByEmail(email) != null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email already exists.");
                 return;
             }
@@ -76,28 +82,44 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        // Parse date of birth
-        LocalDate dateOfBirth;
-        try {
-            dateOfBirth = LocalDate.parse(dobString);
-        } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date of birth.");
-            return;
+        // 5. 생년월일 파싱 (선택)
+        LocalDate dateOfBirth = null;
+        if (dobString != null && !dobString.trim().isEmpty()) {
+            try {
+                dateOfBirth = LocalDate.parse(dobString);
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date of birth.");
+                return;
+            }
         }
 
-        // Hash password
+        // 6. 비밀번호 해싱
         String hashedPassword = PasswordUtil.hashPassword(password);
 
         LocalDateTime now = LocalDateTime.now();
 
         try {
-            int newId = userDAO.getNextId(); // Assumes auto-increment or similar logic
-
-            User newUser = new User(newId, email, firstName, lastName, hashedPassword, gender, favoriteColor, dateOfBirth, now, now, "user", true);
+            // id는 auto-increment이므로 0 또는 null로 설정
+            User newUser = new User(
+                0, // id
+                email,
+                hashedPassword,
+                fullName,
+                phone,
+                postalCode,
+                addressLine1,
+                addressLine2,
+                dateOfBirth,
+                paymentMethod,
+                now,
+                now,
+                "user",
+                true
+            );
 
             userDAO.createUser(newUser);
 
-            // Registration successful
+            // 성공 시
             response.sendRedirect("welcome.jsp");
 
         } catch (Exception e) {
