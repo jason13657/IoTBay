@@ -104,7 +104,8 @@ public class RegisterController extends HttpServlet {
                 0, // id
                 email,
                 hashedPassword,
-                fullName,
+                firstName,
+                lastName,
                 phone,
                 postalCode,
                 addressLine1,
