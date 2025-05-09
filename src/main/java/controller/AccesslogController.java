@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet("/api/accessLogs")
-public class AccessLogApiServlet extends HttpServlet {
+public class AccesslogController extends HttpServlet {
     private AccessLogDAOImpl accessLogDAO;
     private Connection connection;
 
