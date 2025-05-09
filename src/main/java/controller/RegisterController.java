@@ -35,10 +35,12 @@ public class RegisterController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
-        String fullName = request.getParameter("fullName");
         String phone = request.getParameter("phone");
 
         // 주소 정보
@@ -99,6 +101,7 @@ public class RegisterController extends HttpServlet {
         LocalDateTime now = LocalDateTime.now();
 
         try {
+            // Registration completed
             // id는 auto-increment이므로 0 또는 null로 설정
             User newUser = new User(
                 0, // id
@@ -121,6 +124,7 @@ public class RegisterController extends HttpServlet {
             userDAO.createUser(newUser);
 
             // 성공 시
+            //set session attribute
             response.sendRedirect("welcome.jsp");
 
         } catch (Exception e) {

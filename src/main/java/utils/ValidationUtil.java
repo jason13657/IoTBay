@@ -136,4 +136,26 @@ public class ValidationUtil {
 
         return null;
     }
+
+    public static String validateRegisterUserProfile(
+    String firstName, String lastName, String phone, String postalCode, String addressLine1) {
+
+    String firstError = validateName(firstName, "First name");
+    if (firstError != null) return firstError;
+
+    String lastError = validateName(lastName, "Last name");
+    if (lastError != null) return lastError;
+
+    String phoneError = validateAustralianPhone(phone);
+    if (phoneError != null) return phoneError;
+
+    String postalError = validateAustralianPostalCode(postalCode);
+    if (postalError != null) return postalError;
+
+    String addressError = validateAddress(addressLine1);
+    if (addressError != null) return addressError;
+
+    return null;
+}
+
 }
