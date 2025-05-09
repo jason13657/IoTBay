@@ -1,14 +1,16 @@
 package dao;
 
-import model.AccessLog;
-import utils.DateTimeParser;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.interfaces.AccessLogDAO;
+import model.AccessLog;
+import utils.DateTimeParser;
 
 public class AccessLogDAOImpl implements AccessLogDAO {
     private final Connection connection;
@@ -34,6 +36,23 @@ public class AccessLogDAOImpl implements AccessLogDAO {
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
                 logs.add(mapResultSetToAccessLog(rs));
+            }
+        }
+        return logs;
+    }
+
+
+    @Override
+    public List<AccessLog> getAccessLogsByUserIdAndDate(int userId, LocalDate date) throws SQLException {
+        String query = "SELECT id, user_id, action, timestamp FROM access_logs WHERE user_id = ? AND DATE(timestamp) = ?";
+        List<AccessLog> logs = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            statement.setDate(2, java.sql.Date.valueOf(date));
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    logs.add(mapResultSetToAccessLog(rs));
+                }
             }
         }
         return logs;
@@ -68,27 +87,7 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         return logs;
     }
 
-    @Override
-public List<AccessLog> getAccessLogsByUserIdAndDate(int userId, LocalDate date) throws Exception {
-    List<AccessLog> logs = new ArrayList<>();
-    String sql = "SELECT * FROM AccessLog WHERE userID = ? AND DATE(timestamp) = ?";
-    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-        stmt.setInt(1, userId);
-        stmt.setDate(2, java.sql.Date.valueOf(date));
-        try (ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                logs.add(new AccessLog(
-                    rs.getInt("logID"),
-                    rs.getInt("userID"),
-                    rs.getString("action"),
-                    rs.getTimestamp("timestamp").toLocalDateTime()
-                ));
-            }
-        }
-    }
-    return logs;
-}
-
+    
 
     @Override
     public void deleteAccessLog(int id) throws SQLException {

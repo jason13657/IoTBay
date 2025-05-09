@@ -1,22 +1,27 @@
 package controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dao.AccessLogDAOImpl;
-import model.AccessLog;
-import model.User;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dao.AccessLogDAOImpl;
+import model.AccessLog;
+import model.User;
 
 @WebServlet("/api/accessLogs")
 public class AccesslogController extends HttpServlet {
@@ -55,7 +60,7 @@ public class AccesslogController extends HttpServlet {
             List<Map<String, Object>> filteredLogs = new ArrayList<>();
             for (AccessLog log : accessLogs) {
                 Map<String, Object> entry = new HashMap<>();
-                entry.put("loginTime", log.getLoginTime());
+                entry.put("loginTime", log.getTimestamp());
                 filteredLogs.add(entry);
             }
 
