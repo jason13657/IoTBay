@@ -88,7 +88,7 @@ public class User implements Serializable {
     }
     
 
-    public String getPhone() {
+    public String getPhoneNumber() {
         return phone;
     }
 
