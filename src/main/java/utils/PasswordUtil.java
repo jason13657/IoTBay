@@ -1,21 +1,30 @@
-package utils;
+// build.gradle에 추가
+// implementation 'de.mkammerer:argon2-jvm:2.11'
 
-import org.mindrot.jbcrypt.BCrypt;
+import de.mkammerer.argon2.Argon2Factory;
+import de.mkammerer.argon2.Argon2;
 
-public class PasswordUtil {
+public final class PasswordUtil {
+    private static final Argon2 argon2 = Argon2Factory.create();
 
-    // Method to hash the password
+    private PasswordUtil() {}
+
     public static String hashPassword(String password) {
-        // Generate a salt and hash the password
-        String salt = BCrypt.gensalt();
-        return BCrypt.hashpw(password, salt);
+        if (!isValidPassword(password)) {
+            throw new IllegalArgumentException("Invalid password.");
+        }
+        // 파라미터: iterations, memory, parallelism
+        return argon2.hash(3, 65536, 1, password.toCharArray());
     }
 
-    // Method to verify if the entered password matches the hashed password
     public static boolean verifyPassword(String enteredPassword, String storedHash) {
-        if (storedHash == null || storedHash.isEmpty()) {
+        if (!isValidPassword(enteredPassword) || storedHash == null || storedHash.isEmpty()) {
             return false;
         }
-        return BCrypt.checkpw(enteredPassword, storedHash);
+        return argon2.verify(storedHash, enteredPassword.toCharArray());
+    }
+
+    private static boolean isValidPassword(String password) {
+        return password != null && password.length() >= 8;
     }
 }
