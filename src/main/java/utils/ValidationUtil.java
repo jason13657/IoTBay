@@ -1,5 +1,10 @@
 package utils;
 
+//===================Registration Validation Utility===================//
+// This class contains utility methods for validating user input in various scenarios.
+// It includes methods for validating user profile updates, password changes, and email formats.
+// The methods return error messages if the input is invalid, or null if the input is valid.
+//=======================================================================//
 public class ValidationUtil {
 
     // Validates user profile update (e.g., first name, last name, phone)
@@ -27,6 +32,15 @@ public class ValidationUtil {
         if (newPassword.length() < 8) {
             return "Password should be at least 8 characters long.";
         }
+        if (!newPassword.matches(".*[A-Z].*")) {
+            return "Password must contain at least one uppercase letter.";
+        }
+        if (!newPassword.matches(".*[a-z].*")) {
+            return "Password must contain at least one lowercase letter.";
+        }
+        if (!newPassword.matches(".*\\d.*")) {
+            return "Password must contain at least one digit.";
+        }
         return null; // No error
     }
 
@@ -41,4 +55,6 @@ public class ValidationUtil {
         }
         return null; // No error
     }
+
+    
 }

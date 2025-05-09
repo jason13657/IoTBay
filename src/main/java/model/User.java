@@ -16,11 +16,11 @@ public class User implements Serializable {
     private LocalDateTime updatedAt;
     private String role;
     private boolean isActive;
-    //Added phone field
-    private String phone;
-    //
+    // //Added phone field
+    // private String phone;
+    // //
 
-    public User(int id, String email, String firstName, String lastName, String password, String gender, String favoriteColor, LocalDate dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, String role, boolean isActive, String phone) {
+    public User(int id, String email, String firstName, String lastName, String password, String gender, String favoriteColor, LocalDate dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, String role, boolean isActive) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -33,7 +33,7 @@ public class User implements Serializable {
         this.updatedAt = updatedAt;
         this.role = role;
         this.isActive = isActive;
-        this.phone = phone;
+        // this.phone = phone;
     }
 
     public int getId() {
@@ -72,11 +72,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public void setPhone(String phone) {
-        // Assuming phone is a field in the User class
-        // this.phone = phone;
-        this.phone = phone;
-    }
+    // public void setPhone(String phone) {
+    //     // Assuming phone is a field in the User class
+    //     // this.phone = phone;
+    //     this.phone = phone;
+    // }
 
     public String getGender() {
         return gender;

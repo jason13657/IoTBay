@@ -4,6 +4,8 @@ import dao.UserDAOImpl;
 import dao.interfaces.UserDAO;
 import db.DBConnection;
 import model.User;
+import utils.ValidationUtil;
+import utils.PasswordUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,28 +33,71 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        String email = request.getParameter("email");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String password = request.getParameter("password");
+        String gender = request.getParameter("gender");
+        String favoriteColor = request.getParameter("favcol");
+        String dobString = request.getParameter("dateOfBirth");
+
+        // Validate required fields
+        if (email == null || email.trim().isEmpty() ||
+            firstName == null || firstName.trim().isEmpty() ||
+            lastName == null || lastName.trim().isEmpty() ||
+            password == null || password.trim().isEmpty() ||
+            dobString == null || dobString.trim().isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "All fields are required.");
+            return;
+        }
+
+        // Validate email format
+        if (!ValidationUtil.isValidEmail(email)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid email format.");
+            return;
+        }
+
+        // Validate password strength
+        if (!ValidationUtil.isValidPassword(password)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Password is too weak.");
+            return;
+        }
+
+        // Check if email already exists
         try {
-            request.setCharacterEncoding("UTF-8"); // 한글 처리
+            if (userDAO.findByEmail(email) != null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email already exists.");
+                return;
+            }
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error.");
+            return;
+        }
 
-            String email = request.getParameter("email");
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String password = request.getParameter("password");
-            String gender = request.getParameter("gender");
-            String favoriteColor = request.getParameter("favcol");
-            String dobString = request.getParameter("dateOfBirth");
+        // Parse date of birth
+        LocalDate dateOfBirth;
+        try {
+            dateOfBirth = LocalDate.parse(dobString);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date of birth.");
+            return;
+        }
 
-            LocalDate dateOfBirth = LocalDate.parse(dobString);
-            LocalDateTime now = LocalDateTime.now();
+        // Hash password
+        String hashedPassword = PasswordUtil.hashPassword(password);
 
-            // ID는 DB에서 자동 증가하거나, 별도로 생성 로직이 필요
-            int newId = userDAO.getNextId(); // getNextId()는 따로 구현되어야 함
+        LocalDateTime now = LocalDateTime.now();
 
-            User newUser = new User(newId, email, firstName, lastName, password, gender, favoriteColor, dateOfBirth, now, now, "user", true);
+        try {
+            int newId = userDAO.getNextId(); // Assumes auto-increment or similar logic
 
-            userDAO.addUser(newUser); // DAO에 addUser 메서드 필요
+            User newUser = new User(newId, email, firstName, lastName, hashedPassword, gender, favoriteColor, dateOfBirth, now, now, "user", true);
 
-            // 성공 시
+            userDAO.createUser(newUser);
+
+            // Registration successful
             response.sendRedirect("welcome.jsp");
 
         } catch (Exception e) {
