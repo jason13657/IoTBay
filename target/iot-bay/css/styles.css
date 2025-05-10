@@ -96,7 +96,7 @@ form {
 .base__container {
   max-width: 1240px;
   margin: auto;
-  padding: 0px 40px;
+  padding: 0px 100px;
 }
 
 .featured__title {
@@ -381,4 +381,8 @@ input[type="color"].register__input--favcol {
   background-color: #0056b3;
 }
 
+.product__image-large {
+  width: 200px;
+  height: 200px;
+}
 

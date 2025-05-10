@@ -12,21 +12,30 @@
     <jsp:include page="components/header.jsp" />
 
     <section class="base__container">
-        <div class="product__details">
-            <img src="<%= product.getImageUrl() %>" alt="<%= product.getName() %>" class="product__image-large" />
-            <h2><%= product.getName() %></h2>
-            <p>Price: $<%= product.getPrice() %></p>
-            <p>Description: <%= product.getDescription() %></p>
+        <div class="product__container">
+            <div class="product__left">
+                <img src="<%= product.getImageUrl() %>" alt="<%= product.getName() %>" class="product__image" />
+            </div>
 
-            <form method="post" action="wishlist">
-                <input type="hidden" name="productId" value="<%= product.getId() %>" />
-                <button type="submit">Add to Wishlist</button>
-            </form>
+            <div class="product__right">
+                <h2 class="product__name"><%= product.getName() %></h2>
+                <p class="product__price">$<%= product.getPrice() %></p>
 
-            <form method="post" action="cart">
-                <input type="hidden" name="productId" value="<%= product.getId() %>" />
-                <button type="submit">Add to Cart</button>
-            </form>
+                <form method="post" action="wishlist">
+                    <input type="hidden" name="productId" value="<%= product.getId() %>" />
+                    <button type="submit" class="product__btn product__btn--outline">Wishlist</button>
+                </form>
+
+                <form method="post" action="cart">
+                    <input type="hidden" name="productId" value="<%= product.getId() %>" />
+                    <button type="submit" class="product__btn">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="product__details-section">
+            <h3 class="product__details-title">Product Details</h3>
+            <p class="product__description"><%= product.getDescription() %></p>
         </div>
     </section>
 </body>

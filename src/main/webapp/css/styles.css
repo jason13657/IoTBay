@@ -111,11 +111,6 @@ form {
   justify-content: space-between;
 }
 
-.product__container {
-  display: flex;
-  justify-content: space-between;
-}
-
 .product__card {
   width: 33%;
   text-align: center;
@@ -379,10 +374,5 @@ input[type="color"].register__input--favcol {
 
 #searchForm button:hover {
   background-color: #0056b3;
-}
-
-.product__image-large {
-  width: 200px;
-  height: 200px;
 }
 

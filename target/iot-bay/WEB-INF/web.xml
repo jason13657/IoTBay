@@ -40,4 +40,13 @@
         <servlet-name>BrowseProduct</servlet-name>
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProductDetails</servlet-name>
+        <servlet-class>controller.ProductDetailsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProductDetails</servlet-name>
+        <url-pattern>/product</url-pattern>
+    </servlet-mapping>
 </web-app>
