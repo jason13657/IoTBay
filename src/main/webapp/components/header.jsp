@@ -50,5 +50,10 @@
     } else {
         document.getElementById('searchForm').style.display = 'none';
     }
+
+    document.getElementById("searchForm").addEventListener("submit", function(e) {
+        const input = document.getElementById("searchInput");
+        input.value = input.value.trim();
+    });
     </script>
 </header>
