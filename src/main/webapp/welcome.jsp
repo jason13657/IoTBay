@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="model.User" %>
+<%@ page import="uts.isd.iotbay.model.User" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.LocalDateTime" %>
 
