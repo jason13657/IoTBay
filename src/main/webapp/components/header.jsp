@@ -12,7 +12,7 @@
             <img src="images/logo.png" alt="IoT Bay logo" />
         </a>
         <form action="search" method="get" id="searchForm">
-            <input type="text" name="query" placeholder="Search Products..." id="searchInput" onkeyup="showSuggestions(this.value)" autocomplete="off">
+            <input type="text" name="query" placeholder="Search Products..." id="searchInput" onkeyup="showSuggestions(this.value)" autocomplete="off" maxlength="35">
             <button type="submit">Search</button>
             <div id="suggestions" style="display:none; border: 1px solid #ccc; max-width: 200px; background-color: white; position: absolute; z-index: 10;"></div>
         </form>
