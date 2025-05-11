@@ -31,4 +31,22 @@
         <servlet-name>ManageAccessLog</servlet-name>
         <url-pattern>/api/manage/access-logs</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BrowseProduct</servlet-name>
+        <servlet-class>controller.BrowseProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BrowseProduct</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>controller.LoginController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/api/login</url-pattern>
+    </servlet-mapping>
 </web-app>

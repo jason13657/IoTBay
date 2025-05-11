@@ -86,6 +86,11 @@ public class UserDAOStub implements UserDAO {
     }
 
     @Override
+    public User getUserByEmail(String email) throws SQLException {
+        return null;
+    }
+
+    @Override
     public void updateUser(int id, User updatedUser) throws SQLException {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getId() == id) {
