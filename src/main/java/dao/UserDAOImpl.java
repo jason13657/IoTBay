@@ -20,9 +20,9 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void createUser(User user) throws SQLException {
-        String query = "INSERT INTO users (email, first_name, last_name, password, gender, favorite_color, date_of_birth, created_at, updated_at, role, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO User (firstName, lastName, email, phoneNumber, dateOfBirth, role, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            setUserParams(statement, user);
+            setUserParams(statement, user, false);
             statement.executeUpdate();
         }
     }
@@ -30,7 +30,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users";
+        String query = "SELECT * FROM User";
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
@@ -42,7 +42,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserById(int id) throws SQLException {
-        String query = "SELECT * FROM users WHERE id = ?";
+        String query = "SELECT * FROM User WHERE userID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet rs = statement.executeQuery()) {
@@ -57,9 +57,9 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getUsersByEmail(String email) throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE email LIKE ?";
+        String query = "SELECT * FROM User WHERE email LIKE ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, email);
+            statement.setString(1, "%" + email + "%");
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     users.add(mapResultSetToUser(rs));
@@ -71,65 +71,87 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByEmail(String email) throws SQLException {
-    String query = "SELECT * FROM users WHERE email = ?";
-    try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, email);
-        try (ResultSet rs = statement.executeQuery()) {
-            if (rs.next()) {
-                return mapResultSetToUser(rs);
+        String query = "SELECT * FROM User WHERE email = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToUser(rs);
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isEmailExists(String email) throws SQLException {
+        String query = "SELECT 1 FROM User WHERE email = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            try (ResultSet rs = statement.executeQuery()) {
+                return rs.next();
             }
         }
     }
-    return null; // or throw exception if not found
-}
 
     @Override
     public void updateUser(int id, User user) throws SQLException {
-        String query = "UPDATE users SET email = ?, first_name = ?, last_name = ?, password = ?, gender = ?, favorite_color = ?, date_of_birth = ?, created_at = ?, updated_at = ?, role = ?, is_active = ? WHERE id = ?";
+        String query = "UPDATE User SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?, dateOfBirth = ?, role = ?, updatedAt = ? WHERE userID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            setUserParams(statement, user);
-            statement.setInt(12, id); // Only the last param is different
+            setUserParams(statement, user, true);
+            statement.setInt(8, id);
             statement.executeUpdate();
         }
     }
 
     @Override
-    public void deleteUser(int id) throws SQLException {
-        String query = "DELETE FROM users WHERE id = ?";
+    public boolean deleteUser(int id) throws SQLException {
+        String query = "DELETE FROM User WHERE userID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
-            statement.executeUpdate();
+            int affected = statement.executeUpdate();
+            return affected > 0;
         }
     }
 
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
+        // 아래는 예시입니다. User 생성자와 DB 컬럼에 맞게 수정하세요.
         return new User(
-            rs.getInt("id"),
+            rs.getInt("userID"),
             rs.getString("email"),
-            rs.getString("first_name"),
-            rs.getString("last_name"),
-            rs.getString("password"),
-            rs.getString("gender"),
-            rs.getString("favorite_color"),
-            DateTimeParser.parseLocalDate(rs.getString("date_of_birth")),
-            DateTimeParser.parseLocalDateTime(rs.getString("created_at")),
-            DateTimeParser.parseLocalDateTime(rs.getString("updated_at")),
+            null, // hashedPassword (DB에 컬럼 있으면 rs.getString("password"))
+            rs.getString("firstName"),
+            rs.getString("lastName"),
+            rs.getString("phoneNumber"),
+            rs.getString("postalCode"),      // 컬럼 존재 시
+            rs.getString("addressLine1"),    // 컬럼 존재 시
+            rs.getString("addressLine2"),    // 컬럼 존재 시
+            DateTimeParser.parseLocalDate(rs.getString("dateOfBirth")),
+            null, // paymentMethod (컬럼 존재 시)
+            DateTimeParser.parseLocalDateTime(rs.getString("createdAt")),
+            DateTimeParser.parseLocalDateTime(rs.getString("updatedAt")),
             rs.getString("role"),
-            rs.getInt("is_active") != 0
+            true // isActive (컬럼 존재 시 rs.getBoolean("isActive"))
         );
     }
 
-    private void setUserParams(PreparedStatement statement, User user) throws SQLException {
-        statement.setString(1, user.getEmail());
-        statement.setString(2, user.getFirstName());
-        statement.setString(3, user.getLastName());
-        statement.setString(4, user.getPassword());
-        statement.setString(5, user.getGender());
-        statement.setString(6, user.getFavoriteColor());
-        statement.setString(7, DateTimeParser.toText(user.getDateOfBirth()));
-        statement.setString(8, DateTimeParser.toText(user.getCreatedAt()));
-        statement.setString(9, DateTimeParser.toText(user.getUpdatedAt()));
-        statement.setString(10, user.getRole());
-        statement.setBoolean(11, user.isActive());
+    /**
+     * @param statement PreparedStatement
+     * @param user      User object
+     * @param isUpdate  true if for UPDATE (skip createdAt)
+     */
+    private void setUserParams(PreparedStatement statement, User user, boolean isUpdate) throws SQLException {
+        statement.setString(1, user.getFirstName());
+        statement.setString(2, user.getLastName());
+        statement.setString(3, user.getEmail());
+        statement.setString(4, user.getPhoneNumber());
+        statement.setString(5, DateTimeParser.toText(user.getDateOfBirth()));
+        statement.setString(6, user.getRole());
+        if (isUpdate) {
+            statement.setString(7, DateTimeParser.toText(user.getUpdatedAt()));
+        } else {
+            statement.setString(7, DateTimeParser.toText(user.getCreatedAt()));
+            statement.setString(8, DateTimeParser.toText(user.getUpdatedAt()));
+        }
     }
 }
