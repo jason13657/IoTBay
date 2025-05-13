@@ -21,7 +21,7 @@ import db.DBConnection;
 import model.AccessLog;
 import model.User;
 
-@WebServlet("/api/login")
+@WebServlet("/login")
 public class LoginController extends HttpServlet {
     private AccessLogDAO accessLogDAO;
     private UserDAO userDAO;
