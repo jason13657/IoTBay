@@ -3,5 +3,50 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+    <display-name>IOT-BAY Web Application</display-name>
+    
+    <servlet>
+        <servlet-name>ManageProduct</servlet-name>
+        <servlet-class>controller.ManageProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageProduct</servlet-name>
+        <url-pattern>/api/manage/products</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ManageUser</servlet-name>
+        <servlet-class>controller.ManageUserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageUser</servlet-name>
+        <url-pattern>/api/manage/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ManageAccessLog</servlet-name>
+        <servlet-class>controller.ManageAccessLogController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageAccessLog</servlet-name>
+        <url-pattern>/api/manage/access-logs</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BrowseProduct</servlet-name>
+        <servlet-class>controller.BrowseProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BrowseProduct</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>controller.LoginController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/api/login</url-pattern>
+    </servlet-mapping>
 </web-app>

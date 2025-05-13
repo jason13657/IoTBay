@@ -93,7 +93,7 @@ form {
   display: block;
 }
 
-.featured__container {
+.base__container {
   max-width: 1240px;
   margin: auto;
   padding: 0px 40px;
@@ -335,3 +335,50 @@ input[type="color"].register__input--favcol {
   margin-right: auto;
   padding: 0px 120px;
 }
+
+/* Browse CSS */
+.header__top {
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+}
+
+#searchForm {
+  display: none;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 20px;
+  position: relative;
+}
+
+#searchInput {
+  width: 300px;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+#searchInput:focus {
+  border-color: #007bff;
+}
+
+#searchForm button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#searchForm button:hover {
+  background-color: #0056b3;
+}
+
+
