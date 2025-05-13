@@ -1,5 +1,17 @@
 package controller;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
 
 import dao.AccessLogDAOImpl;
 import dao.UserDAOImpl;
@@ -9,18 +21,12 @@ import db.DBConnection;
 import model.AccessLog;
 import model.User;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-
-@WebServlet("/login")
+@WebServlet("/api/login")
 public class LoginController extends HttpServlet {
     private AccessLogDAO accessLogDAO;
     private UserDAO userDAO;
+
+    private final Gson gson = new Gson();
 
     @Override
     public void init() {
@@ -35,42 +41,36 @@ public class LoginController extends HttpServlet {
         }
     }
 
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                try {
-                    String email = request.getParameter("email");
-                    String password = request.getParameter("password");
-                    User user = userDAO.getUserByEmail(email);
+        try {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            
+            User user = userDAO.getUserByEmail(email);
 
-                    if (user == null) {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().write("{\"message\": \"User not found\"}");
-                        return;
-                    }
+            if (user != null && user.getPassword().equals(password)) {
+                
+                // Successful login
+                AccessLog accessLog = new AccessLog(0, user.getId(), "Login successful", LocalDateTime.now());
 
-                    if (!user.getPassword().equals(password)) {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().write("{\"message\": \"Incorrect password\"}");
-                        return;
-                    }
-                    LocalDateTime now = LocalDateTime.now();
-                    AccessLog accessLog = new AccessLog(0, user.getId(), "User "+user.getEmail()+" Logged in" , now);
-                    accessLogDAO.createAccessLog(accessLog);
-
-                    // Successful login
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", user);
-
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    response.setContentType("application/json");
-                    response.getWriter().write("{\"message\": \"Login successful\"}");
-                    response.sendRedirect("/index.jsp");
-                } catch (SQLException e) {
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    response.getWriter().write("{\"error\": \"Database error: " + e.getMessage() + "\"}");
-                    response.sendRedirect("/index.jsp");
-
+                accessLogDAO.addAccessLog(accessLog);
+                
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write(gson.toJson(user));
+            } else {
+                // Invalid credentials
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"error\": \"Invalid email or password\"}");
+            }
+            
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\": \"Database error: " + e.getMessage() + "\"}");
         }
     }
+
+    
 }
