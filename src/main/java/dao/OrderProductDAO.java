@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package dao;
 
 import model.OrderProduct;
@@ -121,3 +122,5 @@ public class OrderProductDAO {
     }
 }
 >>>>>>> feature/userAccessManage
+=======
+>>>>>>> parent of ff88b35 (updated files)

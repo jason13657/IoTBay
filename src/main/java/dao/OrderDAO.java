@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package dao;
 
 <<<<<<< HEAD
@@ -179,3 +180,5 @@ public class OrderDAO {
 
 //=
 >>>>>>> feature/userAccessManage
+=======
+>>>>>>> parent of ff88b35 (updated files)

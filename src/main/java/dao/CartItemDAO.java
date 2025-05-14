@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package dao;
 
 import model.CartItem;
@@ -131,3 +132,5 @@ public class CartItemDAO {
     }
 }
 >>>>>>> feature/userAccessManage
+=======
+>>>>>>> parent of ff88b35 (updated files)
