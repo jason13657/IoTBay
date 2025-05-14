@@ -22,11 +22,13 @@
                     if (products != null && !products.isEmpty()) {
                         for (Product p : products) {
                 %>
-                            <div class="product__card">
-                                <img class="product__image" src="<%= p.getImageUrl() %>" alt="<%= p.getName() %>" />
-                                <h4 class="product__title"><%= p.getName() %></h4>
-                                <p class="product__price">$<%= p.getPrice() %></p>
-                            </div>
+                <a href="product?productId=<%= p.getId() %>" class="product__link">
+                    <div class="product__card">
+                        <img class="product__image" src="<%= p.getImageUrl() %>" alt="<%= p.getName() %>" />
+                        <h4 class="product__title"><%= p.getName() %></h4>
+                        <p class="product__price">$<%= p.getPrice() %></p>
+                    </div>
+                </a>
                 <%
                         }
                     } else {

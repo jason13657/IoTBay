@@ -64,12 +64,12 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>controller.LoginController</servlet-class>
+        <servlet-name>ProductDetails</servlet-name>
+        <servlet-class>controller.ProductDetailsController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Login</servlet-name>
-        <url-pattern>/api/login</url-pattern>
+        <servlet-name>ProductDetails</servlet-name>
+        <url-pattern>/product</url-pattern>
     </servlet-mapping>
 <!-- =======================New Mappings from feature==================== -->
     <servlet>
