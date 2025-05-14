@@ -38,10 +38,17 @@
         </form>
     <% } %>
     <script>
-        if (window.location.pathname === '/index.jsp' || window.location.pathname === '/') {
-            document.getElementById('searchForm').style.display = 'flex';
-        } else {
-            document.getElementById('searchForm').style.display = 'none';
-        }
+    const path = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+
+    if (
+        path === '/index.jsp' ||
+        path === '/' ||
+        (path === '/search' && params.has('query'))
+    ) {
+        document.getElementById('searchForm').style.display = 'flex';
+    } else {
+        document.getElementById('searchForm').style.display = 'none';
+    }
     </script>
 </header>

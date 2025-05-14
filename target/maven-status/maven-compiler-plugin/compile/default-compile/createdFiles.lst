@@ -1,5 +1,6 @@
 dao/AddressDetailDAO.class
 dao/stub/ProductDAOStub.class
+controller/ProductDetailsController.class
 model/Product.class
 dao/ShipmentDAO.class
 dao/PaymentDAO.class
