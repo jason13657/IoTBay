@@ -331,9 +331,7 @@ input[type="color"].register__input--favcol {
   padding: 0px 120px;
 }
 
-<<<<<<< HEAD
 /* Cart Page */
-
 .cart-nav {
   display: flex;
   align-items: center;
@@ -381,12 +379,11 @@ input[type="color"].register__input--favcol {
   padding: 0.75em 0em;
   font-weight: 200;
 }
-=======
+
 /* Browse CSS */
 .header__top {
   display: flex;
   align-items: center;
-
   gap: 20px;
 }
 
@@ -426,9 +423,3 @@ input[type="color"].register__input--favcol {
 #searchForm button:hover {
   background-color: #0056b3;
 }
-
-<<<<<<< HEAD
-
->>>>>>> feature/userAccessManage
-=======
->>>>>>> feature/userAccessManageAndPayment
