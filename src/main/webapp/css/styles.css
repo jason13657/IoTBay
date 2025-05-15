@@ -331,11 +331,59 @@ input[type="color"].register__input--favcol {
   padding: 0px 120px;
 }
 
+/* Cart Page */
+.cart-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+}
+
+.cart-nav a:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.cart-nav img {
+  max-width: 150px;
+  margin: 0 auto;
+}
+
+.exit-cart-btn {
+  margin-left: auto;
+  border: none;
+  background: white;
+  font-weight: bold;
+  border-bottom: transparent 2px solid;
+}
+
+.exit-cart-btn:hover {
+  cursor: pointer;
+  border-bottom: #0077b6 2px solid; 
+}
+
+.cart-container {
+  padding: 1em;
+}
+
+.cart-header h2 {
+  border-bottom: 2px solid #0077b6;
+  padding: 0.75em 0em;
+}
+
+.cart-main {
+  height: 50vh;
+}
+
+.cart-footer h3 {
+  border-top: 2px solid #0077b6;
+  padding: 0.75em 0em;
+  font-weight: 200;
+}
+
 /* Browse CSS */
 .header__top {
   display: flex;
   align-items: center;
-
   gap: 20px;
 }
 
@@ -375,6 +423,7 @@ input[type="color"].register__input--favcol {
 #searchForm button:hover {
   background-color: #0056b3;
 }
+<<<<<<< HEAD
 
 /* Payment Card Layout */
 /* === Payment Create Page === */
@@ -657,3 +706,5 @@ input[type="color"].register__input--favcol {
     font-size: 15px;
   }
 }
+=======
+>>>>>>> feature/cart-page

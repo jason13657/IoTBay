@@ -3,6 +3,27 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+<<<<<<< HEAD
+  <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CartServlet</servlet-name>
+        <servlet-class>servlet.CartServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CartServlet</servlet-name>
+        <url-pattern>/cart.jsp</url-pattern>
+    </servlet-mapping>
+</web-app>
+=======
     <display-name>IOT-BAY Web Application</display-name>
 
     <!-- ====== Admin / Manage API ====== -->
@@ -89,6 +110,7 @@
         <url-pattern>/api/users/delete</url-pattern>  <!-- 가능하면 DELETE /api/users/{id} 권장 -->
     </servlet-mapping>
 
+<<<<<<< HEAD
     <!-- ====== Payment API ====== -->
     <servlet>
         <servlet-name>Payment</servlet-name>
@@ -109,3 +131,7 @@
     </servlet-mapping>
 
 </web-app>
+=======
+</web-app>
+>>>>>>> feature/userAccessManage
+>>>>>>> feature/cart-page
