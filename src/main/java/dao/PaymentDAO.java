@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Payment;
+import model.User;
 
 public class PaymentDAO {
     private final Connection connection;
@@ -30,6 +31,26 @@ public class PaymentDAO {
             statement.executeUpdate();
         }
     }
+
+    public boolean processCreatePayment(HttpServletRequest request, User user) throws SQLException {
+        String orderId = request.getParameter("orderId");
+        String paymentDate = request.getParameter("paymentDate");
+        String amount = request.getParameter("amount");
+        String detailId = request.getParameter("detailId");
+        String paymentStatus = request.getParameter("paymentStatus");
+
+        Payment payment = new Payment();
+        payment.setUserId(user.getId());
+        payment.setOrderId(Integer.parseInt(orderId));
+        payment.setPaymentDate(LocalDateTime.parse(paymentDate));
+        payment.setAmount(Double.parseDouble(amount));
+        payment.setDetailId(Integer.parseInt(detailId));
+        payment.setPaymentStatus(paymentStatus);
+
+        createPayment(payment);
+        return true;
+        
+
 
     // READ: Get payment by ID
     public Payment getPaymentById(int id) throws SQLException {
@@ -96,7 +117,7 @@ public class PaymentDAO {
         }
         return payments;
     }
-
+    // Search payments by userId, paymentId, and date
     public List<Payment> searchPayments(int userId, Integer paymentId, LocalDateTime date) throws SQLException {
     StringBuilder query = new StringBuilder("SELECT * FROM payment WHERE user_id = ?");
     if (paymentId != null) query.append(" AND id = ?");

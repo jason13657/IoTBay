@@ -376,3 +376,284 @@ input[type="color"].register__input--favcol {
   background-color: #0056b3;
 }
 
+/* Payment Card Layout */
+/* === Payment Create Page === */
+.payment__container {
+  max-width: 900px;
+  margin: 40px auto 32px auto;
+  padding: 32px 32px 24px 32px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 119, 182, 0.09), 0 2px 8px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.payment__title {
+  font-size: 38px;
+  font-weight: 800;
+  color: #0077b6;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+
+.payment__contents {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0;
+  min-height: 500px;
+}
+
+.payment__image {
+  width: 350px;
+  object-fit: cover;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  background: #e0f7fa;
+  display: block;
+}
+
+.payment__form--container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #f8fafc;
+  border-top: #0077b6 2px solid;
+  border-right: #0077b6 2px solid;
+  border-bottom: #0077b6 2px solid;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding: 36px 40px;
+  min-width: 320px;
+  box-sizing: border-box;
+}
+
+.payment__form--title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  color: #0096c7;
+  text-align: center;
+}
+
+.payment__form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+}
+
+.payment__form label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.payment__input {
+  padding: 12px 24px;
+  border-radius: 18px;
+  background-color: #caf0f8;
+  border: 1.5px solid #bde0fe;
+  font-size: 19px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.payment__input:focus {
+  border-color: #0077b6;
+  background-color: #e0f7fa;
+}
+
+.payment__button {
+  background: linear-gradient(90deg, #0077b6 0%, #00b4d8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 15px 0;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+  box-shadow: 0 2px 8px rgba(0,119,182,0.07);
+  transition: background 0.18s, box-shadow 0.18s;
+}
+
+.payment__button:hover {
+  background: linear-gradient(90deg, #023e8a 0%, #0096c7 100%);
+  box-shadow: 0 4px 16px rgba(0,119,182,0.12);
+}
+
+.payment__form .error {
+  color: #e63946;
+  font-weight: 600;
+  margin-top: 10px;
+  background: #ffe5e5;
+  border-radius: 12px;
+  padding: 10px 18px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .payment__contents {
+    flex-direction: column;
+    align-items: center;
+    min-height: unset;
+  }
+  .payment__image {
+    width: 100%;
+    border-radius: 25px 25px 0 0;
+    margin-bottom: 18px;
+  }
+  .payment__form--container {
+    border-radius: 0 0 25px 25px;
+    border-top: none;
+    border-left: #0077b6 2px solid;
+    border-right: #0077b6 2px solid;
+    border-bottom: #0077b6 2px solid;
+    min-width: unset;
+    padding: 24px 12px;
+  }
+}
+
+/* === Accesslog Page === */
+.accesslog__container {
+  max-width: 1100px;
+  margin: 40px auto;
+  background: #f8fafc;
+  border-radius: 22px;
+  box-shadow: 0 4px 18px rgba(0, 119, 182, 0.07);
+  padding: 32px 28px;
+}
+
+.accesslog__title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #0096c7;
+  margin-bottom: 18px;
+  letter-spacing: -0.5px;
+}
+
+.accesslog__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  font-size: 17px;
+  background: transparent;
+}
+
+.accesslog__table th, .accesslog__table td {
+  padding: 14px 18px;
+  text-align: left;
+}
+
+.accesslog__table th {
+  background: #e0f7fa;
+  color: #0077b6;
+  font-weight: 700;
+  border-radius: 12px 12px 0 0;
+}
+
+.accesslog__table tr {
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1.5px 6px rgba(0,0,0,0.03);
+  transition: box-shadow 0.15s;
+}
+
+.accesslog__table tr:hover {
+  box-shadow: 0 4px 12px rgba(0,119,182,0.09);
+}
+
+.accesslog__status--success {
+  color: #38b000;
+  font-weight: 600;
+}
+
+.accesslog__status--fail {
+  color: #e63946;
+  font-weight: 600;
+}
+
+@media (max-width: 800px) {
+  .accesslog__container {
+    padding: 12px 2px;
+  }
+  .accesslog__table th, .accesslog__table td {
+    padding: 10px 6px;
+    font-size: 15px;
+  }
+}
+
+/* Access Log Table Layout */
+.accesslog__container {
+  max-width: 1100px;
+  margin: 40px auto;
+  background: #f8fafc;
+  border-radius: 22px;
+  box-shadow: 0 4px 18px rgba(0, 119, 182, 0.07);
+  padding: 32px 28px;
+}
+
+.accesslog__title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #0096c7;
+  margin-bottom: 18px;
+  letter-spacing: -0.5px;
+}
+
+.accesslog__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  font-size: 17px;
+  background: transparent;
+}
+
+.accesslog__table th, .accesslog__table td {
+  padding: 14px 18px;
+  text-align: left;
+}
+
+.accesslog__table th {
+  background: #e0f7fa;
+  color: #0077b6;
+  font-weight: 700;
+  border-radius: 12px 12px 0 0;
+}
+
+.accesslog__table tr {
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1.5px 6px rgba(0,0,0,0.03);
+  transition: box-shadow 0.15s;
+}
+
+.accesslog__table tr:hover {
+  box-shadow: 0 4px 12px rgba(0,119,182,0.09);
+}
+
+.accesslog__status--success {
+  color: #38b000;
+  font-weight: 600;
+}
+
+.accesslog__status--fail {
+  color: #e63946;
+  font-weight: 600;
+}
+
+@media (max-width: 800px) {
+  .accesslog__container {
+    padding: 12px 2px;
+  }
+  .accesslog__table th, .accesslog__table td {
+    padding: 10px 6px;
+    font-size: 15px;
+  }
+}
