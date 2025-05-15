@@ -1,85 +1,60 @@
-package dao.stub;
-
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+package dao.stubs;
 
 import dao.interfaces.AccessLogDAO;
 import model.AccessLog;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class AccessLogDAOStub implements AccessLogDAO {
-    private final List<AccessLog> logs = new ArrayList<>();
 
-    public AccessLogDAOStub() {
-        // 예시 초기 데이터
-
-        //Example data for testing 
-        logs.add(new AccessLog(1, 1, Timestamp.valueOf("2024-04-29 09:00:00"), null, "127.0.0.1"));
-        logs.add(new AccessLog(2, 2, Timestamp.valueOf("2024-04-30 10:00:00"), Timestamp.valueOf("2024-04-30 12:00:00"), "192.168.0.2"));
-    }
-
-    private int getNextId() {
-        return logs.isEmpty() ? 1 : logs.get(logs.size() - 1).getLogId() + 1;
-    }
+    private final List<AccessLog> accessLogs = new ArrayList<>();
+    private int idCounter = 1;
 
     @Override
     public void createAccessLog(AccessLog log) throws SQLException {
-        AccessLog newLog = new AccessLog(
-            getNextId(),
-            log.getUserId(),
-            log.getLoginTime(),
-            log.getLogoutTime(),
-            log.getIpAddress()
-        );
-        logs.add(newLog);
+        log.setId(idCounter++);
+        accessLogs.add(log);
     }
 
     @Override
     public AccessLog getAccessLogById(int id) throws SQLException {
-        return logs.stream()
-                .filter(log -> log.getLogId() == id)
+        return accessLogs.stream()
+                .filter(log -> log.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
     public List<AccessLog> getAccessLogsByUserId(int userId) throws SQLException {
-        List<AccessLog> result = new ArrayList<>();
-        for (AccessLog log : logs) {
-            if (log.getUserId() == userId) {
-                result.add(log);
-            }
-        }
-        return result;
+        return accessLogs.stream()
+                .filter(log -> log.getUserId() == userId)
+                .collect(Collectors.toList());
     }
-
 
     @Override
     public List<AccessLog> getAllAccessLogs() throws SQLException {
-        return new ArrayList<>(logs);
+        return new ArrayList<>(accessLogs);
     }
 
     @Override
     public void deleteAccessLog(int id) throws SQLException {
-        logs.removeIf(log -> log.getLogId() == id);
+        accessLogs.removeIf(log -> log.getId() == id);
     }
 
     @Override
-    public List<AccessLog> getAccessLogsByUserIdAndDate(int userId, LocalDate date) throws SQLException {
-    List<AccessLog> result = new ArrayList<>();
-    for (AccessLog log : logs) {
-        if (log.getUserId() == userId && 
-            log.getLoginTime() != null && 
-            log.getLoginTime().toLocalDateTime().toLocalDate().equals(date)) {
-            result.add(log);
-        }
+    public List<AccessLog> getAccessLogsByUserIdAndDate(int userId, LocalDate date) throws Exception {
+        return accessLogs.stream()
+                .filter(log -> log.getUserId() == userId &&
+                        log.getAccessTime().toLocalDate().equals(date))
+                .collect(Collectors.toList());
     }
-    return result;
+
+    @Override
+    public void addAccessLog(AccessLog accessLog) throws SQLException {
+        createAccessLog(accessLog); // Reuse createAccessLog method
+    }
 }
-}
-
-
-
-
