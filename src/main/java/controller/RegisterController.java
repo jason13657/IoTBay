@@ -38,7 +38,7 @@ public class RegisterController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        // 1. 입력값 받기
+        
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
@@ -51,7 +51,7 @@ public class RegisterController extends HttpServlet {
         String dobString = request.getParameter("dateOfBirth");
         String paymentMethod = request.getParameter("paymentMethod");
 
-        // 2. 필수 정보 유효성 검사
+
         String profileError = ValidationUtil.validateRegisterUserProfile(
                 firstName, lastName, phone, postalCode, addressLine1
         );
@@ -96,13 +96,12 @@ public class RegisterController extends HttpServlet {
             }
         }
 
-        // 7. 비밀번호 해싱
+        // parse the password
         String hashedPassword = PasswordUtil.hashPassword(password);
 
         LocalDateTime now = LocalDateTime.now();
 
         try {
-            // User 객체 생성 (필드 순서 및 구조는 User 모델에 맞게)
             User newUser = new User(
                 0, // id (auto-increment)
                 email,
@@ -117,14 +116,13 @@ public class RegisterController extends HttpServlet {
                 paymentMethod,
                 now,
                 now,
-                "user", // 기본 role
-                true    // 활성화 여부
+                "user", 
+                true    
             );
 
             userDAO.createUser(newUser);
 
-            // 회원가입 성공 시
-            // 세션에 사용자 정보 저장 등 추가 가능
+          
             response.sendRedirect("welcome.jsp");
 
         } catch (Exception e) {
