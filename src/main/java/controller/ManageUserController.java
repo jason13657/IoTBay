@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -39,6 +40,11 @@ public class ManageUserController extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -79,6 +85,11 @@ public class ManageUserController extends HttpServlet{
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         BufferedReader reader = request.getReader();
         User user = gson.fromJson(reader, User.class);
 
@@ -95,6 +106,11 @@ public class ManageUserController extends HttpServlet{
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         String idParam = request.getParameter("id");
         if (idParam == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -118,6 +134,12 @@ public class ManageUserController extends HttpServlet{
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         String idParam = request.getParameter("id");
         if (idParam == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -134,5 +156,16 @@ public class ManageUserController extends HttpServlet{
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"Database error: " + e.getMessage() + "\"}");
         }
+    }
+
+    private boolean isAdmin(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null) return false;
+
+        Object userObj = session.getAttribute("user");
+        if (!(userObj instanceof User)) return false;
+
+        User user = (User) userObj;
+        return "admin".equalsIgnoreCase(user.getRole());
     }
 }

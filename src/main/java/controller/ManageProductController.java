@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -18,6 +19,7 @@ import dao.ProductDAOImpl;
 import dao.interfaces.ProductDAO;
 import db.DBConnection;
 import model.Product;
+import model.User;
 
 @WebServlet("/api/manage/products") 
 public class ManageProductController extends HttpServlet {
@@ -39,6 +41,12 @@ public class ManageProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         String idParam = request.getParameter("id");
         String nameParam = request.getParameter("name");
         String categoryIdParam = request.getParameter("categoryId");
@@ -76,6 +84,13 @@ public class ManageProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         try {
             BufferedReader reader = request.getReader();
             Product product = gson.fromJson(reader, Product.class);
@@ -91,6 +106,11 @@ public class ManageProductController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             BufferedReader reader = request.getReader();
@@ -106,6 +126,11 @@ public class ManageProductController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             productDAO.deleteProduct(id);
@@ -114,5 +139,16 @@ public class ManageProductController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
         }
+    }
+
+    private boolean isAdmin(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null) return false;
+
+        Object userObj = session.getAttribute("user");
+        if (!(userObj instanceof User)) return false;
+
+        User user = (User) userObj;
+        return "admin".equalsIgnoreCase(user.getRole());
     }
 }

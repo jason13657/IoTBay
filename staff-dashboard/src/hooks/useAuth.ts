@@ -24,6 +24,7 @@ export function useAuth() {
         setIsStaff(data.role === "staff");
       })
       .catch((err) => {
+        setAuth(null);
         setLoading(false);
         setError("Failed to fetch auth" + err.message);
       });
