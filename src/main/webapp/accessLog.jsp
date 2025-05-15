@@ -115,6 +115,27 @@
 <body>
 <jsp:include page="components/header.jsp" />
 
+ <jsp:include page="components/header.jsp" />
+        <nav class="nav__container">
+            <ul class="nav__list">
+                <li class="nav__item">
+                    <a href="" class="nav__link">Industrial</a>
+                </li>
+                <li class="nav__item">
+                    <a href="" class="nav__link">Warehouse</a>
+                </li>
+                <li class="nav__item">
+                    <a href="" class="nav__link">Agriculture</a>
+                </li>
+                <li class="nav__item">
+                    <a href="" class="nav__link">Smart Home</a>
+                </li>
+            </ul>
+        </nav>
+    <section class="hero">
+            <img class="hero__image" src="images/hero.png" alt="IoT Hero main"/>
+        </section>
+
 <section class="dashboard__container">
     <h2 class="dashboard__title">Welcome, ${user.fullName}!</h2>
 
