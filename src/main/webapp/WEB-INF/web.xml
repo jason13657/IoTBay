@@ -27,6 +27,7 @@
         <servlet-name>ManageAccessLog</servlet-name>
         <servlet-class>controller.ManageAccessLogController</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>ManageAccessLog</servlet-name>
         <url-pattern>/api/manage/access-logs</url-pattern>
@@ -42,21 +43,20 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>controller.LoginController</servlet-class>
+        <servlet-name>ProductDetails</servlet-name>
+        <servlet-class>controller.ProductDetailsController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Login</servlet-name>
-        <url-pattern>/api/login</url-pattern>
+        <servlet-name>ProductDetails</servlet-name>
+        <url-pattern>/product</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>MeController</servlet-name>
-        <servlet-class>controller.MeController</servlet-class>
+        <servlet-name>CartItems</servlet-name>
+        <servlet-class>controller.CartContoller</servlet-class>
     </servlet>
-
     <servlet-mapping>
-        <servlet-name>MeController</servlet-name>
-        <url-pattern>/api/manage/me</url-pattern>
+        <servlet-name>CartItems</servlet-name>
+        <url-pattern>/cart</url-pattern>
     </servlet-mapping>
 </web-app>
