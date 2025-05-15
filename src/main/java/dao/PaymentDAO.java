@@ -1,10 +1,14 @@
 package dao;
 
-import model.Payment;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.Payment;
 
 public class PaymentDAO {
     private final Connection connection;
@@ -92,4 +96,34 @@ public class PaymentDAO {
         }
         return payments;
     }
+
+    public List<Payment> searchPayments(int userId, Integer paymentId, LocalDateTime date) throws SQLException {
+    StringBuilder query = new StringBuilder("SELECT * FROM payment WHERE user_id = ?");
+    if (paymentId != null) query.append(" AND id = ?");
+    if (date != null) query.append(" AND DATE(payment_date) = ?");
+    
+    try (PreparedStatement stmt = connection.prepareStatement(query.toString())) {
+        int index = 1;
+        stmt.setInt(index++, userId);
+        if (paymentId != null) stmt.setInt(index++, paymentId);
+        if (date != null) stmt.setObject(index, date.toLocalDate());
+        
+        List<Payment> results = new ArrayList<>();
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                results.add(new Payment(
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    rs.getInt("order_id"),
+                    rs.getObject("payment_date", LocalDateTime.class),
+                    rs.getDouble("amount"),
+                    rs.getInt("detail_id"),
+                    rs.getString("payment_status")
+                ));
+            }
+        }
+        return results;
+    }
+}
+
 }
