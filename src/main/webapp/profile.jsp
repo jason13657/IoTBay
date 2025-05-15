@@ -122,6 +122,9 @@
             <a href="#orders">Orders</a>
             <a href="#addresses">Addresses</a>
             <a href="#activity">Activity</a>
+            <a href="#wishlist">Wishlist</a>
+            <a href="#settings">Settings</a>
+            <a href="#support">Support</a>
             <a href="logout.jsp">Logout</a>
         </nav>
     </div>
@@ -248,7 +251,7 @@
                 </tbody>
             </table>
             <div class="quick__actions">
-                <a href="accessLogList.jsp">View All Activity</a>
+                <a href="accessLog.jsp">View All Activity</a>
             </div>
         </div>
 
