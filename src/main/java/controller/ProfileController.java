@@ -9,17 +9,21 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dao.AccessLogDAOImpl;
 import dao.OrderDAO;
 import dao.UserDAOImpl;
 import dao.interfaces.AccessLogDAO;
-import dao.AccessLogDAOImpl;
 import dao.interfaces.UserDAO;
 import db.DBConnection;
-import model.User;
 import model.AccessLog;
+import model.User;
 import utils.PasswordUtil;
 import utils.ValidationUtil;
 
@@ -133,9 +137,9 @@ public class ProfileController extends HttpServlet {
 
             UserDAO userDAO = new UserDAOImpl(conn);
 
-            boolean deleted = userDAO.deleteUser(user.getId());
+            boolean deleted = userDAO.deleteUserById(user.getId());
 
-            if (!deleted) throw new SQLException("사용자 삭제 실패");
+            if (!deleted) throw new SQLException("User deletion failed");
 
             conn.commit();
             session.invalidate();

@@ -128,7 +128,9 @@
                 </li>
             </ul>
         </nav>
-    <section class="hero">
+        <section class="hero">
+            <img class="hero__image" src="images/hero.png" alt="IoT Hero main"/>
+        </section>
 
 <div class="account__container">
     <!-- Sidebar -->
