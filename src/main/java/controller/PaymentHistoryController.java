@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import dao.PaymentDAO;
 import db.DBConnection;
 import model.User;
-@WebServlet("/payment/history")
+@WebServlet("api/payment/history")
 public class PaymentHistoryController extends HttpServlet {
     private PaymentDAO paymentDAO;
 

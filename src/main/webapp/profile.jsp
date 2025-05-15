@@ -251,6 +251,10 @@
                 <a href="accessLogList.jsp">View All Activity</a>
             </div>
         </div>
+
+        <div class="account__section" id="addresses">
+        </div>
+
     </div>
 </div>
 

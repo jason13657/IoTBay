@@ -12,6 +12,6 @@ public interface UserDAO {
     List<User> getUsersByEmail(String email) throws SQLException;
     User getUserByEmail(String email) throws SQLException; // updated 
     void updateUser(int id, User user) throws SQLException;
-    boolean deleteUser(int id) throws SQLException;
+    boolean deleteUserById(int id) throws SQLException;
     boolean isEmailExists(String email) throws SQLException;
 }

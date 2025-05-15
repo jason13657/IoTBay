@@ -1,22 +1,25 @@
 package controller;
 
-import dao.UserDAOImpl;
-import dao.interfaces.UserDAO;
-import db.DBConnection;
-import model.User;
-import utils.ValidationUtil;
-import utils.PasswordUtil;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@WebServlet("api/register")
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dao.UserDAOImpl;
+import dao.interfaces.UserDAO;
+import db.DBConnection;
+import model.User;
+import utils.PasswordUtil;
+import utils.ValidationUtil;
+
+@WebServlet("/api/auth/register")
 public class RegisterController extends HttpServlet {
     private UserDAO userDAO;
 

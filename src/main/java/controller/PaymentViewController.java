@@ -15,7 +15,7 @@ import model.User;
 
 
 
-@WebServlet("/payment/view")
+@WebServlet("api/payment/view")
 public class PaymentViewController extends HttpServlet {
     private PaymentDAO paymentDAO;
 

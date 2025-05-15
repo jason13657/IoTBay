@@ -1,0 +1,12 @@
+CREATE TABLE Payment (
+    paymentId INT PRIMARY KEY AUTO_INCREMENT,
+    orderId INT,
+    userId INT,
+    amount DECIMAL(10, 2) NOT NULL,
+    paymentMethod VARCHAR(50),
+    status VARCHAR(50),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (orderId) REFERENCES `Order`(orderId),
+    FOREIGN KEY (userId) REFERENCES User(userId)
+);

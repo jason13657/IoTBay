@@ -16,7 +16,7 @@ import dao.interfaces.ProductDAO;
 import db.DBConnection;
 import model.Product;
 
-@WebServlet("/search")
+@WebServlet("/api/products/search")
 public class BrowseProductController extends HttpServlet {
     private ProductDAO productDAO;
 

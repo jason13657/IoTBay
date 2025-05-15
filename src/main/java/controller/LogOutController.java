@@ -16,7 +16,7 @@ import dao.interfaces.AccessLogDAO;
 import db.DBConnection;
 import model.AccessLog;
 
-@WebServlet("/api/logout")
+@WebServlet("/api/auth/logout")
 public class LogOutController extends HttpServlet {
 
     private AccessLogDAO accessLogDAO;

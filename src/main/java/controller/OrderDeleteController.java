@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/order-delete")
+@WebServlet("/api/orders/cancel")
 public class OrderDeleteController extends HttpServlet {
     private OrderDAO orderDAO;
 
