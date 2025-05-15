@@ -160,6 +160,65 @@ public class ValidationUtil {
     return null;
 }
 
+    // 결제 금액 유효성 검사
+    public static String validatePaymentAmount(String amountStr) {
+        if (amountStr == null || amountStr.trim().isEmpty()) {
+            return "Amount cannot be empty.";
+        }
+        try {
+            double amount = Double.parseDouble(amountStr);
+            if (amount <= 0) {
+                return "Amount must be greater than zero.";
+            }
+        } catch (NumberFormatException e) {
+            return "Amount must be a valid number.";
+        }
+        return null;
+    }
+
+    // 결제 수단 유효성 검사 (예: Credit Card, PayPal, Bank Transfer)
+    public static String validatePaymentMethod(String method) {
+        if (method == null || method.trim().isEmpty()) {
+            return "Payment method cannot be empty.";
+        }
+
+        String[] validMethods = {"Credit Card", "PayPal", "Bank Transfer"};
+        for (String valid : validMethods) {
+            if (valid.equalsIgnoreCase(method.trim())) {
+                return null;
+            }
+        }
+        return "Invalid payment method. Valid methods: Credit Card, PayPal, Bank Transfer.";
+    }
+
+    // 결제 상태 유효성 검사 (예: Pending, Completed, Failed)
+    public static String validatePaymentStatus(String status) {
+        if (status == null || status.trim().isEmpty()) {
+            return "Payment status cannot be empty.";
+        }
+
+        String[] validStatuses = {"Pending", "Completed", "Failed"};
+        for (String valid : validStatuses) {
+            if (valid.equalsIgnoreCase(status.trim())) {
+                return null;
+            }
+        }
+        return "Invalid payment status. Valid statuses: Pending, Completed, Failed.";
+    }
+
+    // 전체 결제 정보 유효성 검사
+    public static String validatePayment(String amountStr, String method, String status) {
+        String amountError = validatePaymentAmount(amountStr);
+        if (amountError != null) return amountError;
+
+        String methodError = validatePaymentMethod(method);
+        if (methodError != null) return methodError;
+
+        String statusError = validatePaymentStatus(status);
+        if (statusError != null) return statusError;
+
+        return null; // All good
+    }
 
 
 }
