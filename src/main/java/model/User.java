@@ -147,4 +147,53 @@ public class User implements Serializable {
     public String getDateOfBirthAsString() {
         return dateOfBirth != null ? dateOfBirth.toString() : null;
     }
+
+    public String getPostalCode() {
+        // TODO Auto-generated method stub
+        return postalCode;
+    }
+
+    public String getPhone() {
+        // TODO Auto-generated method stub
+        return phone;
+    }
+
+
+    public String getAddressLine1() {
+        // TODO Auto-generated method stub
+        return addressLine1;
+    }
+
+    public String getAddressLine2() {
+        // TODO Auto-generated method stub
+        return addressLine2;
+    }
+
+    public void setPostalCode(String postalCode) {
+        // TODO Auto-generated method stub
+        this.postalCode = postalCode;
+    }
+    public void setPhone(String phone) {
+        // TODO Auto-generated method stub
+        this.phone = phone;
+    }
+    public void setAddressLine1(String addressLine1) {
+        // TODO Auto-generated method stub
+        this.addressLine1 = addressLine1;
+    }
+    public void setAddressLine2(String addressLine2) {
+        // TODO Auto-generated method stub
+        this.addressLine2 = addressLine2;
+    }
+    public void setPaymentMethod(String paymentMethod) {
+        // TODO Auto-generated method stub
+        this.paymentMethod = paymentMethod;
+    }
+    
+
+    public String getPaymentMethod() {
+        // TODO Auto-generated method stub
+        return paymentMethod;
+    
+    }
 }
