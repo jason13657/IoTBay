@@ -1,10 +1,15 @@
 package dao;
 
-import model.Payment;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.Payment;
+import model.User;
 
 public class PaymentDAO {
     private final Connection connection;
@@ -26,6 +31,26 @@ public class PaymentDAO {
             statement.executeUpdate();
         }
     }
+
+    public boolean processCreatePayment(HttpServletRequest request, User user) throws SQLException {
+        String orderId = request.getParameter("orderId");
+        String paymentDate = request.getParameter("paymentDate");
+        String amount = request.getParameter("amount");
+        String detailId = request.getParameter("detailId");
+        String paymentStatus = request.getParameter("paymentStatus");
+
+        Payment payment = new Payment();
+        payment.setUserId(user.getId());
+        payment.setOrderId(Integer.parseInt(orderId));
+        payment.setPaymentDate(LocalDateTime.parse(paymentDate));
+        payment.setAmount(Double.parseDouble(amount));
+        payment.setDetailId(Integer.parseInt(detailId));
+        payment.setPaymentStatus(paymentStatus);
+
+        createPayment(payment);
+        return true;
+        
+
 
     // READ: Get payment by ID
     public Payment getPaymentById(int id) throws SQLException {
@@ -92,4 +117,34 @@ public class PaymentDAO {
         }
         return payments;
     }
+    // Search payments by userId, paymentId, and date
+    public List<Payment> searchPayments(int userId, Integer paymentId, LocalDateTime date) throws SQLException {
+    StringBuilder query = new StringBuilder("SELECT * FROM payment WHERE user_id = ?");
+    if (paymentId != null) query.append(" AND id = ?");
+    if (date != null) query.append(" AND DATE(payment_date) = ?");
+    
+    try (PreparedStatement stmt = connection.prepareStatement(query.toString())) {
+        int index = 1;
+        stmt.setInt(index++, userId);
+        if (paymentId != null) stmt.setInt(index++, paymentId);
+        if (date != null) stmt.setObject(index, date.toLocalDate());
+        
+        List<Payment> results = new ArrayList<>();
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                results.add(new Payment(
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    rs.getInt("order_id"),
+                    rs.getObject("payment_date", LocalDateTime.class),
+                    rs.getDouble("amount"),
+                    rs.getInt("detail_id"),
+                    rs.getString("payment_status")
+                ));
+            }
+        }
+        return results;
+    }
+}
+
 }

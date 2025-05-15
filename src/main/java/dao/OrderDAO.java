@@ -1,10 +1,14 @@
 package dao;
 
-import model.Order;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.Order;
 
 public class OrderDAO {
     private final Connection connection;
@@ -86,4 +90,25 @@ public class OrderDAO {
             statement.executeUpdate();
         }
     }
+
+
+    // the code jungwook added =========================
+
+    public void cancelOrder(int orderId) throws SQLException {
+        String query = "UPDATE \"order\" SET status = '취소됨' WHERE order_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, orderId);
+            statement.executeUpdate();
+        }
+    }
+    //added by jungwook, cancel all orders when user delete account
+    public void cancelAllOrdersByUserId(int userId) throws SQLException {
+        String sql = "UPDATE orders SET status = 'CANCELLED' WHERE user_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+        }
+    }
 }
+
+//=

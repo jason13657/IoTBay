@@ -4,7 +4,8 @@
 
 <web-app>
     <display-name>IOT-BAY Web Application</display-name>
-    
+
+    <!-- ====== Admin / Manage API ====== -->
     <servlet>
         <servlet-name>ManageProduct</servlet-name>
         <servlet-class>controller.ManageProductController</servlet-class>
@@ -27,69 +28,84 @@
         <servlet-name>ManageAccessLog</servlet-name>
         <servlet-class>controller.ManageAccessLogController</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>ManageAccessLog</servlet-name>
         <url-pattern>/api/manage/access-logs</url-pattern>
     </servlet-mapping>
 
+    <!-- ====== Public / Browsing API ====== -->
     <servlet>
         <servlet-name>BrowseProduct</servlet-name>
         <servlet-class>controller.BrowseProductController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>BrowseProduct</servlet-name>
-        <url-pattern>/search</url-pattern>
+        <url-pattern>/api/products/search</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>controller.LoginController</servlet-class>
+        <servlet-name>ProductDetails</servlet-name>
+        <servlet-class>controller.ProductDetailsController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Login</servlet-name>
-        <url-pattern>/api/login</url-pattern>
-    </servlet-mapping>
-<!-- =======================New Mappings from feature==================== -->
-    <servlet>
-    <servlet-name>Logout</servlet-name>
-    <servlet-class>controller.LogoutController</servlet-class>
-    </servlet>
-
-    <servlet-mapping> 
-    <!-- this will be used to map the logout servlet
-    logout will be simple, remove the all the session attributes -->
-    <servlet-name>Logout</servlet-name>
-    <url-pattern>/logout</url-pattern>
+        <servlet-name>ProductDetails</servlet-name>
+        <url-pattern>/api/products/{id}</url-pattern>  <!-- {id}는 실제 구현 시 변수 처리 필요 -->
     </servlet-mapping>
 
+    <!-- ====== Authentication & User Profile ====== -->
     <servlet>
         <servlet-name>Register</servlet-name>
         <servlet-class>controller.RegisterController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Register</servlet-name>
-        <url-pattern>/api/register</url-pattern>
-    </servlet-mapping>
-
-    <serevlet>
-        <servlet-name>Profile</servlet-name>
-        <servlet-class>controller.ProfileController</servlet-class>
-    </serevlet>
-    <servlet-mapping>
-        <servlet-name>Profile</servlet-name>
-        <url-pattern>/api/profile</url-pattern>
+        <url-pattern>/api/auth/register</url-pattern>
     </servlet-mapping>
 
     <servlet>
-      <servlet-name>DeleteRegistration</servlet-name>
-      <servlet-class>controller.DeleteAccountController</servlet-class>
-  </servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>controller.LogoutController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/api/auth/logout</url-pattern>
+    </servlet-mapping>
 
-  <servlet-mapping>
-      <servlet-name>DeleteAccountController</servlet-name>
-      <url-pattern>/api/user/deleteAccount</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <servlet-name>Profile</servlet-name>
+        <servlet-class>controller.ProfileController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Profile</servlet-name>
+        <url-pattern>/api/users/profile</url-pattern>
+    </servlet-mapping>
 
+    <servlet>
+        <servlet-name>DeleteRegistration</servlet-name>
+        <servlet-class>controller.DeleteAccountController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteRegistration</servlet-name>
+        <url-pattern>/api/users/delete</url-pattern>  <!-- 가능하면 DELETE /api/users/{id} 권장 -->
+    </servlet-mapping>
+
+    <!-- ====== Payment API ====== -->
+    <servlet>
+        <servlet-name>Payment</servlet-name>
+        <servlet-class>controller.PaymentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Payment</servlet-name>
+        <url-pattern>/api/payments</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PaymentHistory</servlet-name>
+        <servlet-class>controller.PaymentHistoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaymentHistory</servlet-name>
+        <url-pattern>/api/payments/history</url-pattern>
+    </servlet-mapping>
 
 </web-app>

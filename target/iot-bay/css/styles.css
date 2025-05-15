@@ -93,10 +93,10 @@ form {
   display: block;
 }
 
-.featured__container {
+.base__container {
   max-width: 1240px;
   margin: auto;
-  padding: 0px 40px;
+  padding: 0px 100px;
 }
 
 .featured__title {
@@ -340,7 +340,7 @@ input[type="color"].register__input--favcol {
 .header__top {
   display: flex;
   align-items: center;
-  
+
   gap: 20px;
 }
 
@@ -363,13 +363,13 @@ input[type="color"].register__input--favcol {
 }
 
 #searchInput:focus {
-  border-color: #007BFF;
+  border-color: #007bff;
 }
 
 #searchForm button {
   padding: 10px 15px;
   border: none;
-  background-color: #007BFF;
+  background-color: #007bff;
   color: white;
   font-size: 16px;
   border-radius: 0 4px 4px 0;
@@ -381,28 +381,8 @@ input[type="color"].register__input--favcol {
   background-color: #0056b3;
 }
 
-#suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  z-index: 10;
-  display: none;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-#suggestions div {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-#suggestions div:hover {
-  background-color: #f0f0f0;
+.product__image-large {
+  width: 200px;
+  height: 200px;
 }
 
