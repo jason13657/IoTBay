@@ -166,6 +166,6 @@ public class ManageUserController extends HttpServlet{
         if (!(userObj instanceof User)) return false;
 
         User user = (User) userObj;
-        return "admin".equalsIgnoreCase(user.getRole());
+        return "staff".equalsIgnoreCase(user.getRole());
     }
 }

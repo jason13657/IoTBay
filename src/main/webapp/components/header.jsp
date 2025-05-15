@@ -3,6 +3,7 @@
 
 <% 
     User user = (User)session.getAttribute("user"); 
+    boolean isStaff = user != null && "staff".equalsIgnoreCase(user.getRole());
 %>
 
 
@@ -18,24 +19,34 @@
         </form>
     </div>
     <% if (user == null) { %>
-    <div class="header__container">
-        <form action="register.jsp" method="post">
-            <button class="header__button" type="submit">
-            <p class="header__button-text">Sign Up</p>
-            </button>
-        </form>
-        <form action="login.jsp" method="post">
-            <button class="header__button" type="submit">
-            <p class="header__button-text">Log In</p>
-            </button>
-        </form>
-    </div>
+        <div class="header__container">
+            <form action="register.jsp" method="post">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Sign Up</p>
+                </button>
+            </form>
+            <form action="login.jsp" method="post">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Log In</p>
+                </button>
+            </form>
+        </div>
     <% } else { %>
-        <form action="logout.jsp" method="post">
-            <button class="header__button" type="submit">
-            <p class="header__button-text">Log Out</p>
-            </button>
-        </form>
+        <div class="header__container">
+            <form action="logout.jsp" method="post">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Log Out</p>
+                </button>
+            </form>
+
+            <% if (isStaff) { %>
+            <form action="/manage" method="get">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Manage</p>
+                </button>
+            </form>
+            <% } %>
+        </div>
     <% } %>
     <script>
     const path = window.location.pathname;
