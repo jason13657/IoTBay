@@ -125,7 +125,8 @@
             <a href="#wishlist">Wishlist</a>
             <a href="#settings">Settings</a>
             <a href="#support">Support</a>
-            <a href="logout.jsp">Logout</a>
+            <a href="index.jsp">Logout</a>
+            
         </nav>
     </div>
 
