@@ -3,37 +3,16 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-<<<<<<< HEAD
-  <display-name>Archetype Created Web Application</display-name>
-  <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>servlet.LoginServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/LoginServlet</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>CartServlet</servlet-name>
-        <servlet-class>servlet.CartServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>CartServlet</servlet-name>
-        <url-pattern>/cart.jsp</url-pattern>
-    </servlet-mapping>
-</web-app>
-=======
     <display-name>IOT-BAY Web Application</display-name>
 
-    <!-- ====== Admin / Manage API ====== -->
+    <!-- ========== Admin / Management API (Only Staff Users) ========== -->
     <servlet>
         <servlet-name>ManageProduct</servlet-name>
         <servlet-class>controller.ManageProductController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageProduct</servlet-name>
-        <url-pattern>/api/manage/products</url-pattern>
+        <url-pattern>/api/manage/products/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -42,7 +21,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageUser</servlet-name>
-        <url-pattern>/api/manage/users</url-pattern>
+        <url-pattern>/api/manage/users/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -51,10 +30,10 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageAccessLog</servlet-name>
-        <url-pattern>/api/manage/access-logs</url-pattern>
+        <url-pattern>/api/manage/access-logs/*</url-pattern>
     </servlet-mapping>
 
-    <!-- ====== Public / Browsing API ====== -->
+    <!-- ========== Public Product Browsing API ========== -->
     <servlet>
         <servlet-name>BrowseProduct</servlet-name>
         <servlet-class>controller.BrowseProductController</servlet-class>
@@ -70,10 +49,10 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ProductDetails</servlet-name>
-        <url-pattern>/api/products/{id}</url-pattern>  <!-- {id}는 실제 구현 시 변수 처리 필요 -->
+        <url-pattern>/api/products/*</url-pattern> <!-- /api/products/{id} -->
     </servlet-mapping>
 
-    <!-- ====== Authentication & User Profile ====== -->
+    <!-- ========== User Authentication & Profile ========== -->
     <servlet>
         <servlet-name>Register</servlet-name>
         <servlet-class>controller.RegisterController</servlet-class>
@@ -102,16 +81,52 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>DeleteRegistration</servlet-name>
+        <servlet-name>DeleteAccount</servlet-name>
         <servlet-class>controller.DeleteAccountController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>DeleteRegistration</servlet-name>
-        <url-pattern>/api/users/delete</url-pattern>  <!-- 가능하면 DELETE /api/users/{id} 권장 -->
+        <servlet-name>DeleteAccount</servlet-name>
+        <url-pattern>/api/users/delete</url-pattern> <!-- Better with DELETE -->
     </servlet-mapping>
 
-<<<<<<< HEAD
-    <!-- ====== Payment API ====== -->
+    <!-- ========== Order API ========== -->
+    <servlet>
+        <servlet-name>Order</servlet-name>
+        <servlet-class>controller.OrderController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Order</servlet-name>
+        <url-pattern>/api/orders</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OrderHistory</servlet-name>
+        <servlet-class>controller.OrderHistoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderHistory</servlet-name>
+        <url-pattern>/api/orders/history</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OrderDetails</servlet-name>
+        <servlet-class>controller.OrderDetailsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderDetails</servlet-name>
+        <url-pattern>/api/orders/*</url-pattern> <!-- /api/orders/{id} -->
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OrderCancel</servlet-name>
+        <servlet-class>controller.OrderCancelController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderCancel</servlet-name>
+        <url-pattern>/api/orders/cancel</url-pattern>
+    </servlet-mapping>
+
+    <!-- ========== Payment API ========== -->
     <servlet>
         <servlet-name>Payment</servlet-name>
         <servlet-class>controller.PaymentController</servlet-class>
@@ -130,8 +145,13 @@
         <url-pattern>/api/payments/history</url-pattern>
     </servlet-mapping>
 
+    <!-- ========== Error Handling ========== -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.jsp</location>
+    </error-page>
 </web-app>
-=======
-</web-app>
->>>>>>> feature/userAccessManage
->>>>>>> feature/cart-page
