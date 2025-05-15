@@ -19,37 +19,55 @@ import db.DBConnection;
 public class DeleteAccountController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    
-    private UserDAO userDAO;
+
+    private UserDAOImpl userDAO;
+    private Connection connection; // Add a Connection instance
 
     @Override
     public void init() throws ServletException {
         super.init();
-        // DAO 초기화 (DB 연결은 메서드 내부에서 처리할 수도 있음)
-        userDAO = new UserDAOImpl();
+        try {
+            // Establish database connection in init()
+            connection = DBConnection.getConnection();
+            // Initialize UserDAOImpl with the connection
+            userDAO = new UserDAOImpl(connection);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            throw new ServletException("Error initializing database connection", e);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        // Close the database connection when the servlet is destroyed
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        super.destroy();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-            // 로그인 안 된 상태면 401 Unauthorized 또는 로그인 페이지로 리다이렉트
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Please login first.");
             return;
         }
 
         String userId = (String) session.getAttribute("userId");
 
-        try (Connection conn = DBConnection.getConnection()) {
-            boolean deleted = userDAO.deleteUserById(conn, userId);
+        try {
+            boolean deleted = userDAO.deleteUserById(userId); // Modified to use the instance connection
             if (deleted) {
-                // 삭제 성공 시 세션 무효화 후 메인 또는 로그인 페이지로 리다이렉트
                 session.invalidate();
                 response.sendRedirect(request.getContextPath() + "/login");
             } else {
-                // 삭제 실패 시 500 에러
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete account.");
             }
         } catch (SQLException e) {
