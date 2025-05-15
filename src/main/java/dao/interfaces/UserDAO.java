@@ -2,6 +2,7 @@ package dao.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;
+
 import model.User;
 
 public interface UserDAO {
@@ -12,4 +13,6 @@ public interface UserDAO {
     User getUserByEmail(String email) throws SQLException;
     void updateUser(int id, User user) throws SQLException;
     void deleteUser(int id) throws SQLException;
+    boolean isEmailExists(String email) throws SQLException;
+
 }
