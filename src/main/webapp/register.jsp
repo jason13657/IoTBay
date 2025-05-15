@@ -14,8 +14,9 @@
         <div class="register__contents">
             <img class="register__image" src="images/wewantyou.png" alt="Register" />
             <div class="register__form--container">
+
                 <h3 class="register__form--title">Create Account</h3>
-                <form class="register__form" action="/api/register" method="post" autocomplete="off">
+                <form class="register__form" action="/api/auth/register" method="post" autocomplete="off">
                     <!-- 이메일 -->
                      
                     <input type="email" id="email" name="email" class="register__input" placeholder="Email" required />
