@@ -8,8 +8,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import model.Payment;
 import model.User;
+
 
 public class PaymentDAO {
     private final Connection connection;
@@ -32,25 +35,7 @@ public class PaymentDAO {
         }
     }
 
-    public boolean processCreatePayment(HttpServletRequest request, User user) throws SQLException {
-        String orderId = request.getParameter("orderId");
-        String paymentDate = request.getParameter("paymentDate");
-        String amount = request.getParameter("amount");
-        String detailId = request.getParameter("detailId");
-        String paymentStatus = request.getParameter("paymentStatus");
-
-        Payment payment = new Payment();
-        payment.setUserId(user.getId());
-        payment.setOrderId(Integer.parseInt(orderId));
-        payment.setPaymentDate(LocalDateTime.parse(paymentDate));
-        payment.setAmount(Double.parseDouble(amount));
-        payment.setDetailId(Integer.parseInt(detailId));
-        payment.setPaymentStatus(paymentStatus);
-
-        createPayment(payment);
-        return true;
-        
-
+ 
 
     // READ: Get payment by ID
     public Payment getPaymentById(int id) throws SQLException {
@@ -73,6 +58,40 @@ public class PaymentDAO {
         }
         return null;
     }
+
+    // PaymentDAO.java 안에 추가
+public boolean processCreatePayment(HttpServletRequest request, User user) throws SQLException {
+    String orderIdStr = request.getParameter("orderId");
+    String amountStr = request.getParameter("amount");
+    String paymentMethodStr = request.getParameter("paymentMethod");
+
+    if (orderIdStr == null || amountStr == null || paymentMethodStr == null ||
+        orderIdStr.isEmpty() || amountStr.isEmpty() || paymentMethodStr.isEmpty()) {
+        return false;
+    }
+
+    try {
+        int orderId = Integer.parseInt(orderIdStr);
+        double amount = Double.parseDouble(amountStr);
+        int paymentMethod = Integer.parseInt(paymentMethodStr);
+        String paymentStatus = "PENDING";
+
+        Payment payment = new Payment();
+        payment.setUserId(user.getUserId());
+        payment.setOrderId(orderId);
+        payment.setPaymentDate(LocalDateTime.now());
+        payment.setAmount(amount);
+        payment.setPaymentMethod(paymentMethod);
+        payment.setPaymentStatus(paymentStatus);
+
+        createPayment(payment);
+        return true;
+    } catch (NumberFormatException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 
     // UPDATE
     public void updatePayment(Payment payment) throws SQLException {
@@ -146,5 +165,4 @@ public class PaymentDAO {
         return results;
     }
 }
-
 }
