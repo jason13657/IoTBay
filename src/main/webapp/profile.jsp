@@ -4,179 +4,255 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IoT Bay - My Account</title>
     <link rel="stylesheet" href="css/styles.css" />
-    <title>IoT Bay - Profile</title>
     <style>
-        .profile__container {
-            max-width: 480px;
-            margin: 48px auto 40px auto;
+        body { background: #f6f8fa; }
+        .account__container {
+            display: flex;
+            max-width: 1080px;
+            margin: 48px auto;
             background: #fff;
             border-radius: 22px;
             box-shadow: 0 8px 32px rgba(0,119,182,0.09), 0 2px 8px rgba(0,0,0,0.03);
-            padding: 36px 32px 32px 32px;
+            overflow: hidden;
         }
-        .profile__title {
-            font-size: 32px;
-            font-weight: 800;
-            color: #0077b6;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-            text-align: center;
-        }
-        .profile__role {
-            display: block;
-            text-align: center;
-            color: #0096c7;
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 18px;
-            letter-spacing: 0.5px;
-        }
-        .profile__form {
+        .account__sidebar {
+            width: 240px;
+            background: #0077b6;
+            color: #fff;
+            padding: 36px 0;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            align-items: center;
         }
-        .profile__label {
-            font-size: 15px;
-            color: #222;
-            font-weight: 600;
-            margin-bottom: 5px;
-            display: block;
+        .account__avatar {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            background: #bde0fe;
+            margin-bottom: 18px;
+            object-fit: cover;
         }
-        .profile__input {
+        .account__name { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+        .account__email { font-size: 14px; opacity: 0.9; margin-bottom: 18px; }
+        .account__nav {
             width: 100%;
-            padding: 13px 16px;
-            border-radius: 12px;
-            border: 1.5px solid #bde0fe;
-            background: #f8fafc;
-            font-size: 17px;
-            color: #1a1a1a;
-            box-shadow: 0 2px 8px rgba(0,119,182,0.04);
-            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-top: 16px;
         }
-        .profile__input:focus {
-            border-color: #0077b6;
-            background: #e0f7fa;
-            outline: none;
-            box-shadow: 0 4px 16px rgba(0,119,182,0.12);
+        .account__nav a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.15s;
         }
-        .profile__actions {
+        .account__nav a:hover, .account__nav .active {
+            background: #00b4d8;
+        }
+        .account__main {
+            flex: 1;
+            padding: 36px 48px;
+        }
+        .account__section {
+            margin-bottom: 32px;
+        }
+        .section__header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0077b6;
+            margin-bottom: 16px;
+        }
+        .orders__table, .addresses__table, .activity__table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+        .orders__table th, .orders__table td,
+        .addresses__table th, .addresses__table td,
+        .activity__table th, .activity__table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 15px;
+        }
+        .orders__table th { color: #0077b6; }
+        .orders__status--pending { color: #ff9900; font-weight: 600; }
+        .orders__status--completed { color: #38b000; font-weight: 600; }
+        .orders__status--cancelled { color: #e63946; font-weight: 600; }
+        .quick__actions {
             display: flex;
             gap: 12px;
-            margin-top: 8px;
+            margin-top: 12px;
         }
-        .profile__button {
-            flex: 1;
-            background: linear-gradient(90deg, #0077b6 0%, #00b4d8 100%);
+        .quick__actions a, .quick__actions button {
+            background: #00b4d8;
             color: #fff;
             border: none;
-            border-radius: 12px;
-            padding: 13px 0;
-            font-size: 17px;
-            font-weight: 700;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,119,182,0.07);
-            transition: background 0.18s, box-shadow 0.18s;
-        }
-        .profile__button:hover {
-            background: linear-gradient(90deg, #023e8a 0%, #0096c7 100%);
-        }
-        .profile__cancel {
-            background: #e0e0e0;
-            color: #0077b6;
-            font-weight: 700;
-            text-align: center;
             text-decoration: none;
+            transition: background 0.15s;
         }
-        .profile__cancel:hover {
-            background: #bde0fe;
-            color: #023e8a;
+        .quick__actions a:hover, .quick__actions button:hover {
+            background: #023e8a;
         }
-        .profile__error {
-            color: #e63946;
-            background: #fff2f2;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 15px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .profile__success {
-            color: #38b000;
-            background: #e8ffe8;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 15px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .profile__meta {
-            font-size: 13px;
-            color: #888;
-            margin-top: 8px;
-            text-align: center;
-        }
-        @media (max-width: 600px) {
-            .profile__container {
-                max-width: 98vw;
-                padding: 16px 4px;
-            }
+        @media (max-width: 900px) {
+            .account__container { flex-direction: column; }
+            .account__sidebar { width: 100%; flex-direction: row; padding: 24px 0; }
+            .account__main { padding: 24px 8px; }
         }
     </style>
 </head>
 <body>
 <jsp:include page="components/header.jsp" />
 
-<section class="profile__container">
-    <h2 class="profile__title">My Profile</h2>
-    <span class="profile__role">
-        <c:choose>
-            <c:when test="${user.role eq 'staff'}">Staff</c:when>
-            <c:when test="${user.role eq 'manager'}">Manager</c:when>
-            <c:otherwise>Customer</c:otherwise>
-        </c:choose>
-    </span>
-    <form class="profile__form" method="post" action="api/users/profile" autocomplete="off">
-        <c:if test="${not empty errorMessage}">
-            <div class="profile__error" role="alert">${errorMessage}</div>
-        </c:if>
-        <c:if test="${not empty successMessage}">
-            <div class="profile__success" role="alert">${successMessage}</div>
-        </c:if>
+<div class="account__container">
+    <!-- Sidebar -->
+    <div class="account__sidebar">
+        <img class="account__avatar" src="${empty user.avatarUrl ? 'images/default-avatar.png' : user.avatarUrl}" alt="Avatar" />
+        <div class="account__name">${fn:escapeXml(user.firstName)} ${fn:escapeXml(user.lastName)}</div>
+        <div class="account__email">${fn:escapeXml(user.email)}</div>
+        <nav class="account__nav">
+            <a href="#profile" class="active">Profile</a>
+            <a href="#orders">Orders</a>
+            <a href="#addresses">Addresses</a>
+            <a href="#activity">Activity</a>
+            <a href="logout.jsp">Logout</a>
+        </nav>
+    </div>
 
-        <label for="firstName" class="profile__label">First Name</label>
-        <input type="text" id="firstName" name="firstName" class="profile__input" required
-               value="${fn:escapeXml(user.firstName)}" placeholder="First Name" />
+    <!-- Main Content -->
+    <div class="account__main">
 
-        <label for="lastName" class="profile__label">Last Name</label>
-        <input type="text" id="lastName" name="lastName" class="profile__input" required
-               value="${fn:escapeXml(user.lastName)}" placeholder="Last Name" />
-
-        <label for="email" class="profile__label">Email (read-only)</label>
-        <input type="email" id="email" name="email" class="profile__input" required
-               value="${fn:escapeXml(user.email)}" placeholder="you@email.com" readonly />
-
-        <c:if test="${user.role eq 'staff' || user.role eq 'manager'}">
-            <label for="staffId" class="profile__label">Staff ID</label>
-            <input type="text" id="staffId" name="staffId" class="profile__input"
-                   value="${fn:escapeXml(user.staffId)}" placeholder="Staff ID" readonly />
-        </c:if>
-
-        <label for="phone" class="profile__label">Phone</label>
-        <input type="text" id="phone" name="phone" class="profile__input"
-               value="${fn:escapeXml(user.phone)}" placeholder="Phone Number" />
-
-        <div class="profile__actions">
-            <button type="submit" class="profile__button">Save Changes</button>
-            <a href="dashboard.jsp" class="profile__button profile__cancel">Cancel</a>
+        <!-- Profile Section -->
+        <div class="account__section" id="profile">
+            <div class="section__header">Profile Details</div>
+            <form class="profile__form" method="post" action="api/users/profile" autocomplete="off">
+                <!-- Show error/success messages here -->
+                <c:if test="${not empty errorMessage}">
+                    <div class="profile__error" role="alert">${errorMessage}</div>
+                </c:if>
+                <c:if test="${not empty successMessage}">
+                    <div class="profile__success" role="alert">${successMessage}</div>
+                </c:if>
+                <label for="firstName" class="profile__label">First Name</label>
+                <input type="text" id="firstName" name="firstName" class="profile__input" required
+                       value="${fn:escapeXml(user.firstName)}" placeholder="First Name" />
+                <label for="lastName" class="profile__label">Last Name</label>
+                <input type="text" id="lastName" name="lastName" class="profile__input" required
+                       value="${fn:escapeXml(user.lastName)}" placeholder="Last Name" />
+                <label for="email" class="profile__label">Email (read-only)</label>
+                <input type="email" id="email" name="email" class="profile__input" required
+                       value="${fn:escapeXml(user.email)}" placeholder="you@email.com" readonly />
+                <label for="phone" class="profile__label">Phone</label>
+                <input type="text" id="phone" name="phone" class="profile__input"
+                       value="${fn:escapeXml(user.phone)}" placeholder="Phone Number" />
+                <div class="quick__actions">
+                    <button type="submit">Save Changes</button>
+                    <a href="changePassword.jsp">Change Password</a>
+                </div>
+                <div class="profile__meta">
+                    Last updated: <c:out value="${user.updatedAt}" />
+                </div>
+            </form>
         </div>
-        <div class="profile__meta">
-            Last updated: <c:out value="${user.updatedAt}" />
+
+        <!-- Order History Section -->
+        <div class="account__section" id="orders">
+            <div class="section__header">Order History</div>
+            <table class="orders__table">
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="order" items="${orderList}">
+                        <tr>
+                            <td>${order.id}</td>
+                            <td>${order.date}</td>
+                            <td>
+                                <span class="orders__status--${order.status}">
+                                    ${fn:toUpperCase(order.status)}
+                                </span>
+                            </td>
+                            <td>$${order.totalPrice}</td>
+                            <td>
+                                <a href="orderDetail.jsp?orderId=${order.id}">View</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+            <div class="quick__actions">
+                <a href="orderList.jsp">View All Orders</a>
+            </div>
         </div>
-    </form>
-</section>
+
+        <!-- Address Book Section -->
+        <div class="account__section" id="addresses">
+            <div class="section__header">Address Book</div>
+            <table class="addresses__table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="address" items="${addressList}">
+                        <tr>
+                            <td>${address.type}</td>
+                            <td>${fn:escapeXml(address.fullAddress)}</td>
+                            <td>
+                                <a href="editAddress.jsp?addressId=${address.id}">Edit</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+            <div class="quick__actions">
+                <a href="addAddress.jsp">Add New Address</a>
+            </div>
+        </div>
+
+        <!-- Activity Log Section -->
+        <div class="account__section" id="activity">
+            <div class="section__header">Recent Activity</div>
+            <table class="activity__table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Activity</th>
+                        <th>IP Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="log" items="${accessLogList}">
+                        <tr>
+                            <td>${log.loginDate}</td>
+                            <td>${log.activity}</td>
+                            <td>${log.ipAddress}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+            <div class="quick__actions">
+                <a href="accessLogList.jsp">View All Activity</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <jsp:include page="components/footer.jsp" />
 </body>
