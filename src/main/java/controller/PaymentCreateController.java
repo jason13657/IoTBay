@@ -16,7 +16,7 @@ import utils.ValidationUtil;
 import db.DBConnection;
 
 
-@WebServlet("/payment/create")
+@WebServlet("api/payment/create")
 public class PaymentCreateController extends HttpServlet {
 
     private PaymentDAO paymentDAO;

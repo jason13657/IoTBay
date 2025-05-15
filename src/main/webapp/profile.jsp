@@ -111,12 +111,31 @@
 <body>
 <jsp:include page="components/header.jsp" />
 
+ <jsp:include page="components/header.jsp" />
+        <nav class="nav__container">
+            <ul class="nav__list">
+                <li class="nav__item">
+                    <a href="" class="nav__link">Industrial</a>
+                </li>
+                <li class="nav__item">
+                    <a href="" class="nav__link">Warehouse</a>
+                </li>
+                <li class="nav__item">
+                    <a href="" class="nav__link">Agriculture</a>
+                </li>
+                <li class="nav__item">
+                    <a href="" class="nav__link">Smart Home</a>
+                </li>
+            </ul>
+        </nav>
+    <section class="hero">
+
 <div class="account__container">
     <!-- Sidebar -->
     <div class="account__sidebar">
-        <img class="account__avatar" src="${empty user.avatarUrl ? 'images/default-avatar.png' : user.avatarUrl}" alt="Avatar" />
         <div class="account__name">${fn:escapeXml(user.firstName)} ${fn:escapeXml(user.lastName)}</div>
         <div class="account__email">${fn:escapeXml(user.email)}</div>
+
         <nav class="account__nav">
             <a href="#profile" class="active">Profile</a>
             <a href="#orders">Orders</a>
@@ -134,37 +153,7 @@
     <div class="account__main">
 
         <!-- Profile Section -->
-        <div class="account__section" id="profile">
-            <div class="section__header">Profile Details</div>
-            <form class="profile__form" method="post" action="api/users/profile" autocomplete="off">
-                <!-- Show error/success messages here -->
-                <c:if test="${not empty errorMessage}">
-                    <div class="profile__error" role="alert">${errorMessage}</div>
-                </c:if>
-                <c:if test="${not empty successMessage}">
-                    <div class="profile__success" role="alert">${successMessage}</div>
-                </c:if>
-                <label for="firstName" class="profile__label">First Name</label>
-                <input type="text" id="firstName" name="firstName" class="profile__input" required
-                       value="${fn:escapeXml(user.firstName)}" placeholder="First Name" />
-                <label for="lastName" class="profile__label">Last Name</label>
-                <input type="text" id="lastName" name="lastName" class="profile__input" required
-                       value="${fn:escapeXml(user.lastName)}" placeholder="Last Name" />
-                <label for="email" class="profile__label">Email (read-only)</label>
-                <input type="email" id="email" name="email" class="profile__input" required
-                       value="${fn:escapeXml(user.email)}" placeholder="you@email.com" readonly />
-                <label for="phone" class="profile__label">Phone</label>
-                <input type="text" id="phone" name="phone" class="profile__input"
-                       value="${fn:escapeXml(user.phone)}" placeholder="Phone Number" />
-                <div class="quick__actions">
-                    <button type="submit">Save Changes</button>
-                    <a href="changePassword.jsp">Change Password</a>
-                </div>
-                <div class="profile__meta">
-                    Last updated: <c:out value="${user.updatedAt}" />
-                </div>
-            </form>
-        </div>
+       
 
         <!-- Order History Section -->
         <div class="account__section" id="orders">
@@ -226,7 +215,6 @@
                 </tbody>
             </table>
             <div class="quick__actions">
-                <a href="addAddress.jsp">Add New Address</a>
             </div>
         </div>
 

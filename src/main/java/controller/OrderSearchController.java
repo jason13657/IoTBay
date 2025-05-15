@@ -9,7 +9,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/order-search")
+@WebServlet("api/order-search")
 public class OrderSearchController extends HttpServlet {
     private OrderDAO orderDAO;
 

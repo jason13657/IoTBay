@@ -105,7 +105,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean deleteUser(int id) throws SQLException {
+    public boolean deleteUserById(int id) throws SQLException {
         String query = "DELETE FROM User WHERE userID = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);

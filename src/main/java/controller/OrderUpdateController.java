@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/order-update")
+@WebServlet("api/order-update")
 public class OrderUpdateController extends HttpServlet {
     private OrderDAO orderDAO;
 
