@@ -50,7 +50,7 @@
         <servlet-name>ProductDetails</servlet-name>
         <url-pattern>/product</url-pattern>
     </servlet-mapping>
-<!-- =======================New Mappings from feature==================== -->
+<!-- =======================New Mappings from feature 1 , Access Manage==================== -->
     <servlet>
     <servlet-name>Logout</servlet-name>
     <servlet-class>controller.LogoutController</servlet-class>
@@ -72,10 +72,10 @@
         <url-pattern>/api/register</url-pattern>
     </servlet-mapping>
 
-    <serevlet>
+    <servlet>
         <servlet-name>Profile</servlet-name>
         <servlet-class>controller.ProfileController</servlet-class>
-    </serevlet>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Profile</servlet-name>
         <url-pattern>/api/profile</url-pattern>
@@ -90,6 +90,25 @@
       <servlet-name>DeleteAccountController</servlet-name>
       <url-pattern>/api/user/deleteAccount</url-pattern>
   </servlet-mapping>
+
+<!-- =======================New Mappings from feature 4 , Payment Manage==================== -->
+    <servlet>
+        <servlet-name>Payment</servlet-name>
+        <servlet-class>controller.PaymentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Payment</servlet-name>
+        <url-pattern>/api/payment</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PaymentHistory</servlet-name>
+        <servlet-class>controller.PaymentHistoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaymentHistory</servlet-name>
+        <url-pattern>/api/payment/history</url-pattern>
+    </servlet-mapping>
 
 
 </web-app>
