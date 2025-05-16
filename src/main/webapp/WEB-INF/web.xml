@@ -53,7 +53,7 @@
 
     <servlet>
         <servlet-name>CartItems</servlet-name>
-        <servlet-class>controller.CartContoller</servlet-class>
+        <servlet-class>controller.CartController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CartItems</servlet-name>
