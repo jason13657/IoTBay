@@ -11,6 +11,7 @@ import { HttpClient } from "./network/HttpClient";
 import { ProductService } from "./services/ProductService";
 import { UserService } from "./services/UserService";
 import { AccessLogService } from "./services/AccessLogService";
+import { AuthService } from "./services/AuthService";
 
 function App() {
   const [services, setServices] = useState<ServiceContextType | null>(null);
@@ -22,7 +23,7 @@ function App() {
     const productService = new ProductService(httpClient);
     const userService = new UserService(httpClient);
     const accessLogService = new AccessLogService(httpClient);
-    const authService = new AuthServiceStub();
+    const authService = new AuthService(httpClient);
 
     setServices({
       productService,

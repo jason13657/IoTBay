@@ -6,6 +6,7 @@ import dao.AccessLogDAOImpl;
 import dao.interfaces.AccessLogDAO;
 import db.DBConnection;
 import model.AccessLog;
+import model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,6 +37,11 @@ public class ManageAccessLogController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -69,6 +75,11 @@ public class ManageAccessLogController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         try {
             BufferedReader reader = request.getReader();
             AccessLog log = gson.fromJson(reader, AccessLog.class);
@@ -84,6 +95,11 @@ public class ManageAccessLogController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             accessLogDAO.deleteAccessLog(id);
@@ -92,5 +108,15 @@ public class ManageAccessLogController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"Database error: " + e.getMessage() + "\"}");
         }
+    }
+    private boolean isAdmin(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null) return false;
+
+        Object userObj = session.getAttribute("user");
+        if (!(userObj instanceof User)) return false;
+
+        User user = (User) userObj;
+        return "staff".equalsIgnoreCase(user.getRole());
     }
 }

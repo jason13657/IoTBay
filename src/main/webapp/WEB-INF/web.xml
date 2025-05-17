@@ -49,4 +49,23 @@
         <servlet-name>ProductDetails</servlet-name>
         <url-pattern>/product</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>controller.LoginController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/api/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MeController</servlet-name>
+        <servlet-class>controller.MeController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>MeController</servlet-name>
+        <url-pattern>/api/manage/me</url-pattern>
+    </servlet-mapping>
 </web-app>
