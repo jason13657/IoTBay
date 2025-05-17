@@ -17,18 +17,16 @@
 
                 <h3 class="register__form--title">Create Account</h3>
                 <form class="register__form" action="/api/auth/register" method="post" autocomplete="off">
-                    <!-- 이메일 -->
                      
                     <input type="email" id="email" name="email" class="register__input" placeholder="Email" required />
 
-                    <!-- 비밀번호/확인 -->
                     <input type="password" id="password" name="password" class="register__input" placeholder="Password" required />
                     <input type="password" id="confirmPassword" name="confirmPassword" class="register__input" placeholder="Confirm Password" required />
 
-                    <!-- 이름 -->
+            
                     <input type="text" id="fullName" name="fullName" class="register__input" placeholder="Full Name" required />
 
-                    <!-- 휴대폰 번호 -->
+                    
                     <input type="tel" id="phone" name="phone" class="register__input" placeholder="Phone Number" required />
 
                     <!-- 주소 -->
