@@ -60,21 +60,21 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        // 3. 이메일 유효성 검사
+        // 3. validate email
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, emailError);
             return;
         }
 
-        // 4. 비밀번호 및 확인 비밀번호 유효성 검사
+        // 4.confirm the password
         String passwordError = ValidationUtil.validatePasswordChange(password, confirmPassword);
         if (passwordError != null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, passwordError);
             return;
         }
 
-        // 5. 중복 이메일 검사
+        // 5. validate email duplication
         try {
             if (userDAO.getUserByEmail(email) != null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email already exists.");
@@ -85,16 +85,37 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        // 6. 생년월일 파싱 (선택)
-        LocalDate dateOfBirth = null;
-        if (dobString != null && !dobString.trim().isEmpty()) {
-            try {
-                dateOfBirth = LocalDate.parse(dobString);
-            } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date of birth.");
-                return;
-            }
+        // 6. birth date parsing
+        // 6. birth date parsing + 유효성 체크 (미래/성인)
+LocalDate dateOfBirth = null;
+if (dobString != null && !dobString.trim().isEmpty()) {
+    try {
+        dateOfBirth = LocalDate.parse(dobString);
+
+        // 미래 날짜 방지
+        if (dateOfBirth.isAfter(LocalDate.now())) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "생년월일이 미래일 수 없습니다.");
+            return;
         }
+
+        // 성인(만 19세 이상)만 가입 가능 (한국 기준)
+        LocalDate today = LocalDate.now();
+        int age = today.getYear() - dateOfBirth.getYear();
+        // 생일이 아직 안 지났으면 1살 빼기
+        if (today.getDayOfYear() < dateOfBirth.getDayOfYear()) {
+            age--;
+        }
+        if (age < 19) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "만 19세 이상만 가입할 수 있습니다.");
+            return;
+        }
+
+    } catch (Exception e) {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "생년월일 형식이 올바르지 않습니다.");
+        return;
+    }
+}
+
 
         // parse the password
         String hashedPassword = PasswordUtil.hashPassword(password);

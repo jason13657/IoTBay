@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-@WebServlet("/accessLog")
+@WebServlet("api/accessLog")
 public class AccesslogController extends HttpServlet {
     private AccessLogDAO accessLogDAO;
     private UserDAO userDAO;
