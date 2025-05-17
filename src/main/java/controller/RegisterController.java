@@ -76,7 +76,7 @@ public class RegisterController extends HttpServlet {
 
         // 5. 중복 이메일 검사
         try {
-            if (userDAO.getUserByEmail(email) != null) {
+            if (userDAO.isEmailExists(email)) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email already exists.");
                 return;
             }
