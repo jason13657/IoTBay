@@ -3,6 +3,7 @@
 
 <% 
     User user = (User)session.getAttribute("user"); 
+    boolean isStaff = user != null && "staff".equalsIgnoreCase(user.getRole());
 %>
 
 
@@ -12,30 +13,40 @@
             <img src="images/logo.png" alt="IoT Bay logo" />
         </a>
         <form action="search" method="get" id="searchForm">
-            <input type="text" name="query" placeholder="Search Products..." id="searchInput" onkeyup="showSuggestions(this.value)" autocomplete="off">
+            <input type="text" name="query" placeholder="Search Products..." id="searchInput" onkeyup="showSuggestions(this.value)" autocomplete="off" maxlength="35">
             <button type="submit">Search</button>
             <div id="suggestions" style="display:none; border: 1px solid #ccc; max-width: 200px; background-color: white; position: absolute; z-index: 10;"></div>
         </form>
     </div>
     <% if (user == null) { %>
-    <div class="header__container">
-        <form action="register.jsp" method="post">
-            <button class="header__button" type="submit">
-            <p class="header__button-text">Sign Up</p>
-            </button>
-        </form>
-        <form action="login.jsp" method="post">
-            <button class="header__button" type="submit">
-            <p class="header__button-text">Log In</p>
-            </button>
-        </form>
-    </div>
+        <div class="header__container">
+            <form action="register.jsp" method="post">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Sign Up</p>
+                </button>
+            </form>
+            <form action="login.jsp" method="post">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Log In</p>
+                </button>
+            </form>
+        </div>
     <% } else { %>
-        <form action="logout.jsp" method="post">
-            <button class="header__button" type="submit">
-            <p class="header__button-text">Log Out</p>
-            </button>
-        </form>
+        <div class="header__container">
+            <form action="logout.jsp" method="post">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Log Out</p>
+                </button>
+            </form>
+
+            <% if (isStaff) { %>
+            <form action="/manage" method="get">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Manage</p>
+                </button>
+            </form>
+            <% } %>
+        </div>
     <% } %>
     <script>
     const path = window.location.pathname;
@@ -50,5 +61,10 @@
     } else {
         document.getElementById('searchForm').style.display = 'none';
     }
+
+    document.getElementById("searchForm").addEventListener("submit", function(e) {
+        const input = document.getElementById("searchInput");
+        input.value = input.value.trim();
+    });
     </script>
 </header>

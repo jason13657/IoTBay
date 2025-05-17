@@ -45,6 +45,25 @@ public class CartItemDAO {
         return cartItems;
     }
 
+    public CartItem getCartItem(int userId, int productId) throws SQLException {
+    String query = "SELECT user_id, product_id, quantity, added_at FROM cart_item WHERE user_id = ? AND product_id = ?";
+    try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setInt(1, userId);
+        statement.setInt(2, productId);
+        try (ResultSet rs = statement.executeQuery()) {
+            if (rs.next()) {
+                return new CartItem(
+                    rs.getInt("user_id"),
+                    rs.getInt("product_id"),
+                    rs.getInt("quantity"),
+                    rs.getObject("added_at", LocalDateTime.class)
+                );
+            }
+        }
+    }
+    return null;
+}
+
     // UPDATE: Update quantity of a product in the user's cart
     public void updateCartItemQuantity(int userId, int productId, int quantity) throws SQLException {
         String query = "UPDATE cart_item SET quantity = ? WHERE user_id = ? AND product_id = ?";

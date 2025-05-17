@@ -42,6 +42,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>ProductDetails</servlet-name>
+        <servlet-class>controller.ProductDetailsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProductDetails</servlet-name>
+        <url-pattern>/product</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>controller.LoginController</servlet-class>
     </servlet>

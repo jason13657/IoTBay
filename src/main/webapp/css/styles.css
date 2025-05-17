@@ -96,7 +96,7 @@ form {
 .base__container {
   max-width: 1240px;
   margin: auto;
-  padding: 0px 40px;
+  padding: 0px 100px;
 }
 
 .featured__title {
@@ -107,11 +107,6 @@ form {
 }
 
 .featured__products {
-  display: flex;
-  justify-content: space-between;
-}
-
-.product__container {
   display: flex;
   justify-content: space-between;
 }
@@ -380,5 +375,4 @@ input[type="color"].register__input--favcol {
 #searchForm button:hover {
   background-color: #0056b3;
 }
-
 
