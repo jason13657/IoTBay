@@ -31,39 +31,40 @@ public class CartController extends HttpServlet {
         }
     }
 
-@Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    // Set content type
-    response.setContentType("application/json");
-    
-    try {
-        // Retrieve parameters from the request
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        int productId = Integer.parseInt(request.getParameter("productId"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        LocalDateTime addedAt = LocalDateTime.now();
-
-        CartItem existingItem = cartItemDAO.getCartItem(userId, productId);
-        // Create CartItem object
-
-        if (existingItem != null) {
-            // Item exists, update quantity
-            int newQuantity = existingItem.getQuantity() + quantity;
-            cartItemDAO.updateCartItemQuantity(userId, productId, newQuantity);
-        } else {
-            // Item does not exist, insert new
-            CartItem newItem = new CartItem(userId, productId, quantity, addedAt);
-            cartItemDAO.addCartItem(newItem);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        
+        try {
+            Integer userId = (Integer) request.getSession().getAttribute("userId");
+            if (userId == null) {
+                Integer anonymousUserId = (Integer) request.getSession().getAttribute("anonymousUserId");
+                if (anonymousUserId == null) {
+                    anonymousUserId = (int) (Math.random() * -1000000);
+                    request.getSession().setAttribute("anonymousUserId", anonymousUserId);
+                }
+                userId = anonymousUserId;
+            }
+            
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            int quantity = 1; // you can fix quantity or get from form if you want
+            LocalDateTime addedAt = LocalDateTime.now();
+            
+            CartItem existingItem = cartItemDAO.getCartItem(userId, productId);
+            
+            if (existingItem != null) {
+                int newQuantity = existingItem.getQuantity() + quantity;
+                cartItemDAO.updateCartItemQuantity(userId, productId, newQuantity);
+            } else {
+                CartItem newItem = new CartItem(userId, productId, quantity, addedAt);
+                cartItemDAO.addCartItem(newItem);
+            }
+            
+            response.getWriter().write("{\"status\":\"success\",\"message\":\"Item added to cart\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
         }
-
-        // Success response
-        response.getWriter().write("{\"status\":\"success\",\"message\":\"Item added to cart\"}");
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        response.getWriter().write("{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
     }
-}
-
 }
