@@ -6,7 +6,136 @@
 <html>
 <head>
     <title>Manage Products</title>
-    <style>
+</head>
+<body>
+    <h1>Manage Products</h1>
+    <div style="text-align: right;">
+        <button id="main-create-btn" class="create-btn" onclick="openCreateModal()">Create New Product</button>
+    </div>  
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Stock QTY</th>
+                <th>Image URL</th>
+                <th>Date Created</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        <%
+            List<Product> products = (List<Product>) request.getAttribute("products");
+            if (products != null && !products.isEmpty()) {
+                for (Product product : products) {
+        %>
+            <tr>
+                <td><%= product.getId() %></td>
+                <td><%= product.getCategoryId() %></td>
+                <td><%= product.getName() %></td>
+                <td><%= product.getDescription() %></td>
+                <td><%= product.getPrice() %></td>
+                <td><%= product.getStockQuantity() %></td>
+                <td class="image-url"><%= product.getImageUrl() %></td>
+                <td><%= product.getCreatedAt() %></td>
+                <td>
+                    <button class="edit-btn" onclick="openEditModal(
+                        '<%= product.getId() %>',
+                        '<%= product.getCategoryId() %>',
+                        '<%= product.getName().replace("'", "\\'") %>',
+                        '<%= product.getDescription().replace("'", "\\'") %>',
+                        '<%= product.getPrice() %>',
+                        '<%= product.getStockQuantity() %>',
+                        '<%= product.getImageUrl() %>',
+                        '<%= product.getCreatedAt() %>'
+                    )">Edit</button>
+                    <form action="<%=request.getContextPath()%>/manage/products/delete" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="<%= product.getId() %>">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>                    
+                </td>
+            </tr>
+        <%
+                }
+            } else {
+        %>
+            <tr>
+                <td colspan="5" style="text-align:center;">No products available.</td>
+            </tr>
+        <%
+            }
+        %>
+        </tbody>
+    </table>
+    <div id="createProductModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeCreateModal()">&times;</span>
+            <form action="/manage/products" method="post">
+                <input type="hidden" name="product_id"><br>
+
+                <label>Name:</label>
+                <input type="text" name="name" required><br>
+    
+                <label>Description:</label>
+                <textarea name="description" required></textarea><br>
+    
+                <label>Price:</label>
+                <input type="number" name="price" step="0.01" required><br>
+    
+                <label>Stock Quantity:</label>
+                <input type="number" name="stockQuantity" required min="1"><br>
+    
+                <label>Category ID:</label>
+                <input type="number" name="categoryId" required><br>
+    
+                <label>Image URL:</label>
+                <input type="text" name="imageUrl"><br>
+    
+                <label>Created At:</label>
+                <input type="date" name="created_at" id="created_at" required><br>
+    
+                <button type="submit" id="submit-modal-btn" class="create-btn">Create</button>
+            </form>
+        </div>
+    </div>
+        <!-- EDIT PRODUCT MODAL -->
+        <div id="editProductModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <form action="/manage/products/update" method="post">
+                    <input type="hidden" name="product_id" id="edit_id">
+                    <label>Name:</label>
+                    <input type="text" name="name" id="edit_name" required>
+    
+                    <label>Description:</label>
+                    <textarea name="description" id="edit_description" required></textarea>
+    
+                    <label>Price:</label>
+                    <input type="number" name="price" step="0.01" id="edit_price" required>
+    
+                    <label>Stock Quantity:</label>
+                    <input type="number" name="stockQuantity" id="edit_stockQuantity" required min="1">
+    
+                    <label>Category ID:</label>
+                    <input type="number" name="categoryId" id="edit_categoryId" required>
+    
+                    <label>Image URL:</label>
+                    <input type="text" name="imageUrl" id="edit_imageUrl">
+    
+                    <label>Created At:</label>
+                    <input type="date" name="created_at" id="edit_created_at" required>
+    
+                    <button type="submit" class="update-btn">Update</button>
+                </form>
+            </div>
+        </div>
+        <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
         table {
             border-collapse: collapse;
             width: 90%;
@@ -70,6 +199,8 @@
             border-radius: 10px;
             width: 400px;
             max-width: 90%;
+            max-height: 92vh; /* prevents it from exceeding screen height */
+            overflow-y: auto;
             box-shadow: 0 4px 10px rgba(0,0,0,0.25);
             position: relative;
         }
@@ -124,133 +255,89 @@
         .table-actions button.delete-btn {
             background-color: #dc3545;
         }
-    </style>
-</head>
-<body>
-    <h1>Manage Products</h1>
-    <div style="text-align: right;">
-        <button onclick="openCreateModal()">Create New Product</button>
-    </div>  
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Category ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Stock QTY</th>
-                <th>Image URL</th>
-                <th>Date Created</th>
-            </tr>
-        </thead>
-        <tbody>
-        <%
-            List<Product> products = (List<Product>) request.getAttribute("products");
-            if (products != null && !products.isEmpty()) {
-                for (Product product : products) {
-        %>
-            <tr>
-                <td><%= product.getId() %></td>
-                <td><%= product.getCategoryId() %></td>
-                <td><%= product.getName() %></td>
-                <td><%= product.getDescription() %></td>
-                <td><%= product.getPrice() %></td>
-                <td><%= product.getStockQuantity() %></td>
-                <td class="image-url"><%= product.getImageUrl() %></td>
-                <td><%= product.getCreatedAt() %></td>
-                <td>
-                    <button class="edit-btn" onclick="openEditModal(
-                        '<%= product.getId() %>',
-                        '<%= product.getCategoryId() %>',
-                        '<%= product.getName().replace("'", "\\'") %>',
-                        '<%= product.getDescription().replace("'", "\\'") %>',
-                        '<%= product.getPrice() %>',
-                        '<%= product.getStockQuantity() %>',
-                        '<%= product.getImageUrl() %>',
-                        '<%= product.getCreatedAt() %>'
-                    )">Edit</button>
-                    <form action="<%=request.getContextPath()%>/manage/products/delete" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= product.getId() %>">
-                        <button type="submit" class="delete-btn">Delete</button>
-                    </form>                    
-                </td>
-            </tr>
-        <%
-                }
-            } else {
-        %>
-            <tr>
-                <td colspan="5" style="text-align:center;">No products available.</td>
-            </tr>
-        <%
+        .create-btn {
+            background-color: #007BFF; /* Blue */
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: right;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0,123,255,0.4);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .create-btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 5px 10px rgba(0,86,179,0.6);
+        }
+        .create-btn:active {
+            background-color: #004494;
+            box-shadow: 0 2px 5px rgba(0,68,148,0.8);
+        }
+        #main-create-btn {
+            margin: 0 25px;
+        }
+        #submit-modal-btn {
+            float: right;
+        }
+            .edit-btn {
+              background-color: #007bff;
+              color: white;
+              border: none;
+              padding: 6px 14px;
+              font-size: 14px;
+              border-radius: 4px;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
             }
-        %>
-        </tbody>
-    </table>
-    <div id="createProductModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeCreateModal()">&times;</span>
-            <form action="/manage/products" method="post">
-                <label>Product ID:</label>
-                <input type="number" name="product_id" required><br>
+            .edit-btn:hover {
+              background-color: #0062ff;
+            }
+          
+            .delete-btn {
+              background-color: #f44336; /* Red */
+              color: white;
+              border: none;
+              padding: 6px 14px;
+              font-size: 14px;
+              border-radius: 4px;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+            }
+            .delete-btn:hover {
+              background-color: #d32f2f;
+            }
+          
+            /* Optional: add spacing between buttons */
+            .edit-btn, .delete-btn {
+              margin-right: 8px;
+            }
 
-                <label>Name:</label>
-                <input type="text" name="name" required><br>
-    
-                <label>Description:</label>
-                <textarea name="description" required></textarea><br>
-    
-                <label>Price:</label>
-                <input type="number" name="price" step="0.01" required><br>
-    
-                <label>Stock Quantity:</label>
-                <input type="number" name="stockQuantity" required><br>
-    
-                <label>Category ID:</label>
-                <input type="number" name="categoryId" required><br>
-    
-                <label>Image URL:</label>
-                <input type="text" name="imageUrl"><br>
-    
-                <label>Created At:</label>
-                <input type="date" name="created_at" id="created_at" required><br>
-    
-                <button type="submit">Create</button>
-            </form>
-        </div>
-    </div>
-        <!-- EDIT PRODUCT MODAL -->
-        <div id="editProductModal" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeEditModal()">&times;</span>
-                <form action="/manage/products/update" method="post">
-                    <input type="hidden" name="product_id" id="edit_id">
-                    <label>Name:</label>
-                    <input type="text" name="name" id="edit_name" required>
-    
-                    <label>Description:</label>
-                    <textarea name="description" id="edit_description" required></textarea>
-    
-                    <label>Price:</label>
-                    <input type="number" name="price" step="0.01" id="edit_price" required>
-    
-                    <label>Stock Quantity:</label>
-                    <input type="number" name="stockQuantity" id="edit_stockQuantity" required>
-    
-                    <label>Category ID:</label>
-                    <input type="number" name="categoryId" id="edit_categoryId" required>
-    
-                    <label>Image URL:</label>
-                    <input type="text" name="imageUrl" id="edit_imageUrl">
-    
-                    <label>Created At:</label>
-                    <input type="date" name="created_at" id="edit_created_at" required>
-    
-                    <button type="submit">Update</button>
-                </form>
-            </div>
-        </div>
+            .update-btn {
+            background-color: #007BFF; /* Blue */
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: right;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0,123,255,0.4);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .update-btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 5px 10px rgba(0,86,179,0.6);
+        }
+        .update-btn:active {
+            background-color: #004494;
+            box-shadow: 0 2px 5px rgba(0,68,148,0.8);
+        }
+
+          </style>
     <script>
         function openCreateModal() {
             document.getElementById('createProductModal').style.display = 'block';
@@ -279,7 +366,13 @@
         const today = new Date().toISOString().split('T')[0];
         const createdAtInput = document.getElementById('created_at');
         createdAtInput.value = today;
-        createdAtInput.max = today; // Prevent future dates
+        createdAtInput.max = today;
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const today = new Date().toISOString().split('T')[0];
+        const createdAtInput = document.getElementById('edit_created_at');
+        createdAtInput.max = today;
     });
     </script>
     
