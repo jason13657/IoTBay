@@ -161,12 +161,10 @@
                 <td><%= product.getCreatedAt() %></td>
                 <td>
                     <button>Edit</button>
-                    <form action="/manage/products" method="post" style="display:inline;">
+                    <form action="<%=request.getContextPath()%>/manage/products/delete" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="<%= product.getId() %>">
-                        <button type="submit" name="deleteBtn" value="delete" class="delete-btn">Delete</button>
-                    </form>
-                    
-                    
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>                    
                 </td>
             </tr>
         <%

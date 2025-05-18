@@ -15,6 +15,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>DeleteProduct</servlet-name>
+        <servlet-class>controller.DeleteProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteProduct</servlet-name>
+        <url-pattern>/manage/products/delete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ManageUser</servlet-name>
         <servlet-class>controller.ManageUserController</servlet-class>
     </servlet>
