@@ -39,6 +39,12 @@
                 </button>
             </form>
 
+            <form action="profiles.jsp" method="get">
+            <button class="header__button" type="submit">
+                <p class="header__button-text">Profiles</p>
+            </button>
+        </form>
+
             <% if (isStaff) { %>
             <form action="/manage" method="get">
                 <button class="header__button" type="submit">

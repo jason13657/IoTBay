@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dao.interfaces.UserDAO;
+import jdk.jshell.spi.ExecutionControl;
 import model.User;
 
 public class UserDAOStub implements UserDAO {
@@ -34,6 +35,7 @@ public class UserDAOStub implements UserDAO {
         users.add(new User(18, "paul.kim@example.com", "paulpass", "Paul", "Kim", "+61 400 000 018", "2017", "18 Goulburn St", "Sydney NSW", LocalDate.of(1991, 1, 13), "Bank", LocalDateTime.now(), LocalDateTime.now(), "customer", true));
         users.add(new User(19, "quinn.cho@example.com", "quinnpass", "Quinn", "Cho", "+61 400 000 019", "2018", "19 College St", "Sydney NSW", LocalDate.of(1988, 6, 27), "Card", LocalDateTime.now(), LocalDateTime.now(), "staff", true));
         users.add(new User(20, "ryan.hwang@example.com", "ryanpass", "Ryan", "Hwang", "+61 400 000 020", "2019", "20 King St", "Sydney NSW", LocalDate.of(1995, 9, 9), "PayPal", LocalDateTime.now(), LocalDateTime.now(), "customer", true));
+        
     }
 
     @Override

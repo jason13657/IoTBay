@@ -57,26 +57,26 @@ public class RegisterController extends HttpServlet {
         );
         if (profileError != null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, profileError);
-            return;
+            return;     
         }
 
-        // 3. 이메일 유효성 검사
+        // 3. validate email
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, emailError);
             return;
         }
 
-        // 4. 비밀번호 및 확인 비밀번호 유효성 검사
+        // 4.confirm the password
         String passwordError = ValidationUtil.validatePasswordChange(password, confirmPassword);
         if (passwordError != null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, passwordError);
             return;
         }
 
-        // 5. 중복 이메일 검사
+        // 5. validate email duplication
         try {
-            if (userDAO.isEmailExists(email)) {
+            if (userDAO.getUserByEmail(email) != null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email already exists.");
                 return;
             }
@@ -85,11 +85,30 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        // 6. 생년월일 파싱 (선택)
+        // 6. birth date parsing
         LocalDate dateOfBirth = null;
         if (dobString != null && !dobString.trim().isEmpty()) {
             try {
                 dateOfBirth = LocalDate.parse(dobString);
+
+
+                if (dateOfBirth.isAfter(LocalDate.now())) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Date of birth cannot be in the future.");
+                    return;
+                }
+
+                if (dateOfBirth.isBefore(LocalDate.now().minusYears(18))) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You must be at least 18 years old.");
+                    return;
+                }
+
+                if (dateOfBirth.isBefore(LocalDate.now().minusYears(100))) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Date of birth is too far in the past.");
+                    return;
+                }
+
+            
+
             } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date of birth.");
                 return;
