@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,133 +12,80 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.gson.Gson;
-
 import dao.ProductDAOImpl;
 import dao.interfaces.ProductDAO;
 import db.DBConnection;
 import model.Product;
 import model.User;
 
-@WebServlet("/api/manage/products") 
+@WebServlet("/manage/products")
 public class ManageProductController extends HttpServlet {
     private ProductDAO productDAO;
-    private final Gson gson = new Gson();
 
     @Override
     public void init() throws ServletException {
         try {
             Connection connection = DBConnection.getConnection();
             productDAO = new ProductDAOImpl(connection);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Failed to initialize database connection", e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Database driver not found", e);
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+    
         if (!isAdmin(request)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("{\"error\": \"Access denied\"}");
             return;
         }
-        String idParam = request.getParameter("id");
-        String nameParam = request.getParameter("name");
-        String categoryIdParam = request.getParameter("categoryId");
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
+    
         try {
-            if (idParam != null) {
-                int id = Integer.parseInt(idParam);
-                Product product = productDAO.getProductById(id);
-                if (product != null) {
-                    response.getWriter().write(gson.toJson(product));
-                } else {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    response.getWriter().write("{\"error\": \"Product not found\"}");
-                }
-            } else if (nameParam != null) { 
-                List<Product> products = productDAO.getProductsByName(nameParam);
-                response.getWriter().write(gson.toJson(products));
-            } else if (categoryIdParam != null) { 
-                int categoryId = Integer.parseInt(categoryIdParam);
-                List<Product> products = productDAO.getProductsByCategoryId(categoryId);
-                response.getWriter().write(gson.toJson(products));
-            } else { 
-                List<Product> products = productDAO.getAllProducts();
-                response.getWriter().write(gson.toJson(products));
-            }
+            List<Product> products = productDAO.getAllProducts(); // Get all products
+            request.setAttribute("products", products); // Add products to request attribute
+    
+            // Forward to JSP page to display products
+            request.getRequestDispatcher("/WEB-INF/views/manage-products.jsp").forward(request, response);
+    
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
         }
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
-        
         if (!isAdmin(request)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("{\"error\": \"Access denied\"}");
             return;
         }
+
         try {
-            BufferedReader reader = request.getReader();
-            Product product = gson.fromJson(reader, Product.class);
+            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+            String name = request.getParameter("name");
+            String description = request.getParameter("description");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int stockQuantity = Integer.parseInt(request.getParameter("stockQuantity"));
+            String imageUrl = request.getParameter("imageUrl");
+
+            Product product = new Product(0, categoryId, name, description, price, stockQuantity, imageUrl, java.time.LocalDate.now());
+
             productDAO.createProduct(product);
-            response.setStatus(HttpServletResponse.SC_CREATED);
-            response.getWriter().write(gson.toJson(product));
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
-        }
-    }
 
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        if (!isAdmin(request)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("{\"error\": \"Access denied\"}");
-            return;
-        }
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            BufferedReader reader = request.getReader();
-            Product product = gson.fromJson(reader, Product.class);
-            productDAO.updateProduct(id, product);
-            response.getWriter().write("{\"message\": \"Product updated successfully\"}");
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
-        }
-    }
+            response.sendRedirect(request.getContextPath() + "/manage/products");
 
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        if (!isAdmin(request)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("{\"error\": \"Access denied\"}");
-            return;
-        }
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            productDAO.deleteProduct(id);
-            response.getWriter().write("{\"message\": \"Product deleted successfully\"}");
-        } catch (SQLException e) {
+        } catch (SQLException | NumberFormatException e) {
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
+            response.getWriter().write("{\"error\":\"Failed to create product: " + e.getMessage() + "\"}");
         }
-    }
+}
+
 
     private boolean isAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession(false);

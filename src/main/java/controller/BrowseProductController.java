@@ -28,7 +28,7 @@ public class BrowseProductController extends HttpServlet {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Failed to init");
         }
-    } 
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {

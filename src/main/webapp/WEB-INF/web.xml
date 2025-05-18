@@ -11,7 +11,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageProduct</servlet-name>
-        <url-pattern>/api/manage/products</url-pattern>
+        <url-pattern>/manage/products</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -20,7 +20,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageUser</servlet-name>
-        <url-pattern>/api/manage/users</url-pattern>
+        <url-pattern>/manage/users</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -29,7 +29,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageAccessLog</servlet-name>
-        <url-pattern>/api/manage/access-logs</url-pattern>
+        <url-pattern>/manage/access-logs</url-pattern>
     </servlet-mapping>
 
     <servlet>
