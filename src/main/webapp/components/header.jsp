@@ -40,9 +40,19 @@
             </form>
 
             <% if (isStaff) { %>
-            <form action="/manage" method="get">
+            <form action="/manage/products" method="get">
                 <button class="header__button" type="submit">
-                    <p class="header__button-text">Manage</p>
+                    <p class="header__button-text">Products</p>
+                </button>
+            </form>
+            <form action="/manage/users" method="get">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Users</p>
+                </button>
+            </form>
+            <form action="/manage/access-log" method="get">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Access Log</p>
                 </button>
             </form>
             <% } %>
