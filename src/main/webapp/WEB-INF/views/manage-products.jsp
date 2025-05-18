@@ -160,7 +160,16 @@
                 <td class="image-url"><%= product.getImageUrl() %></td>
                 <td><%= product.getCreatedAt() %></td>
                 <td>
-                    <button>Edit</button>
+                    <button class="edit-btn" onclick="openEditModal(
+                        '<%= product.getId() %>',
+                        '<%= product.getCategoryId() %>',
+                        '<%= product.getName().replace("'", "\\'") %>',
+                        '<%= product.getDescription().replace("'", "\\'") %>',
+                        '<%= product.getPrice() %>',
+                        '<%= product.getStockQuantity() %>',
+                        '<%= product.getImageUrl() %>',
+                        '<%= product.getCreatedAt() %>'
+                    )">Edit</button>
                     <form action="<%=request.getContextPath()%>/manage/products/delete" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="<%= product.getId() %>">
                         <button type="submit" class="delete-btn">Delete</button>
@@ -210,7 +219,38 @@
                 <button type="submit">Create</button>
             </form>
         </div>
-    </div>    
+    </div>
+        <!-- EDIT PRODUCT MODAL -->
+        <div id="editProductModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <form action="/manage/products/update" method="post">
+                    <input type="hidden" name="product_id" id="edit_id">
+                    <label>Name:</label>
+                    <input type="text" name="name" id="edit_name" required>
+    
+                    <label>Description:</label>
+                    <textarea name="description" id="edit_description" required></textarea>
+    
+                    <label>Price:</label>
+                    <input type="number" name="price" step="0.01" id="edit_price" required>
+    
+                    <label>Stock Quantity:</label>
+                    <input type="number" name="stockQuantity" id="edit_stockQuantity" required>
+    
+                    <label>Category ID:</label>
+                    <input type="number" name="categoryId" id="edit_categoryId" required>
+    
+                    <label>Image URL:</label>
+                    <input type="text" name="imageUrl" id="edit_imageUrl">
+    
+                    <label>Created At:</label>
+                    <input type="date" name="created_at" id="edit_created_at" required>
+    
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+        </div>
     <script>
         function openCreateModal() {
             document.getElementById('createProductModal').style.display = 'block';
@@ -219,7 +259,22 @@
         function closeCreateModal() {
             document.getElementById('createProductModal').style.display = 'none';
         }
-        
+        function openEditModal(id, categoryId, name, description, price, stockQty, imageUrl, createdAt) {
+            document.getElementById('editProductModal').style.display = 'flex';
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_description').value = description;
+            document.getElementById('edit_price').value = price;
+            document.getElementById('edit_stockQuantity').value = stockQty;
+            document.getElementById('edit_categoryId').value = categoryId;
+            document.getElementById('edit_imageUrl').value = imageUrl;
+            document.getElementById('edit_created_at').value = createdAt;
+        }
+
+        function closeEditModal() {
+            document.getElementById('editProductModal').style.display = 'none';
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
         const today = new Date().toISOString().split('T')[0];
         const createdAtInput = document.getElementById('created_at');

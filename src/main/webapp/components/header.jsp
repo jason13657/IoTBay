@@ -50,7 +50,7 @@
                     <p class="header__button-text">Users</p>
                 </button>
             </form>
-            <form action="/manage/access-log" method="get">
+            <form action="/manage/access-logs" method="get">
                 <button class="header__button" type="submit">
                     <p class="header__button-text">Access Log</p>
                 </button>

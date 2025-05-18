@@ -24,6 +24,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>UpdateProduct</servlet-name>
+        <servlet-class>controller.UpdateProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateProduct</servlet-name>
+        <url-pattern>/manage/products/update</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ManageUser</servlet-name>
         <servlet-class>controller.ManageUserController</servlet-class>
     </servlet>
