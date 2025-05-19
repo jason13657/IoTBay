@@ -12,7 +12,7 @@
     <section class="register__container">
         <h2 class="register__title">Join Us</h2>
         <div class="register__contents">
-            <!-- <img class="register__image" src="images/wewantyou.png" alt="Register" /> -->
+            <img class="register__image" src="images/wewantyou.png" alt="Register" />
             <div class="register__form--container">
 
                 <h3 class="register__form--title">Create Account</h3>

@@ -195,9 +195,8 @@ form {
 
 .register__image {
   flex: 1 1 0;            /* flex-grow: 1, flex-shrink: 1, flex-basis: 0 */
-  width: 400px;           /* 원하는 너비, 또는 max-width: 40% 등 */
+  width: 400px;           
   min-width: 220px;
-
   object-fit: cover;      /* 비율 유지하며 채움 */
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -205,8 +204,7 @@ form {
 }
 
 .register__form--container {
-  display: flex;
-  flex: 1 1 0;
+  display: flex
   flex-direction: column;
   justify-content: center;
   width: 100%;
@@ -221,7 +219,7 @@ form {
 }
 
 .register__form {
-  width: 0%;
+  width: auto;
   display: flex;
   flex-direction: column;
   gap: 23px;
