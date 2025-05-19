@@ -57,6 +57,44 @@
         </div>
     </section>
 
+
+    <!-- error handling script -->
+    <div id="errorModal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+        <h2>Oops! Something went wrong.</h2>
+        <p id="modalMessage"></p>
+        <button onclick="closeModal()">Close</button>
+    </div>
+    </div>
+
     <jsp:include page="components/footer.jsp" />
+
+
+     <!-- jQuery CDN (AJAX용) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    function showModal(message) {
+        $('#modalMessage').text(message);
+        $('#errorModal').fadeIn(150);
+    }
+    function closeModal() {
+        $('#errorModal').fadeOut(150);
+    }
+
+    $('#registerForm').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/api/auth/register',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function() {
+                window.location.href = 'welcome.jsp';
+            },
+            error: function(xhr) {
+                showModal(xhr.responseText); //show error message in modal
+            }
+        });
+    });
+</script>
 </body>
 </html>
