@@ -40,13 +40,13 @@
                     <input type="date" id="dateOfBirth" name="dateOfBirth" class="register__input" />
 
                     <!-- 결제수단 (선택) -->
-                <label for="paymentMethod">Payment Method</label>
-                <select name="paymentMethod" id="paymentMethod">
-                    <option value="">Select</option>
-                    <option value="CreditCard" <%= user != null && "CreditCard".equals(user.getPaymentMethod()) ? "selected" : "" %>>Credit Card</option>
-                    <option value="PayPal" <%= user != null && "PayPal".equals(user.getPaymentMethod()) ? "selected" : "" %>>PayPal</option>
-                    <option value="BankTransfer" <%= user != null && "BankTransfer".equals(user.getPaymentMethod()) ? "selected" : "" %>>Bank Transfer</option>
-                </select>
+                    <label for="paymentMethod">Payment Method</label>
+                    <select name="paymentMethod" id="paymentMethod">
+                        <option value="">Select</option>
+                        <option value="CreditCard" <%= user != null && "CreditCard".equals(user.getPaymentMethod()) ? "selected" : "" %>>Credit Card</option>
+                        <option value="PayPal" <%= user != null && "PayPal".equals(user.getPaymentMethod()) ? "selected" : "" %>>PayPal</option>
+                        <option value="BankTransfer" <%= user != null && "BankTransfer".equals(user.getPaymentMethod()) ? "selected" : "" %>>Bank Transfer</option>
+                    </select>
                     <!-- 약관동의 -->
                     <div class="tos__container">
                         <label for="tos">
