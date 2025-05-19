@@ -12,7 +12,6 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 @WebServlet("/manage/products/update")
 public class UpdateProductController extends HttpServlet {
@@ -46,7 +45,8 @@ public class UpdateProductController extends HttpServlet {
             double price = Double.parseDouble(request.getParameter("price"));
             int stockQuantity = Integer.parseInt(request.getParameter("stockQuantity"));
             String imageUrl = request.getParameter("imageUrl");
-
+            String createdAtStr = request.getParameter("created_at");
+            java.time.LocalDate createdAt = java.time.LocalDate.parse(createdAtStr);
             Product updatedProduct = new Product(
                 id,
                 categoryId,
@@ -55,7 +55,7 @@ public class UpdateProductController extends HttpServlet {
                 price,
                 stockQuantity,
                 imageUrl,
-                LocalDate.now()
+                createdAt
             );
 
             productDAO.updateProduct(id, updatedProduct);

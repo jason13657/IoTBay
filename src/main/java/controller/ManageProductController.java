@@ -73,7 +73,10 @@ public class ManageProductController extends HttpServlet {
             int stockQuantity = Integer.parseInt(request.getParameter("stockQuantity"));
             String imageUrl = request.getParameter("imageUrl");
 
-            Product product = new Product(0, categoryId, name, description, price, stockQuantity, imageUrl, java.time.LocalDate.now());
+            String createdAtStr = request.getParameter("created_at");
+            java.time.LocalDate createdAt = java.time.LocalDate.parse(createdAtStr); // expects yyyy-MM-dd
+    
+            Product product = new Product(0, categoryId, name, description, price, stockQuantity, imageUrl, createdAt);
 
             productDAO.createProduct(product);
 

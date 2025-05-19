@@ -42,6 +42,24 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>DeleteUser</servlet-name>
+        <servlet-class>controller.DeleteUserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteUser</servlet-name>
+        <url-pattern>/manage/users/delete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateUser</servlet-name>
+        <servlet-class>controller.UpdateUserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateUser</servlet-name>
+        <url-pattern>/manage/users/update</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ManageAccessLog</servlet-name>
         <servlet-class>controller.ManageAccessLogController</servlet-class>
     </servlet>

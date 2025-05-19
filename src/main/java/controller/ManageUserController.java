@@ -3,6 +3,8 @@ package controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -49,6 +51,65 @@ public class ManageUserController extends HttpServlet {
             response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        if (!isAdmin(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("{\"error\": \"Access denied\"}");
+            return;
+        }
+
+        try {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String gender = request.getParameter("gender");
+            String favouriteColor = request.getParameter("favouriteColor");
+            String dob = request.getParameter("dateOfBirth");
+            String role = request.getParameter("role");
+
+            // Input validation (optional but recommended)
+            if (email == null || password == null || firstName == null || lastName == null || gender == null || dob == null || role == null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\": \"Missing required fields\"}");
+                return;
+            }
+
+            User user = new User(
+                0, // or a dummy ID if your DB auto-generates it
+                request.getParameter("email"),
+                request.getParameter("firstName"),
+                request.getParameter("lastName"),
+                request.getParameter("password"),
+                request.getParameter("gender"),
+                request.getParameter("favouriteColor"),
+                LocalDate.parse(request.getParameter("dateOfBirth")),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                request.getParameter("role"),
+                true // isActive
+            );
+
+
+            // Insert into DB
+            userDAO.createUser(user);
+
+            // Redirect or reload
+            response.sendRedirect(request.getContextPath() + "/manage/users");
+
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\": \"Database error: " + e.getMessage() + "\"}");
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Invalid input: " + e.getMessage() + "\"}");
+        }
+    }
+
 
     private boolean isAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession(false);

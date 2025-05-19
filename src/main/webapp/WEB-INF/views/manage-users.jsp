@@ -45,9 +45,9 @@
                 <td><%= user.getFavoriteColor() %></td>
                 <td><%= user.getDateOfBirth() %></td>
                 <td><%= user.getCreatedAt() %></td>
-                <td><%= user.getUpdatedAt() %></td>
+                <td class="updatedAtTime"><%= user.getUpdatedAt() %></td>
                 <td><%= user.getRole() %></td>
-                <td>
+                <td class="actionbtns">
                     <button class="edit-btn" onclick="openEditModal(
                         '<%= user.getId() %>',
                         '<%= user.getEmail().replace("'", "\\'") %>',
@@ -99,21 +99,21 @@
             
                 <label>Gender:</label>
                 <select name="gender" required>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                    <option value="OTHER">Other</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                 </select><br>
             
                 <label>Favourite Color:</label>
                 <input type="text" name="favouriteColor"><br>
             
                 <label>Date of Birth:</label>
-                <input type="date" name="dateOfBirth" required><br>
+                <input type="date" id="create_dateOfBirth" name="dateOfBirth" required><br>
             
                 <label>Role:</label>
                 <select name="role" required>
-                    <option value="USER">User</option>
-                    <option value="ADMIN">Admin</option>
+                    <option value="customer">Customer</option>
+                    <option value="staff">Staff</option>
                 </select><br>
             
                 <button type="submit" id="submit-modal-btn" class="create-btn">Create</button>
@@ -147,16 +147,19 @@
                     </select>
                 
                     <label>Favourite Color:</label>
-                    <input type="text" name="favouriteColor" id="edit_favouriteColor">
+                    <input type="text" name="favoriteColor" id="edit_favoriteColor">
                 
                     <label>Date of Birth:</label>
                     <input type="date" name="dateOfBirth" id="edit_dateOfBirth" required>
-                
+                    <input type="hidden" name="createdAt" id="edit_createdAt">
+                    <input type="hidden" name="updatedAt" id="edit_updatedAt">
+
                     <label>Role:</label>
                     <select name="role" id="edit_role" required>
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
+                        <option value="staff">Staff</option>
+                        <option value="customer">Customer</option>
                     </select>
+                    <input type="hidden" name="isActive" id="edit_isActive" value="true"> <!-- default true -->
                     <br>
                     <button type="submit" class="update-btn">Update</button>
                 </form>                
@@ -183,12 +186,15 @@
             text-align: center;
             margin-top: 30px;
         }
-        td.image-url {
-        max-width: 200px;
-        word-break: break-all;
-        white-space: normal;
-        overflow-wrap: break-word;
-    }
+        td.actionbtns {
+            min-width: 150px
+        }
+        td.updatedAtTime {
+            max-width: 150px;
+            word-break: break-all;
+            white-space: normal;
+            overflow-wrap: break-word;
+        }
 
         input[type="text"],
         input[type="number"],
@@ -380,38 +386,37 @@
         function closeCreateModal() {
             document.getElementById('createUserModal').style.display = 'none';
         }
-        function openEditModal(id, email, password, firstName, lastName, gender, favouriteColor, dateOfBirth, createdAt, updatedAt, role) {
-            document.getElementById('editUserModal').style.display = 'flex';
+        function openEditModal(id, email, password, firstName, lastName, gender, favoriteColor, dateOfBirth, createdAt, updatedAt, role) {
             document.getElementById('edit_id').value = id;
             document.getElementById('edit_email').value = email;
             document.getElementById('edit_password').value = password;
             document.getElementById('edit_firstName').value = firstName;
             document.getElementById('edit_lastName').value = lastName;
             document.getElementById('edit_gender').value = gender;
-            document.getElementById('edit_favouriteColor').value = favouriteColor;
+            document.getElementById('edit_favoriteColor').value = favoriteColor;
             document.getElementById('edit_dateOfBirth').value = dateOfBirth;
             document.getElementById('edit_createdAt').value = createdAt;
             document.getElementById('edit_updatedAt').value = updatedAt;
             document.getElementById('edit_role').value = role;
+            document.getElementById('edit_isActive').value = "true";
+
+            document.getElementById('editUserModal').style.display = 'block';
         }
+
 
         function closeEditModal() {
             document.getElementById('editUserModal').style.display = 'none';
         }
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toISOString().split('T')[0];
 
-        window.addEventListener('DOMContentLoaded', () => {
-        const today = new Date().toISOString().split('T')[0];
-        const createdAtInput = document.getElementById('created_at');
-        createdAtInput.value = today;
-        createdAtInput.max = today;
-    });
+            const createDOB = document.getElementById("create_dateOfBirth");
+            const editDOB = document.getElementById("edit_dateOfBirth");
 
-    window.addEventListener('DOMContentLoaded', () => {
-        const today = new Date().toISOString().split('T')[0];
-        const createdAtInput = document.getElementById('edit_created_at');
-        createdAtInput.max = today;
-    });
-    </script>
+            if (createDOB) createDOB.max = today;
+            if (editDOB) editDOB.max = today;
+        });
+</script>
     
 </body>
 </html>
