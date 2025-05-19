@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,32 +24,52 @@ public class BrowseProductController extends HttpServlet {
         try {
             Connection connection = DBConnection.getConnection();
             productDAO = new ProductDAOImpl(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to init");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Failed to init");
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException("Failed to initialize database connection", e);
         }
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        String keyword = request.getParameter("query");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
+        String keyword = request.getParameter("query");
+        String categoryIdParam = request.getParameter("categoryId");
+        List<Product> products;
 
         try {
-            List<Product> products = productDAO.getProductsByName(keyword);
+            boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+            boolean hasCategory = categoryIdParam != null && !categoryIdParam.trim().isEmpty();
+
+            if (hasCategory) {
+                int categoryId = Integer.parseInt(categoryIdParam);
+                products = productDAO.getProductsByCategoryId(categoryId);
+
+                if (hasKeyword) {
+                    String lowerKeyword = keyword.trim().toLowerCase();
+                    products = products.stream()
+                            .filter(p -> p.getName().toLowerCase().contains(lowerKeyword))
+                            .collect(Collectors.toList());
+                }
+
+                request.setAttribute("categoryId", categoryId);
+            } else if (hasKeyword) {
+                products = productDAO.getProductsByName(keyword.trim());
+            } else {
+                products = productDAO.getAllProducts();
+            }
+
             request.setAttribute("results", products);
             request.setAttribute("keyword", keyword);
+            request.getRequestDispatcher("browse.jsp").forward(request, response);
 
-            try {
-                request.getRequestDispatcher("browse.jsp").forward(request, response);
-            } catch (ServletException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Invalid category ID\"}");
         }
     }
 }

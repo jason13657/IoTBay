@@ -68,11 +68,10 @@ public class ManageUserController extends HttpServlet {
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             String gender = request.getParameter("gender");
-            String favouriteColor = request.getParameter("favouriteColor");
+            String favoriteColor = request.getParameter("favoriteColor");
             String dob = request.getParameter("dateOfBirth");
             String role = request.getParameter("role");
 
-            // Input validation (optional but recommended)
             if (email == null || password == null || firstName == null || lastName == null || gender == null || dob == null || role == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.getWriter().write("{\"error\": \"Missing required fields\"}");
@@ -80,25 +79,20 @@ public class ManageUserController extends HttpServlet {
             }
 
             User user = new User(
-                0, // or a dummy ID if your DB auto-generates it
+                0,
                 request.getParameter("email"),
                 request.getParameter("firstName"),
                 request.getParameter("lastName"),
                 request.getParameter("password"),
                 request.getParameter("gender"),
-                request.getParameter("favouriteColor"),
+                request.getParameter("favoriteColor"),
                 LocalDate.parse(request.getParameter("dateOfBirth")),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 request.getParameter("role"),
-                true // isActive
+                true
             );
-
-
-            // Insert into DB
             userDAO.createUser(user);
-
-            // Redirect or reload
             response.sendRedirect(request.getContextPath() + "/manage/users");
 
         } catch (SQLException e) {
