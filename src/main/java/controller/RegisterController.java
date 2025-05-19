@@ -51,10 +51,17 @@ public class RegisterController extends HttpServlet {
         String dobString = request.getParameter("dateOfBirth");
         String paymentMethod = request.getParameter("paymentMethod");
 
-
+        String tos = request.getParameter("tos");
+        if (tos == null || !tos.equals("on")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You must accept the terms of service.");
+            return;
+        }
+        
         String profileError = ValidationUtil.validateRegisterUserProfile(
                 firstName, lastName, phone, postalCode, addressLine1
         );
+
+        
         if (profileError != null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, profileError);
             return;     

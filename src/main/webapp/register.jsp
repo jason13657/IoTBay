@@ -23,13 +23,14 @@
                     <input type="password" id="password" name="password" class="register__input" placeholder="Password" required />
                     <input type="password" id="confirmPassword" name="confirmPassword" class="register__input" placeholder="Confirm Password" required />
 
-            
-                    <input type="text" id="fullName" name="fullName" class="register__input" placeholder="Full Name" required />
+
+                    <input type="text" id="firstName" name="firstName" class="register__input" placeholder="First Name" required />
+                    <input type="text" id="lastName" name="lastName" class="register__input" placeholder="Last Name" required />
 
                     
                     <input type="tel" id="phone" name="phone" class="register__input" placeholder="Phone Number" required />
 
-                    <!-- 주소 -->
+                
                     <input type="text" id="postalCode" name="postalCode" class="register__input" placeholder="Postal Code" required />
                     <input type="text" id="addressLine1" name="addressLine1" class="register__input" placeholder="Address Line 1" required />
                     <input type="text" id="addressLine2" name="addressLine2" class="register__input" placeholder="Address Line 2 (optional)" />
