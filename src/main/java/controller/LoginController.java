@@ -1,6 +1,18 @@
 package controller;
 
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import dao.AccessLogDAOImpl;
 import dao.UserDAOImpl;
 import dao.interfaces.AccessLogDAO;
@@ -8,14 +20,6 @@ import dao.interfaces.UserDAO;
 import db.DBConnection;
 import model.AccessLog;
 import model.User;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
@@ -54,17 +58,23 @@ public class LoginController extends HttpServlet {
                         response.getWriter().write("{\"message\": \"Incorrect password\"}");
                         return;
                     }
+                    //create access log
                     LocalDateTime now = LocalDateTime.now();
                     AccessLog accessLog = new AccessLog(0, user.getId(), "User "+user.getEmail()+" Logged in" , now);
                     accessLogDAO.createAccessLog(accessLog);
 
                     // Successful login
+                    //set sessiosn 
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
 
-                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.setStatus(HttpServletResponse.SC_OK);  
                     response.setContentType("application/json");
-                    response.getWriter().write("{\"message\": \"Login successful\"}");
+
+                    // to fix the error, cmmenting out the next line 
+
+                    // response.getWriter().write("{\"message\": \"Login successful\"}");
+
                     response.sendRedirect("/index.jsp");
                 } catch (SQLException e) {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

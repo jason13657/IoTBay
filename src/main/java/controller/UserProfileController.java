@@ -18,7 +18,7 @@ import db.DBConnection;
 import model.User;
 import utils.ValidationUtil;
 
-@WebServlet("/api/profile")
+@WebServlet("/api/Profiles")
 public class UserProfileController extends HttpServlet {
     private UserDAO userDAO;
 
@@ -36,13 +36,15 @@ public class UserProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                //brings user to profile page
+        // Check if user is logged in
         HttpSession session = request.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-        // 최신 정보 조회
+        // update user info
         try {
             User freshUser = userDAO.getUserById(user.getId());
             request.setAttribute("user", freshUser);
