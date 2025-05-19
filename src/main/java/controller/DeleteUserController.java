@@ -1,53 +1,51 @@
 package controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
+import dao.UserDAOImpl;
+import dao.interfaces.UserDAO;
+import db.DBConnection;
+import model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-import dao.AccessLogDAOImpl;
-import dao.interfaces.AccessLogDAO;
-import db.DBConnection;
-import model.AccessLog;
-import model.User;
-
-@WebServlet("/manage/access-logs")
-public class ManageAccessLogController extends HttpServlet {
-    private AccessLogDAO accessLogDAO;
+@WebServlet("/manage/users/delete")
+public class DeleteUserController extends HttpServlet {
+    private UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         try {
             Connection connection = DBConnection.getConnection();
-            accessLogDAO = new AccessLogDAOImpl(connection);
+            userDAO = new UserDAOImpl(connection);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Failed to initialize database connection", e);
         }
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         if (!isAdmin(request)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("{\"error\": \"Access denied\"}");
+            response.getWriter().write("Access denied");
             return;
         }
 
         try {
-            List<AccessLog> accessLogs = accessLogDAO.getAllAccessLogs();
-            request.setAttribute("accessLogs", accessLogs);
-
-            request.getRequestDispatcher("/WEB-INF/views/manage-access-logs.jsp").forward(request, response);
-
+            int userId = Integer.parseInt(request.getParameter("id"));
+            userDAO.deleteUser(userId);
+            response.sendRedirect(request.getContextPath() + "/manage/users");
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Invalid user ID.");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
+            response.getWriter().write("Database error: " + e.getMessage());
         }
     }
 

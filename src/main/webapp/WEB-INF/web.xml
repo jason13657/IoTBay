@@ -11,7 +11,25 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageProduct</servlet-name>
-        <url-pattern>/api/manage/products</url-pattern>
+        <url-pattern>/manage/products</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteProduct</servlet-name>
+        <servlet-class>controller.DeleteProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteProduct</servlet-name>
+        <url-pattern>/manage/products/delete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateProduct</servlet-name>
+        <servlet-class>controller.UpdateProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateProduct</servlet-name>
+        <url-pattern>/manage/products/update</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -20,7 +38,25 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageUser</servlet-name>
-        <url-pattern>/api/manage/users</url-pattern>
+        <url-pattern>/manage/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteUser</servlet-name>
+        <servlet-class>controller.DeleteUserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteUser</servlet-name>
+        <url-pattern>/manage/users/delete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateUser</servlet-name>
+        <servlet-class>controller.UpdateUserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateUser</servlet-name>
+        <url-pattern>/manage/users/update</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -29,7 +65,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ManageAccessLog</servlet-name>
-        <url-pattern>/api/manage/access-logs</url-pattern>
+        <url-pattern>/manage/access-logs</url-pattern>
     </servlet-mapping>
 
     <servlet>
