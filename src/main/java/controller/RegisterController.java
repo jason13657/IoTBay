@@ -56,7 +56,7 @@ public class RegisterController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You must accept the terms of service.");
             return;
         }
-        
+
         String profileError = ValidationUtil.validateRegisterUserProfile(
                 firstName, lastName, phone, postalCode, addressLine1
         );

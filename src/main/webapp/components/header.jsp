@@ -39,7 +39,7 @@
                 </button>
             </form>
 
-            <form action="profiles.jsp" method="get">
+            <form action="Profiles.jsp" method="get">
             <button class="header__button" type="submit">
                 <p class="header__button-text">Profiles</p>
             </button>
