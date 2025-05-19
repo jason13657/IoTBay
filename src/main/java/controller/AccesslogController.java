@@ -42,7 +42,7 @@ public class AccesslogController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. 세션 및 로그인 체크
+        // 1. Session check: Only allow logged-in users
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -51,10 +51,11 @@ public class AccesslogController extends HttpServlet {
 
         User user = (User) session.getAttribute("user");
 
-        // 2. 날짜 검색 파라미터 처리
+        // 2. Date parameter check and validation
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
         LocalDate startDate = null, endDate = null;
+        LocalDate today = LocalDate.now();
 
         try {
             if (startDateStr != null && !startDateStr.isEmpty()) {
@@ -64,10 +65,34 @@ public class AccesslogController extends HttpServlet {
                 endDate = LocalDate.parse(endDateStr);
             }
         } catch (DateTimeParseException e) {
-            request.setAttribute("error", "날짜 형식이 올바르지 않습니다.");
+            // Invalid date format
+            request.setAttribute("error", "Date format is invalid. Please use YYYY-MM-DD.");
+            request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
+            return;
         }
 
-        // 3. DB에서 본인 로그만 조회
+        // Prevent searching for logs in the future
+        if ((startDate != null && startDate.isAfter(today)) || (endDate != null && endDate.isAfter(today))) {
+            request.setAttribute("error", "You cannot search for access logs in the future.");
+            request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
+            return;
+        }
+
+        // Prevent endDate before startDate
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+            request.setAttribute("error", "End date cannot be before start date.");
+            request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
+            return;
+        }
+
+        // Prevent date ranges that are too large (e.g., more than 1 year)
+        if (startDate != null && endDate != null && startDate.plusYears(1).isBefore(endDate)) {
+            request.setAttribute("error", "Date range is too large. Please select a range within 1 year.");
+            request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
+            return;
+        }
+
+        // 3. Retrieve only the current user's logs from the database
         List<AccessLog> accessLogList = null;
         try {
             if (startDate != null && endDate != null) {
@@ -78,12 +103,12 @@ public class AccesslogController extends HttpServlet {
             request.setAttribute("accessLogList", accessLogList);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Failed to retrieve access logs for userId " + user.getId(), e);
-            request.setAttribute("error", "접속 기록 조회 중 오류가 발생했습니다.");
+            request.setAttribute("error", "An error occurred while retrieving access logs.");
         }
 
-        // 4. JSP로 포워딩 (수정/삭제 기능 없음)
+        // 4. Forward to JSP (no edit/delete functionality)
         request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
     }
 
-    // POST, PUT, DELETE 등은 구현하지 않음 (접속 로그는 사용자 직접 수정/삭제 불가)
+    // POST, PUT, DELETE are not implemented (users cannot edit/delete their access logs)
 }
