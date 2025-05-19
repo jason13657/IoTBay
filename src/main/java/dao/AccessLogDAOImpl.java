@@ -1,13 +1,16 @@
 package dao;
 
-import model.AccessLog;
-import utils.DateTimeParser;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.interfaces.AccessLogDAO;
+import model.AccessLog;
+import utils.DateTimeParser;
 
 public class AccessLogDAOImpl implements AccessLogDAO {
     private final Connection connection;
@@ -90,4 +93,23 @@ public class AccessLogDAOImpl implements AccessLogDAO {
             DateTimeParser.parseLocalDateTime(rs.getString("timestamp")) // Parse text to LocalDateTime
         );
     }
+
+    // AccessLogDAOImpl.java
+    @Override
+    public List<AccessLog> getAccessLogsByUserIdAndDateRange(int userId, LocalDate startDate, LocalDate endDate) throws SQLException {
+        List<AccessLog> logs = new ArrayList<>();
+        String sql = "SELECT * FROM access_log WHERE user_id = ? AND login_time >= ? AND login_time <= ? ORDER BY login_time DESC";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setObject(2, startDate.atStartOfDay());
+            ps.setObject(3, endDate.plusDays(1).atStartOfDay());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                // AccessLog 객체 생성 및 리스트에 추가
+            }
+        }
+        return logs;
+    }
+
+    
 }

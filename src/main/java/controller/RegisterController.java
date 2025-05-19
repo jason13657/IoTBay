@@ -85,30 +85,11 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        // 6. birth date parsing
+        // 6. 생년월일 파싱 (선택)
         LocalDate dateOfBirth = null;
         if (dobString != null && !dobString.trim().isEmpty()) {
             try {
                 dateOfBirth = LocalDate.parse(dobString);
-
-
-                if (dateOfBirth.isAfter(LocalDate.now())) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Date of birth cannot be in the future.");
-                    return;
-                }
-
-                if (dateOfBirth.isBefore(LocalDate.now().minusYears(18))) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You must be at least 18 years old.");
-                    return;
-                }
-
-                if (dateOfBirth.isBefore(LocalDate.now().minusYears(100))) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Date of birth is too far in the past.");
-                    return;
-                }
-
-            
-
             } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date of birth.");
                 return;
