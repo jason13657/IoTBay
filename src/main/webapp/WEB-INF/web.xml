@@ -65,7 +65,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Register</servlet-name>
-        <url-pattern>/api/register</url-pattern>
+        <url-pattern>/api/auth/register</url-pattern>
     </servlet-mapping>
 
     <servlet>
