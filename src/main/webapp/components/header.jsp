@@ -21,37 +21,51 @@
     </div>
 
     <div class="header__container">
-        <% if (user == null) { %>
-            <form action="register.jsp" method="get">
+    <% if (user == null) { %>
+        <!-- 로그인되지 않은 사용자 -->
+        <form action="register.jsp" method="get">
+            <button class="header__button" type="submit">
+                <p class="header__button-text">Sign Up</p>
+            </button>
+        </form>
+        <form action="login.jsp" method="get">
+            <button class="header__button" type="submit">
+                <p class="header__button-text">Log In</p>
+            </button>
+        </form>
+    <% } else { %>
+        <!-- 로그인된 사용자 공통 -->
+        <form action="logout.jsp" method="post">
+            <button class="header__button" type="submit">
+                <p class="header__button-text">Log Out</p>
+            </button>
+        </form>
+        <form action="Profiles.jsp" method="get">
+            <button class="header__button" type="submit">
+                <p class="header__button-text">Profiles</p>
+            </button>
+        </form>
+
+        <% if (isStaff) { %>
+            <!-- Staff 전용 메뉴 -->
+            <form action="products.jsp" method="get">
                 <button class="header__button" type="submit">
-                    <p class="header__button-text">Sign Up</p>
+                    <p class="header__button-text">Products</p>
                 </button>
             </form>
-            <form action="login.jsp" method="get">
+            <form action="users.jsp" method="get">
                 <button class="header__button" type="submit">
-                    <p class="header__button-text">Log In</p>
+                    <p class="header__button-text">Users</p>
                 </button>
             </form>
-        <% } else { %>
-            <form action="logout.jsp" method="post">
+            <form action="accessLog.jsp" method="get">
                 <button class="header__button" type="submit">
-                    <p class="header__button-text">Log Out</p>
+                    <p class="header__button-text">Access Log</p>
                 </button>
             </form>
-            <form action="Profiles.jsp" method="get">
-                <button class="header__button" type="submit">
-                    <p class="header__button-text">Profiles</p>
-                </button>
-            </form>
-            <% if (isStaff) { %>
-                <form action="/manage" method="get">
-                    <button class="header__button" type="submit">
-                        <p class="header__button-text">Manage</p>
-                    </button>
-                </form>
-            <% } %>
         <% } %>
-    </div>
+    <% } %>
+</div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
