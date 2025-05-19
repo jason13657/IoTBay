@@ -196,7 +196,7 @@
                 </tbody>
             </table>
             <div class="quick__actions">
-                <a href="addAddress.jsp">Fix Profiles</a>
+                <a href="updateProfile.jsp">Update Profiles</a>
             </div>
         </div>
 

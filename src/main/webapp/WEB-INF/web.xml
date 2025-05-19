@@ -84,7 +84,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>UserProfileController</servlet-name>
-        <url-pattern>/api/manage/Profiles</url-pattern>
+        <url-pattern>/api/Profiles</url-pattern>
     </servlet-mapping>
 
 

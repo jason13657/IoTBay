@@ -92,7 +92,7 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        // 6. 생년월일 파싱 (선택)
+        // 6. date of birth / optional
         LocalDate dateOfBirth = null;
         if (dobString != null && !dobString.trim().isEmpty()) {
             try {
