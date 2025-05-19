@@ -196,6 +196,7 @@
                 </tbody>
             </table>
             <div class="quick__actions">
+                <a href="addAddress.jsp">Fix Profiles</a>
             </div>
         </div>
 
@@ -207,15 +208,14 @@
                     <tr>
                         <th>Date</th>
                         <th>Activity</th>
-                        <th>IP Address</th>
                     </tr>
                 </thead>
+                
                 <tbody>
                     <c:forEach var="log" items="${accessLogList}">
                         <tr>
                             <td>${log.loginDate}</td>
                             <td>${log.activity}</td>
-                            <td>${log.ipAddress}</td>
                         </tr>
                     </c:forEach>
                 </tbody>
