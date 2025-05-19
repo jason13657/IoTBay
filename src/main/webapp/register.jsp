@@ -12,7 +12,7 @@
     <section class="register__container">
         <h2 class="register__title">Join Us</h2>
         <div class="register__contents">
-            <img class="register__image" src="images/wewantyou.png" alt="Register" />
+            <!-- <img class="register__image" src="images/wewantyou.png" alt="Register" /> -->
             <div class="register__form--container">
 
                 <h3 class="register__form--title">Create Account</h3>
@@ -39,7 +39,7 @@
                     <label for="dateOfBirth">Date of Birth (optional):</label>
                     <input type="date" id="dateOfBirth" name="dateOfBirth" class="register__input" />
 
-                    <!-- 결제수단 (선택) -->
+          
 
                     <label for="paymentMethod">Payment Method</label>
                     <select name="paymentMethod" id="paymentMethod">
@@ -48,7 +48,6 @@
                         <option value="BankTransfer">Bank Transfer</option>
                     </select>
 
-                    <!-- 약관동의 -->
                     <div class="tos__container">
                         <label for="tos">
                             <input type="checkbox" name="tos" id="tos" required/>

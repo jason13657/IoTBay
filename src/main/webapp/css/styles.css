@@ -179,7 +179,7 @@ form {
 }
 
 .register__container {
-  max-width: 1240px;
+  max-width: 1300px;
   padding: 0px 40px;
   margin: auto;
   margin-top: 20px;
@@ -194,13 +194,19 @@ form {
 }
 
 .register__image {
-  object-fit: cover;
+  flex: 1 1 0;            /* flex-grow: 1, flex-shrink: 1, flex-basis: 0 */
+  width: 400px;           /* 원하는 너비, 또는 max-width: 40% 등 */
+  min-width: 220px;
+
+  object-fit: cover;      /* 비율 유지하며 채움 */
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
+  display: block;
 }
 
 .register__form--container {
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   justify-content: center;
   width: 100%;
@@ -215,7 +221,7 @@ form {
 }
 
 .register__form {
-  width: 70%;
+  width: 0%;
   display: flex;
   flex-direction: column;
   gap: 23px;
@@ -226,9 +232,10 @@ form {
 .register__contents {
   display: flex;
   justify-content: center;
-  height: 740px;
+  min-height: 740px;
   width: 100%;
-  align-items: center;
+  align-items: stretch
+
 }
 
 .register__form--title {
