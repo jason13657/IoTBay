@@ -14,7 +14,7 @@
     <section class="base__container">
         <div class="product__top">
             <div class="product__left">
-                <img src="<%= product.getImageUrl() %>" alt="<%= product.getName() %>" class="product__image" />
+                <img src="<%= product.getImageUrl() %>" alt="<%= product.getName() %>" class="product__image" onerror="this.onerror=null;this.src='https://i.imgur.com/EJLFNOwg.jpg';"/>
             </div>
     
             <div class="product__right">

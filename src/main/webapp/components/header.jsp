@@ -13,10 +13,31 @@
             <img src="images/logo.png" alt="IoT Bay logo" />
         </a>
         <form action="search" method="get" id="searchForm">
-            <input type="text" name="query" placeholder="Search Products..." id="searchInput" onkeyup="showSuggestions(this.value)" autocomplete="off" maxlength="35">
+            <input 
+                type="text" 
+                name="query" 
+                placeholder="Search Products..." 
+                id="searchInput" 
+                value="<%= request.getParameter("query") != null ? request.getParameter("query") : "" %>"
+                onkeyup="showSuggestions(this.value)" 
+                autocomplete="off" 
+                maxlength="35"
+            >
+        
+            <select name="categoryId" id="categorySelect">
+                <option value="">All Products</option>
+                <option value="1" <%= "1".equals(request.getParameter("categoryId")) ? "selected" : "" %>>Sensors</option>
+                <option value="2" <%= "2".equals(request.getParameter("categoryId")) ? "selected" : "" %>>Actuators</option>
+                <option value="3" <%= "3".equals(request.getParameter("categoryId")) ? "selected" : "" %>>Gateways</option>
+                <option value="4" <%= "4".equals(request.getParameter("categoryId")) ? "selected" : "" %>>Smart Devices</option>
+                <option value="5" <%= "5".equals(request.getParameter("categoryId")) ? "selected" : "" %>>Security</option>
+            </select>
+        
             <button type="submit">Search</button>
+        
             <div id="suggestions" style="display:none; border: 1px solid #ccc; max-width: 200px; background-color: white; position: absolute; z-index: 10;"></div>
         </form>
+        
     </div>
     <% if (user == null) { %>
         <div class="header__container">
@@ -46,9 +67,19 @@
         </form>
 
             <% if (isStaff) { %>
-            <form action="/manage" method="get">
+            <form action="/manage/products" method="get">
                 <button class="header__button" type="submit">
-                    <p class="header__button-text">Manage</p>
+                    <p class="header__button-text">Products</p>
+                </button>
+            </form>
+            <form action="/manage/users" method="get">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Users</p>
+                </button>
+            </form>
+            <form action="/manage/access-logs" method="get">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Access Log</p>
                 </button>
             </form>
             <% } %>
