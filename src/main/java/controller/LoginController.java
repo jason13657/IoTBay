@@ -1,6 +1,5 @@
 package controller;
 
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,55 +31,49 @@ public class LoginController extends HttpServlet {
             Connection connection = DBConnection.getConnection();
             accessLogDAO = new AccessLogDAOImpl(connection);
             userDAO = new UserDAOImpl(connection);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Failed to initialize database connection", e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Database driver not found", e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                try {
-                    String email = request.getParameter("email");
-                    String password = request.getParameter("password");
-                    User user = userDAO.getUserByEmail(email);
+        try {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            User user = userDAO.getUserByEmail(email);
 
-                    if (user == null) {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().write("{\"message\": \"User not found\"}");
-                        return;
-                    }
+            if (user == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"message\": \"User not found\"}");
+                return;
+            }
 
-                    if (!user.getPassword().equals(password)) {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().write("{\"message\": \"Incorrect password\"}");
-                        return;
-                    }
-                    //create access log
-                    LocalDateTime now = LocalDateTime.now();
-                    AccessLog accessLog = new AccessLog(0, user.getId(), "User "+user.getEmail()+" Logged in" , now);
-                    accessLogDAO.createAccessLog(accessLog);
+            if (!user.getPassword().equals(password)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"message\": \"Incorrect password\"}");
+                return;
+            }
 
-                    // Successful login
-                    //set sessiosn 
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", user);
+            // Create access log
+            LocalDateTime now = LocalDateTime.now();
+            AccessLog accessLog = new AccessLog(0, user.getId(), "User " + user.getEmail() + " Logged in", now);
+            accessLogDAO.createAccessLog(accessLog);
 
-                    response.setStatus(HttpServletResponse.SC_OK);  
-                    response.setContentType("application/json");
+            // Successful login: set session
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
 
-                    // to fix the error, cmmenting out the next line 
-
-                    // response.getWriter().write("{\"message\": \"Login successful\"}");
-
-                    response.sendRedirect("/index.jsp");
-                } catch (SQLException e) {
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    response.getWriter().write("{\"error\": \"Database error: " + e.getMessage() + "\"}");
-                    response.sendRedirect("/index.jsp");
-
+            // Redirect to index.jsp (with context path!)
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+        } catch (SQLException e) {
+            // Log error (optional)
+            e.printStackTrace();
+            // Redirect to index.jsp on error (with context path)
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
     }
 }

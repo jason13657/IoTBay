@@ -3,6 +3,7 @@
 
 <%
     User user = (User) session.getAttribute("user");
+    out.println("user: " + user); // Debugging line
     boolean isStaff = user != null && "staff".equalsIgnoreCase(user.getRole());
 %>
 
