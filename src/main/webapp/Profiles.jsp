@@ -1,9 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import="com.example.model.User" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
 
 <html lang="en">
 <head>
@@ -115,13 +112,14 @@
 <body>
 <jsp:include page="components/header.jsp" />
 
-
-
 <div class="account__container">
     <!-- Sidebar -->
     <div class="account__sidebar">
-        <div class="account__name">${fn:escapeXml(user.firstName)} ${fn:escapeXml(user.lastName)}</div>
-        <div class="account__email">${fn:escapeXml(user.email)}</div>
+        <!-- 세션 또는 request 속성에서 사용자 정보를 가져옵니다 -->
+        <c:set var="userInfo" value="${requestScope.user != null ? requestScope.user : sessionScope.user}" />
+        
+        <div class="account__name">${fn:escapeXml(userInfo.firstName)} ${fn:escapeXml(userInfo.lastName)}</div>
+        <div class="account__email">${fn:escapeXml(userInfo.email)}</div>
 
         <nav class="account__nav">
             <a href="#profile" class="active">Profile</a>
@@ -138,9 +136,48 @@
 
     <!-- Main Content -->
     <div class="account__main">
-
         <!-- Profile Section -->
-       
+        <div class="account__section" id="profile">
+            <div class="section__header">My Profile</div>
+            
+            <!-- 성공 또는 오류 메시지 표시 -->
+            <c:if test="${not empty requestScope.success}">
+                <div class="alert alert-success">${requestScope.success}</div>
+            </c:if>
+            <c:if test="${not empty requestScope.error}">
+                <div class="alert alert-error">${requestScope.error}</div>
+            </c:if>
+            
+            <!-- 프로필 정보 표시 -->
+            <table class="profile-details">
+                <tr>
+                    <td><strong>Name:</strong></td>
+                    <td>${fn:escapeXml(userInfo.firstName)} ${fn:escapeXml(userInfo.lastName)}</td>
+                </tr>
+                <tr>
+                    <td><strong>Email:</strong></td>
+                    <td>${fn:escapeXml(userInfo.email)}</td>
+                </tr>
+                <tr>
+                    <td><strong>Phone:</strong></td>
+                    <td>${fn:escapeXml(userInfo.phone)}</td>
+                </tr>
+                <tr>
+                    <td><strong>Address:</strong></td>
+                    <td>
+                        ${fn:escapeXml(userInfo.addressLine1)}
+                        <c:if test="${not empty userInfo.addressLine2}">
+                            <br/>${fn:escapeXml(userInfo.addressLine2)}
+                        </c:if>
+                        <br/>${fn:escapeXml(userInfo.postalCode)}
+                    </td>
+                </tr>
+            </table>
+            
+            <div class="quick__actions">
+                <a href="updateProfile.jsp">Edit Profile</a>
+            </div>
+        </div>
 
         <!-- Order History Section -->
         <div class="account__section" id="orders">
@@ -230,10 +267,6 @@
                 <a href="accessLog.jsp">View All Activity</a>
             </div>
         </div>
-
-        <div class="account__section" id="addresses">
-        </div>
-
     </div>
 </div>
 
