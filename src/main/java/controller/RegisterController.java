@@ -123,7 +123,7 @@ public class RegisterController extends HttpServlet {
                 paymentMethod,
                 now,
                 now,
-                "user", 
+                "customer", // default role
                 true    
             );
 
