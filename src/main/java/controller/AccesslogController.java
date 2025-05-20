@@ -57,6 +57,7 @@ public class AccesslogController extends HttpServlet {
         LocalDate startDate = null, endDate = null;
         LocalDate today = LocalDate.now();
 
+        // 날짜 파싱
         try {
             if (startDateStr != null && !startDateStr.isEmpty()) {
                 startDate = LocalDate.parse(startDateStr);
@@ -65,27 +66,38 @@ public class AccesslogController extends HttpServlet {
                 endDate = LocalDate.parse(endDateStr);
             }
         } catch (DateTimeParseException e) {
-            // Invalid date format
             request.setAttribute("error", "Date format is invalid. Please use YYYY-MM-DD.");
             request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
             return;
         }
 
-        // Prevent searching for logs in the future
+        // 미래 날짜 검색 방지 (시작일 또는 종료일이 미래면 안 됨)
         if ((startDate != null && startDate.isAfter(today)) || (endDate != null && endDate.isAfter(today))) {
             request.setAttribute("error", "You cannot search for access logs in the future.");
             request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
             return;
         }
 
-        // Prevent endDate before startDate
+        // 종료일만 입력된 경우: 시작일도 필요
+        if (startDate == null && endDate != null) {
+            request.setAttribute("error", "Please select a start date when searching with an end date.");
+            request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
+            return;
+        }
+
+        // 시작일만 입력된 경우: 오늘까지로 자동 확장
+        if (startDate != null && endDate == null) {
+            endDate = today;
+        }
+
+        // 종료일이 시작일보다 빠른 경우
         if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
             request.setAttribute("error", "End date cannot be before start date.");
             request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
             return;
         }
 
-        // Prevent date ranges that are too large (e.g., more than 1 year)
+        // 1년 초과 범위 방지
         if (startDate != null && endDate != null && startDate.plusYears(1).isBefore(endDate)) {
             request.setAttribute("error", "Date range is too large. Please select a range within 1 year.");
             request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
@@ -107,11 +119,8 @@ public class AccesslogController extends HttpServlet {
         }
 
         // 4. Forward to JSP (no edit/delete functionality)
-        request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/views/accessLog.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
     }
 
-
     // POST, PUT, DELETE are not implemented (users cannot edit/delete their access logs)
-
 }
-
