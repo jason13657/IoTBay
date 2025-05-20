@@ -112,15 +112,12 @@
 <body>
 <jsp:include page="components/header.jsp" />
 
+
 <div class="account__container">
     <!-- Sidebar -->
     <div class="account__sidebar">
-        <!-- 세션 또는 request 속성에서 사용자 정보를 가져옵니다 -->
-        <c:set var="userInfo" value="${requestScope.user != null ? requestScope.user : sessionScope.user}" />
-        
         <div class="account__name">${fn:escapeXml(user.firstName)} ${fn:escapeXml(user.lastName)}</div>
         <div class="account__email">${fn:escapeXml(user.email)}</div>
-
         <nav class="account__nav">
             <a href="#profile" class="active">Profile</a>
             <a href="#orders">Orders</a>
@@ -130,7 +127,6 @@
             <a href="#settings">Settings</a>
             <a href="#support">Support</a>
             <a href="index.jsp">Logout</a>
-            
         </nav>
     </div>
 
@@ -141,42 +137,78 @@
             <div class="section__header">My Profile</div>
             
             <!-- 성공 또는 오류 메시지 표시 -->
-            <c:if test="${not empty requestScope.success}">
-                <div class="alert alert-success">${requestScope.success}</div>
+            <c:if test="${not empty success}">
+                <div class="alert alert-success">${success}</div>
             </c:if>
-            <c:if test="${not empty requestScope.error}">
-                <div class="alert alert-error">${requestScope.error}</div>
+            <c:if test="${not empty error}">
+                <div class="alert alert-error">${error}</div>
             </c:if>
             
-            <!-- 프로필 정보 표시 -->
-            <table class="profile-details">
-                <tr>
-                    <td><strong>Name:</strong></td>
-                    <td>${fn:escapeXml(user.firstName)} ${fn:escapeXml(user.lastName)}</td>
-                </tr>
-                <tr>
-                    <td><strong>Email:</strong></td>
-                    <td>${fn:escapeXml(user.email)}</td>
-                </tr>
-                <tr>
-                    <td><strong>Phone:</strong></td>
-                    <td>${fn:escapeXml(user.phone)}</td>
-                </tr>
-                <tr>
-                    <td><strong>Address:</strong></td>
-                    <td>
-                        ${fn:escapeXml(user.addressLine1)}
-                        <c:if test="${not empty userInfo.addressLine2}">
-                            <br/>${fn:escapeXml(user.addressLine2)}
-                        </c:if>
-                        <br/>${fn:escapeXml(user.postalCode)}
-                    </td>
-                </tr>
-            </table>
-            
-            <div class="quick__actions">
-                <a href="updateProfile.jsp">Edit Profile</a>
-            </div>
+            <!-- 프로필 수정 폼 -->
+            <form method="post" action="${pageContext.request.contextPath}/api/Profiles" class="profile-form">
+                <table class="profile-details">
+                    <tr>
+                        <td><strong>Email:</strong></td>
+                        <td>
+                            <input type="text" value="${fn:escapeXml(user.email)}" disabled />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>First Name:</strong></td>
+                        <td>
+                            <input name="firstName" type="text" value="${fn:escapeXml(user.firstName)}" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Name:</strong></td>
+                        <td>
+                            <input name="lastName" type="text" value="${fn:escapeXml(user.lastName)}" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone:</strong></td>
+                        <td>
+                            <input name="phone" type="text" value="${fn:escapeXml(user.phone)}" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Postal Code:</strong></td>
+                        <td>
+                            <input name="postalCode" type="text" value="${fn:escapeXml(user.postalCode)}" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address Line 1:</strong></td>
+                        <td>
+                            <input name="addressLine1" type="text" value="${fn:escapeXml(user.addressLine1)}" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address Line 2:</strong></td>
+                        <td>
+                            <input name="addressLine2" type="text" value="${fn:escapeXml(user.addressLine2)}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date of Birth:</strong></td>
+                        <td>
+                            <input name="dateOfBirth" type="date" value="<c:out value='${user.dateOfBirth}'/>" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Payment Method:</strong></td>
+                        <td>
+                            <select name="paymentMethod">
+                                <option value="">Select</option>
+                                <option value="CreditCard" <c:if test="${user.paymentMethod eq 'CreditCard'}">selected</c:if>>Credit Card</option>
+                                <option value="PayPal" <c:if test="${user.paymentMethod eq 'PayPal'}">selected</c:if>>PayPal</option>
+                                <option value="BankTransfer" <c:if test="${user.paymentMethod eq 'BankTransfer'}">selected</c:if>>Bank Transfer</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
         </div>
 
         <!-- Order History Section -->
@@ -238,9 +270,6 @@
                     </c:forEach>
                 </tbody>
             </table>
-            <div class="quick__actions">
-                <a href="updateProfile.jsp">Update Profiles</a>
-            </div>
         </div>
 
         <!-- Activity Log Section -->
@@ -253,7 +282,6 @@
                         <th>Activity</th>
                     </tr>
                 </thead>
-                
                 <tbody>
                     <c:forEach var="log" items="${accessLogList}">
                         <tr>
