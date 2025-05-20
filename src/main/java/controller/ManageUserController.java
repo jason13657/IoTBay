@@ -9,10 +9,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import dao.UserDAOImpl;
 import dao.interfaces.UserDAO;
@@ -82,21 +79,18 @@ public class ManageUserController extends HttpServlet {
             }
 
             User user = new User(
-                    0, // ID will be auto-generated
-                    email,
-                    password,
-                    firstName,
-                    lastName,
-                    null, // phone
-                    null, // postalCode
-                    null, // addressLine1
-                    null, // addressLine2
-                    LocalDate.parse(dob),
-                    null, // paymentMethod
-                    LocalDateTime.now(),
-                    LocalDateTime.now(),
-                    role,
-                    true // isActive
+                0,
+                request.getParameter("email"),
+                request.getParameter("firstName"),
+                request.getParameter("lastName"),
+                request.getParameter("password"),
+                request.getParameter("gender"),
+                request.getParameter("favoriteColor"),
+                LocalDate.parse(request.getParameter("dateOfBirth")),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                request.getParameter("role"),
+                true
             );
             userDAO.createUser(user);
             response.sendRedirect(request.getContextPath() + "/manage/users");

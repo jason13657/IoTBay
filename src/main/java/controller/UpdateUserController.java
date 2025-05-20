@@ -1,22 +1,18 @@
 package controller;
 
+import dao.UserDAOImpl;
+import dao.interfaces.UserDAO;
+import db.DBConnection;
+import model.User;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import dao.UserDAOImpl;
-import dao.interfaces.UserDAO;
-import db.DBConnection;
-import model.User;
 
 @WebServlet("/manage/users/update")
 public class UpdateUserController extends HttpServlet {
@@ -48,42 +44,29 @@ public class UpdateUserController extends HttpServlet {
             String password = request.getParameter("password");
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
-            String phone = request.getParameter("phone");
-            String postalCode = request.getParameter("postalCode");
-            String addressLine1 = request.getParameter("addressLine1");
-            String addressLine2 = request.getParameter("addressLine2");
-            String paymentMethod = request.getParameter("paymentMethod");
+            String gender = request.getParameter("gender");
+            String favoriteColor = request.getParameter("favoriteColor");
             String dateOfBirthStr = request.getParameter("dateOfBirth");
+            String createdAtStr = request.getParameter("createdAt");
+            String updatedAtStr = request.getParameter("updatedAt");
             String role = request.getParameter("role");
-            String isActiveStr = request.getParameter("isActive");
+            boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
 
-            // Parse date of birth
-            LocalDate dateOfBirth = (dateOfBirthStr != null && !dateOfBirthStr.isEmpty())
-                    ? LocalDate.parse(dateOfBirthStr)
-                    : null;
+            LocalDate dateOfBirth = LocalDate.parse(dateOfBirthStr);
+            LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
+            LocalDateTime updatedAt = LocalDateTime.parse(updatedAtStr);
 
-            // Set createdAt and updatedAt to the current time
-            LocalDateTime now = LocalDateTime.now();
-
-            // Parse isActive (checkbox or boolean string)
-            boolean isActive = isActiveStr != null &&
-                    (isActiveStr.equalsIgnoreCase("true") || isActiveStr.equalsIgnoreCase("on") || isActiveStr.equals("1"));
-
-            // Construct the User object (id is set to 0, since updateUser uses the id parameter)
             User updatedUser = new User(
-                0, // id (actual id is passed separately)
+                id,
                 email,
-                password,
                 firstName,
                 lastName,
-                phone,
-                postalCode,
-                addressLine1,
-                addressLine2,
+                password,
+                gender,
+                favoriteColor,
                 dateOfBirth,
-                paymentMethod,
-                now,
-                now,
+                createdAt,
+                updatedAt,
                 role,
                 isActive
             );
@@ -96,10 +79,6 @@ public class UpdateUserController extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"Failed to update user: " + e.getMessage() + "\"}");
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Invalid input: " + e.getMessage() + "\"}");
         }
     }
 

@@ -9,34 +9,22 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String password;
-
-    private String phone;
-    private String postalCode;
-    private String addressLine1;
-    private String addressLine2;
-    private String paymentMethod;
-    // private String gender;
-    // we don't need a gender field for e-commerce website
-    // private String favoriteColor;
-    //we dont need a favorite color field for e-commerce website
+    private String gender;
+    private String favoriteColor;
     private LocalDate dateOfBirth;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String role;
     private boolean isActive;
 
-    public User(int id, String email, String password, String firstName, String lastName,
-                String phone, String postalCode, String addressLine1, String addressLine2,
-                LocalDate dateOfBirth, String paymentMethod,
-                LocalDateTime createdAt, LocalDateTime updatedAt,
-                String role, boolean isActive)  {
+    public User(int id, String email, String firstName, String lastName, String password, String gender, String favoriteColor, LocalDate dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, String role, boolean isActive) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        // this.gender = gender;
-        // this.favoriteColor = favoriteColor;
+        this.gender = gender;
+        this.favoriteColor = favoriteColor;
         this.dateOfBirth = dateOfBirth;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -80,21 +68,21 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    // public String getGender() {
-    //     return gender;
-    // }
+    public String getGender() {
+        return gender;
+    }
 
-    // public void setGender(String gender) {
-    //     this.gender = gender;
-    // }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-    // public String getFavoriteColor() {
-    //     return favoriteColor;
-    // }
+    public String getFavoriteColor() {
+        return favoriteColor;
+    }
 
-    // public void setFavoriteColor(String favoriteColor) {
-    //     this.favoriteColor = favoriteColor;
-    // }
+    public void setFavoriteColor(String favoriteColor) {
+        this.favoriteColor = favoriteColor;
+    }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
@@ -146,54 +134,5 @@ public class User implements Serializable {
 
     public String getDateOfBirthAsString() {
         return dateOfBirth != null ? dateOfBirth.toString() : null;
-    }
-
-    public String getPostalCode() {
-        // TODO Auto-generated method stub
-        return postalCode;
-    }
-
-    public String getPhone() {
-        // TODO Auto-generated method stub
-        return phone;
-    }
-
-
-    public String getAddressLine1() {
-        // TODO Auto-generated method stub
-        return addressLine1;
-    }
-
-    public String getAddressLine2() {
-        // TODO Auto-generated method stub
-        return addressLine2;
-    }
-
-    public void setPostalCode(String postalCode) {
-        // TODO Auto-generated method stub
-        this.postalCode = postalCode;
-    }
-    public void setPhone(String phone) {
-        // TODO Auto-generated method stub
-        this.phone = phone;
-    }
-    public void setAddressLine1(String addressLine1) {
-        // TODO Auto-generated method stub
-        this.addressLine1 = addressLine1;
-    }
-    public void setAddressLine2(String addressLine2) {
-        // TODO Auto-generated method stub
-        this.addressLine2 = addressLine2;
-    }
-    public void setPaymentMethod(String paymentMethod) {
-        // TODO Auto-generated method stub
-        this.paymentMethod = paymentMethod;
-    }
-    
-
-    public String getPaymentMethod() {
-        // TODO Auto-generated method stub
-        return paymentMethod;
-    
     }
 }
