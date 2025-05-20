@@ -53,7 +53,7 @@ public class UserProfileController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to load profile.");
         }
     }
-
+    
     // POST: Update current user's profile
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -126,4 +126,29 @@ public class UserProfileController extends HttpServlet {
             doGet(request, response);
         }
     }
+
+    // DELETE: Delete current user's account
+    @Override
+protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    HttpSession session = request.getSession(false);
+    User sessionUser = (session != null) ? (User) session.getAttribute("user") : null;
+    if (sessionUser == null) {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Unauthorized: Please login.");
+        return;
+    }
+
+    try {
+        // 실제로 DB에서 사용자 삭제
+        userDAO.deleteUser(sessionUser.getId());
+        // 세션 무효화
+        session.invalidate();
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write("Account deleted successfully.");
+    } catch (Exception e) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        response.getWriter().write("Failed to delete account: " + e.getMessage());
+    }
+}
 }
