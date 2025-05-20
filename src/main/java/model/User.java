@@ -35,8 +35,13 @@ public class User implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        // this.gender = gender;
-        // this.favoriteColor = favoriteColor;
+        this.phone = phone;
+        this.postalCode = postalCode;
+        this.addressLine1 = addressLine1;
+        this.addressLine2 = addressLine2;
+        this.paymentMethod = paymentMethod;
+        //
+
         this.dateOfBirth = dateOfBirth;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
