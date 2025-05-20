@@ -1,6 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import="com.example.model.User" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -110,6 +114,8 @@
 </head>
 <body>
 <jsp:include page="components/header.jsp" />
+
+
 
 <div class="account__container">
     <!-- Sidebar -->
