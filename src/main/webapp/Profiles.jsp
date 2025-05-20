@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -118,8 +118,8 @@
         <!-- 세션 또는 request 속성에서 사용자 정보를 가져옵니다 -->
         <c:set var="userInfo" value="${requestScope.user != null ? requestScope.user : sessionScope.user}" />
         
-        <div class="account__name">${fn:escapeXml(userInfo.firstName)} ${fn:escapeXml(userInfo.lastName)}</div>
-        <div class="account__email">${fn:escapeXml(userInfo.email)}</div>
+        <div class="account__name">${fn:escapeXml(user.firstName)} ${fn:escapeXml(user.lastName)}</div>
+        <div class="account__email">${fn:escapeXml(user.email)}</div>
 
         <nav class="account__nav">
             <a href="#profile" class="active">Profile</a>
@@ -152,24 +152,24 @@
             <table class="profile-details">
                 <tr>
                     <td><strong>Name:</strong></td>
-                    <td>${fn:escapeXml(userInfo.firstName)} ${fn:escapeXml(userInfo.lastName)}</td>
+                    <td>${fn:escapeXml(user.firstName)} ${fn:escapeXml(user.lastName)}</td>
                 </tr>
                 <tr>
                     <td><strong>Email:</strong></td>
-                    <td>${fn:escapeXml(userInfo.email)}</td>
+                    <td>${fn:escapeXml(user.email)}</td>
                 </tr>
                 <tr>
                     <td><strong>Phone:</strong></td>
-                    <td>${fn:escapeXml(userInfo.phone)}</td>
+                    <td>${fn:escapeXml(user.phone)}</td>
                 </tr>
                 <tr>
                     <td><strong>Address:</strong></td>
                     <td>
-                        ${fn:escapeXml(userInfo.addressLine1)}
+                        ${fn:escapeXml(user.addressLine1)}
                         <c:if test="${not empty userInfo.addressLine2}">
-                            <br/>${fn:escapeXml(userInfo.addressLine2)}
+                            <br/>${fn:escapeXml(user.addressLine2)}
                         </c:if>
-                        <br/>${fn:escapeXml(userInfo.postalCode)}
+                        <br/>${fn:escapeXml(user.postalCode)}
                     </td>
                 </tr>
             </table>
