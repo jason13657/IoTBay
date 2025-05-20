@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,9 @@ import model.AccessLog;
 
 public class AccessLogDAOImpl implements AccessLogDAO {
     private final Connection connection;
+    // 포맷 상수
+    private static final DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // yyyy-MM-dd'T'HH:mm:ss
+    private static final DateTimeFormatter SPACE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public AccessLogDAOImpl(Connection connection) {
         this.connection = connection;
@@ -25,8 +29,8 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, log.getUserId());
             statement.setString(2, log.getAction());
-            // LocalDateTime을 ISO-8601 문자열로 저장 (예: 2025-05-20T14:23:45)
-            statement.setString(3, log.getTimestamp().toString());
+            // 항상 ISO-8601 포맷으로 저장
+            statement.setString(3, log.getTimestamp().format(ISO_FORMATTER));
             statement.executeUpdate();
         }
     }
@@ -88,9 +92,9 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         List<AccessLog> logs = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
-            // LocalDate를 LocalDateTime 자정으로 변환 후 문자열로 저장
-            statement.setString(2, startDate.atStartOfDay().toString());
-            statement.setString(3, endDate.plusDays(1).atStartOfDay().toString());
+            // ISO-8601 포맷으로 비교
+            statement.setString(2, startDate.atStartOfDay().format(ISO_FORMATTER));
+            statement.setString(3, endDate.plusDays(1).atStartOfDay().format(ISO_FORMATTER));
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     logs.add(mapResultSetToAccessLog(rs));
@@ -100,13 +104,22 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         return logs;
     }
 
-    // ResultSet -> AccessLog 객체 변환
+    // ResultSet -> AccessLog 객체 변환 (포맷 자동 인식)
     private AccessLog mapResultSetToAccessLog(ResultSet rs) throws SQLException {
+        String ts = rs.getString("timestamp");
+        LocalDateTime timestamp;
+        try {
+            // ISO-8601 ("2025-05-20T14:23:45")
+            timestamp = LocalDateTime.parse(ts, ISO_FORMATTER);
+        } catch (Exception e) {
+            // 공백 구분 ("2025-05-20 14:23:45")
+            timestamp = LocalDateTime.parse(ts, SPACE_FORMATTER);
+        }
         return new AccessLog(
             rs.getInt("id"),
             rs.getInt("user_id"),
             rs.getString("action"),
-            LocalDateTime.parse(rs.getString("timestamp")) // TEXT → LocalDateTime
+            timestamp
         );
     }
 }
