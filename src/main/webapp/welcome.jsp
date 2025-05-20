@@ -41,7 +41,7 @@
             } else {
         %>
                 <h2>Welcome!</h2>
-                <h3>We're glad you're here. Please <a href="login.jsp">log in</a> to continue.</h3>
+                <h3>We're glad you're here.</h3>
         <%
             }
         %>
