@@ -41,7 +41,6 @@ public class User implements Serializable {
         this.addressLine2 = addressLine2;
         this.paymentMethod = paymentMethod;
         //
-
         this.dateOfBirth = dateOfBirth;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
