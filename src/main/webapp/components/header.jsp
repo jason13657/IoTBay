@@ -59,11 +59,6 @@
                     <p class="header__button-text">Users</p>
                 </button>
             </form>
-            <form action="accessLog.jsp" method="get">
-                <button class="header__button" type="submit">
-                    <p class="header__button-text">Access Log</p>
-                </button>
-            </form>
         <% } %>
     <% } %>
 </div>
