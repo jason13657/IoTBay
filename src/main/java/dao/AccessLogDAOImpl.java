@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +25,8 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, log.getUserId());
             statement.setString(2, log.getAction());
-            statement.setTimestamp(3, Timestamp.valueOf(log.getTimestamp()));
+            // LocalDateTime을 ISO-8601 문자열로 저장 (예: 2025-05-20T14:23:45)
+            statement.setString(3, log.getTimestamp().toString());
             statement.executeUpdate();
         }
     }
@@ -87,9 +88,9 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         List<AccessLog> logs = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
-            // 시작일은 자정, 종료일은 다음날 자정(미포함)까지
-            statement.setTimestamp(2, Timestamp.valueOf(startDate.atStartOfDay()));
-            statement.setTimestamp(3, Timestamp.valueOf(endDate.plusDays(1).atStartOfDay()));
+            // LocalDate를 LocalDateTime 자정으로 변환 후 문자열로 저장
+            statement.setString(2, startDate.atStartOfDay().toString());
+            statement.setString(3, endDate.plusDays(1).atStartOfDay().toString());
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     logs.add(mapResultSetToAccessLog(rs));
@@ -105,7 +106,7 @@ public class AccessLogDAOImpl implements AccessLogDAO {
             rs.getInt("id"),
             rs.getInt("user_id"),
             rs.getString("action"),
-            rs.getTimestamp("timestamp").toLocalDateTime()
+            LocalDateTime.parse(rs.getString("timestamp")) // TEXT → LocalDateTime
         );
     }
 }
