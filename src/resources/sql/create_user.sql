@@ -1,5 +1,5 @@
 CREATE TABLE User (
-    userID INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     firstName TEXT NOT NULL,
@@ -12,6 +12,6 @@ CREATE TABLE User (
     paymentMethod TEXT,
     createdAt TEXT DEFAULT (datetime('now')),
     updatedAt TEXT DEFAULT (datetime('now')),
-    role TEXT NOT NULL CHECK(role IN ('customer', 'user')) DEFAULT 'user',
+    role TEXT NOT NULL CHECK(role IN ('customer', 'staff')) DEFAULT 'customer',
     isActive BOOLEAN NOT NULL DEFAULT 1
 );

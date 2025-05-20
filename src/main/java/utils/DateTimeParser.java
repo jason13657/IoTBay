@@ -6,14 +6,15 @@ import java.time.format.DateTimeFormatter;
 
 public class DateTimeParser {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
-    private static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    // DB에 저장된 포맷: "yyyy-MM-dd HH:mm:ss"
+    private static final DateTimeFormatter DB_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static String toText(LocalDate date) {
         return date != null ? date.format(DATE_FORMAT) : null;
     }
 
     public static String toText(LocalDateTime dateTime) {
-        return dateTime != null ? dateTime.format(DATETIME_FORMAT) : null;
+        return dateTime != null ? dateTime.format(DB_DATETIME_FORMAT) : null;
     }
 
     public static LocalDate parseLocalDate(String text) {
@@ -21,6 +22,6 @@ public class DateTimeParser {
     }
 
     public static LocalDateTime parseLocalDateTime(String text) {
-        return text != null ? LocalDateTime.parse(text, DATETIME_FORMAT) : null;
+        return text != null ? LocalDateTime.parse(text, DB_DATETIME_FORMAT) : null;
     }
 }
