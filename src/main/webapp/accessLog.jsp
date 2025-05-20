@@ -32,10 +32,6 @@
     <% if (error != null) { %>
         <div class="error"><%= error %></div>
     <% } %>
-
-    <% if (accessLogList != null) { %>
-    <div>Number of logs: <%= accessLogList.size() %></div>
-    <% } %>
     <form method="get" action="<%= request.getContextPath() %>/api/accessLog">
         <label for="startDate">Start Date:</label>
         <input type="date" id="startDate" name="startDate" value="<%= request.getParameter("startDate") != null ? request.getParameter("startDate") : "" %>"/>
