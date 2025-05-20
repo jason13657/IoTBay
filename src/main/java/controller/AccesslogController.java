@@ -107,8 +107,11 @@ public class AccesslogController extends HttpServlet {
         }
 
         // 4. Forward to JSP (no edit/delete functionality)
-        request.getRequestDispatcher("/WEB-INF/views/accessLog.jsp").forward(request, response);
+        request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/views/accessLog.jsp").forward(request, response);
     }
 
+
     // POST, PUT, DELETE are not implemented (users cannot edit/delete their access logs)
+
 }
+

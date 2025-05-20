@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.AccessLog" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalDateTime" %>
 <%
     List<AccessLog> accessLogList = (List<AccessLog>) request.getAttribute("accessLogList");
     String error = (String) request.getAttribute("error");
@@ -32,13 +33,21 @@
     <% if (error != null) { %>
         <div class="error"><%= error %></div>
     <% } %>
+
+    <% if (accessLogList != null) { %>
+        <div>Number of logs: <%= accessLogList.size() %></div>
+    <% } %>
+    
     <form method="get" action="<%= request.getContextPath() %>/api/accessLog">
         <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" value="<%= request.getParameter("startDate") != null ? request.getParameter("startDate") : "" %>"/>
+        <input type="date" id="startDate" name="startDate"
+               value="<%= request.getParameter("startDate") != null ? request.getParameter("startDate") : "" %>"/>
         <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" value="<%= request.getParameter("endDate") != null ? request.getParameter("endDate") : "" %>"/>
+        <input type="date" id="endDate" name="endDate"
+               value="<%= request.getParameter("endDate") != null ? request.getParameter("endDate") : "" %>"/>
         <button type="submit">Search</button>
-        <a href="<%= request.getContextPath() %>/api/accessLog" style="margin-left:18px; color:#555; text-decoration:underline;">Show All</a>
+        <a href="<%= request.getContextPath() %>/api/accessLog"
+           style="margin-left:18px; color:#555; text-decoration:underline;">Show All</a>
     </form>
     <table>
         <tr>
@@ -52,7 +61,18 @@
                 <tr>
                     <td><%= idx++ %></td>
                     <td><%= log.getAction() %></td>
-                    <td><%= log.getTimestamp().format(dtf) %></td>
+                    <td>
+                        <%
+                        LocalDateTime ts = log.getTimestamp();
+                        String formattedTs = "";
+                        try {
+                            formattedTs = ts != null ? ts.format(dtf) : "";
+                        } catch(Exception e) {
+                            formattedTs = ts != null ? ts.toString() : "";
+                        }
+                        %>
+                        <%= formattedTs %>
+                    </td>
                 </tr>
         <%  }
            } else { %>
