@@ -130,7 +130,8 @@ public class RegisterController extends HttpServlet {
             userDAO.createUser(newUser);
 
           
-            response.sendRedirect("welcome.jsp");
+            response.sendRedirect(request.getContextPath() + "/welcome.jsp");
+
 
         } catch (Exception e) {
             e.printStackTrace();
