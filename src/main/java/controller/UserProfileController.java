@@ -48,7 +48,7 @@ public class UserProfileController extends HttpServlet {
         try {
             User freshUser = userDAO.getUserById(user.getId());
             request.setAttribute("user", freshUser);
-            request.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/Profiles.jsp").forward(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to load profile.");
         }
