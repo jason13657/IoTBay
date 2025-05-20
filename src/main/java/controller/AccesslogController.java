@@ -123,4 +123,4 @@ public class AccesslogController extends HttpServlet {
     }
 
     // POST, PUT, DELETE are not implemented (users cannot edit/delete their access logs)
-}
+}   
