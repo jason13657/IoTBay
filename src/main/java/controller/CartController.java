@@ -60,13 +60,15 @@ public class CartController extends HttpServlet {
             // Existing add to cart logic
             int productId = Integer.parseInt(request.getParameter("productId"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
+            double price = Double.parseDouble(request.getParameter("productPrice"));
 
             CartItem existingItem = cartItemDAO.getCartItem(userId, productId);
+
             if (existingItem != null) {
                 int updatedQuantity = existingItem.getQuantity() + quantity;
                 cartItemDAO.updateCartItemQuantity(userId, productId, updatedQuantity);
             } else {
-                CartItem newItem = new CartItem(userId, productId, quantity, LocalDateTime.now());
+                CartItem newItem = new CartItem(userId, productId, quantity, price, LocalDateTime.now());
                 cartItemDAO.addCartItem(newItem);
             }
 

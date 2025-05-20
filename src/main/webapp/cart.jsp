@@ -42,6 +42,8 @@
                         <p><strong>Product ID:</strong> <%= item.getProductId() %></p>
                         <p><strong>Quantity:</strong> <%= item.getQuantity() %></p>
                         <p><strong>Added At:</strong> <%= item.getAddedAt() %></p>
+                        <p><strong>Price:</strong> $<%= item.getPrice() %></p>
+                        <p><strong>Subtotal:</strong> $<%= item.getSubtotal(item.getPrice()) %></p>
                     </div>
                 <%
                         }
@@ -53,7 +55,7 @@
                 %>
             </div>
         
-            <form action="CheckoutController" method="get">
+            <form action="checkout" method="post">
                 <button class="header__button" type="submit">
                     <p class="header__button-text">Checkout</p>
                 </button>

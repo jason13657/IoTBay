@@ -3,7 +3,6 @@ package dao;
 import model.CartItem;
 import java.sql.*;
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,22 +13,22 @@ public class CartItemDAO {
         this.connection = connection;
     }
 
-    // CREATE: Add item to cart (using user_id and product_id as composite key)
+    // CREATE: Add item to cart (with price)
     public void addCartItem(CartItem cartItem) throws SQLException {
-        String query = "INSERT INTO cart_items (user_id, product_id, quantity, added_at) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO cart_items (user_id, product_id, quantity, price, added_at) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, cartItem.getUserId());
             statement.setInt(2, cartItem.getProductId());
             statement.setInt(3, cartItem.getQuantity());
-            // Store LocalDateTime as ISO string
-            statement.setString(4, cartItem.getAddedAt().toString());
+            statement.setDouble(4, cartItem.getPrice());   // set price here
+            statement.setString(5, cartItem.getAddedAt().toString());
             statement.executeUpdate();
         }
     }
 
-    // READ: Get all items in a user's cart
+    // READ: Get all items in a user's cart (include price)
     public List<CartItem> getCartItemsByUserId(int userId) throws SQLException {
-        String query = "SELECT user_id, product_id, quantity, added_at FROM cart_items WHERE user_id = ?";
+        String query = "SELECT user_id, product_id, quantity, price, added_at FROM cart_items WHERE user_id = ?";
         List<CartItem> cartItems = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
@@ -39,7 +38,8 @@ public class CartItemDAO {
                         rs.getInt("user_id"),
                         rs.getInt("product_id"),
                         rs.getInt("quantity"),
-                        LocalDateTime.parse(rs.getString("added_at"))  // Parse ISO string back to LocalDateTime
+                        rs.getDouble("price"),
+                        LocalDateTime.parse(rs.getString("added_at"))
                     ));
                 }
             }
@@ -47,9 +47,9 @@ public class CartItemDAO {
         return cartItems;
     }
 
-    // READ: Get specific item in user's cart
+    // READ: Get specific item in user's cart (include price)
     public CartItem getCartItem(int userId, int productId) throws SQLException {
-        String query = "SELECT user_id, product_id, quantity, added_at FROM cart_items WHERE user_id = ? AND product_id = ?";
+        String query = "SELECT user_id, product_id, quantity, price, added_at FROM cart_items WHERE user_id = ? AND product_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
             statement.setInt(2, productId);
@@ -59,7 +59,8 @@ public class CartItemDAO {
                         rs.getInt("user_id"),
                         rs.getInt("product_id"),
                         rs.getInt("quantity"),
-                        LocalDateTime.parse(rs.getString("added_at"))  // Parse ISO string
+                        rs.getDouble("price"),
+                        LocalDateTime.parse(rs.getString("added_at"))
                     );
                 }
             }
@@ -67,7 +68,7 @@ public class CartItemDAO {
         return null;
     }
 
-    // UPDATE: Update quantity of a product in the user's cart
+    // UPDATE: Update quantity of a product in the user's cart (price stays the same)
     public void updateCartItemQuantity(int userId, int productId, int quantity) throws SQLException {
         String query = "UPDATE cart_items SET quantity = ? WHERE user_id = ? AND product_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
