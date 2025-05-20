@@ -20,7 +20,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void createUser(User user) throws SQLException {
-        String query = "INSERT INTO User (email, password, firstName, lastName, phoneNumber, postalCode, addressLine1, addressLine2, dateOfBirth, paymentMethod, createdAt, updatedAt, role, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Users (email, password, firstName, lastName, phoneNumber, postalCode, addressLine1, addressLine2, dateOfBirth, paymentMethod, createdAt, updatedAt, role, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             setUserParams(statement, user);
             statement.executeUpdate();
@@ -30,7 +30,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM User";
+        String query = "SELECT * FROM Users";
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
@@ -42,7 +42,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserById(int id) throws SQLException {
-        String query = "SELECT * FROM User WHERE id = ?";
+        String query = "SELECT * FROM Users WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet rs = statement.executeQuery()) {
@@ -57,7 +57,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getUsersByEmail(String email) throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM User WHERE email LIKE ?";
+        String query = "SELECT * FROM Users WHERE email LIKE ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
             try (ResultSet rs = statement.executeQuery()) {
@@ -71,7 +71,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByEmail(String email) throws SQLException {
-        String query = "SELECT * FROM User WHERE email = ?";
+        String query = "SELECT * FROM Users WHERE email = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
             try (ResultSet rs = statement.executeQuery()) {
@@ -85,7 +85,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean isEmailExists(String email) throws SQLException {
-        String query = "SELECT COUNT(*) FROM User WHERE email = ?";
+        String query = "SELECT COUNT(*) FROM Users WHERE email = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
             try (ResultSet rs = statement.executeQuery()) {
@@ -99,17 +99,17 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateUser(int id, User user) throws SQLException {
-        String query = "UPDATE User SET email = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, postalCode = ?, addressLine1 = ?, addressLine2 = ?, dateOfBirth = ?, paymentMethod = ?, createdAt = ?, updatedAt = ?, role = ?, isActive = ? WHERE id = ?";
+        String query = "UPDATE Users SET email = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, postalCode = ?, addressLine1 = ?, addressLine2 = ?, dateOfBirth = ?, paymentMethod = ?, createdAt = ?, updatedAt = ?, role = ?, isActive = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             setUserParams(statement, user);
-            statement.setInt(15, id);
+            statement.setInt(15, id); // 14개 필드 + id
             statement.executeUpdate();
         }
     }
 
     @Override
     public void deleteUser(int id) throws SQLException {
-        String query = "DELETE FROM User WHERE id = ?";
+        String query = "DELETE FROM Users WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.executeUpdate();
