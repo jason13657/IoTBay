@@ -86,4 +86,41 @@ public class OrderDAO {
             statement.executeUpdate();
         }
     }
+
+    public List<Order> searchOrders(int userId, String orderId, String orderDate) throws SQLException {
+        List<Order> orders = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM orders WHERE user_id = ?");
+        if (orderId != null && !orderId.isEmpty()) {
+            sql.append(" AND order_id = ?");
+        }
+        if (orderDate != null && !orderDate.isEmpty()) {
+            sql.append(" AND DATE(order_date) = ?");
+        }
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            int index = 1;
+            stmt.setInt(index++, userId);
+
+            if (orderId != null && !orderId.isEmpty()) {
+                stmt.setInt(index++, Integer.parseInt(orderId));
+            }
+            if (orderDate != null && !orderDate.isEmpty()) {
+                stmt.setString(index++, orderDate);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                orders.add(new Order(
+                    rs.getInt("order_id"),
+                    rs.getInt("user_id"),
+                    rs.getTimestamp("order_date").toLocalDateTime(),
+                    rs.getString("status"),
+                    rs.getDouble("total_amount")
+                ));
+            }
+        }
+
+        return orders;
+    }
 }
