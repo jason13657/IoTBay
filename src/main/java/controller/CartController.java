@@ -4,16 +4,17 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import dao.CartItemDAO;
 import db.DBConnection;
 import model.CartItem;
+import model.User;
 
 @WebServlet("/cart")
 public class CartController extends HttpServlet {
@@ -24,47 +25,80 @@ public class CartController extends HttpServlet {
         try {
             Connection connection = DBConnection.getConnection();
             cartItemDAO = new CartItemDAO(connection);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Failed to initialize database connection", e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Database driver not found", e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
-        
-        try {
-            Integer userId = (Integer) request.getSession().getAttribute("userId");
-            if (userId == null) {
-                Integer anonymousUserId = (Integer) request.getSession().getAttribute("anonymousUserId");
-                if (anonymousUserId == null) {
-                    anonymousUserId = (int) (Math.random() * -1000000);
-                    request.getSession().setAttribute("anonymousUserId", anonymousUserId);
-                }
-                userId = anonymousUserId;
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        Integer userId;
+        if (user != null) {
+            userId = user.getId();
+        } else {
+            if (session.getAttribute("guestId") == null) {
+                int guestId = -1 * new Random().nextInt(100000);
+                session.setAttribute("guestId", guestId);
             }
-            
+            userId = (Integer) session.getAttribute("guestId");
+        }
+
+        String action = request.getParameter("action");
+        try {
+            if ("clear".equals(action)) {
+                // Clear all cart items for this user
+                cartItemDAO.clearCartByUserId(userId);
+
+                // Optionally redirect or send response
+                response.sendRedirect("cart"); // Redirect to show empty cart
+                return;
+            }
+
+            // Existing add to cart logic
             int productId = Integer.parseInt(request.getParameter("productId"));
-            int quantity = 1; // you can fix quantity or get from form if you want
-            LocalDateTime addedAt = LocalDateTime.now();
-            
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+
             CartItem existingItem = cartItemDAO.getCartItem(userId, productId);
-            
             if (existingItem != null) {
-                int newQuantity = existingItem.getQuantity() + quantity;
-                cartItemDAO.updateCartItemQuantity(userId, productId, newQuantity);
+                int updatedQuantity = existingItem.getQuantity() + quantity;
+                cartItemDAO.updateCartItemQuantity(userId, productId, updatedQuantity);
             } else {
-                CartItem newItem = new CartItem(userId, productId, quantity, addedAt);
+                CartItem newItem = new CartItem(userId, productId, quantity, LocalDateTime.now());
                 cartItemDAO.addCartItem(newItem);
             }
-            
-            response.getWriter().write("{\"status\":\"success\",\"message\":\"Item added to cart\"}");
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write("Item successfully added to cart.");
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Failed to process cart operation.");
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        Integer userId;
+        if (user != null) {
+            userId = user.getId();
+        } else {
+            userId = (Integer) session.getAttribute("guestId");
+        }
+
+        try {
+            List<CartItem> cartItems = cartItemDAO.getCartItemsByUserId(userId);
+            request.setAttribute("cartItems", cartItems);
+            request.getRequestDispatcher("/cart.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to load cart items");
         }
     }
 }

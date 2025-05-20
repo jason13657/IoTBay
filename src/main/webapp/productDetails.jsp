@@ -1,7 +1,8 @@
-<%@ page import="model.Product" %>
+<%@ page import="model.Product, model.User" %>
 <%
     Product product = (Product) request.getAttribute("product");
 %>
+
 
 <html>
 <head>
@@ -32,11 +33,6 @@
                     <button type="submit" class="product__btn">Add to Cart</button>
                 </form>
             </div>
-        </div>
-    
-        <div class="product__details-section">
-            <h3 class="product__details-title">Product Details</h3>
-            <p class="product__description"><%= product.getDescription() %></p>
         </div>
     </section>
     

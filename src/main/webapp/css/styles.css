@@ -331,6 +331,78 @@ input[type="color"].register__input--favcol {
   padding: 0px 120px;
 }
 
+/* Cart Page */
+.cart-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+}
+
+.cart-nav a:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.cart-nav img {
+  max-width: 150px;
+  margin: 0 auto;
+}
+
+.exit-cart-btn {
+  margin-left: auto;
+  border: none;
+  background: white;
+  font-weight: bold;
+  border-bottom: transparent 2px solid;
+}
+
+.exit-cart-btn:hover {
+  cursor: pointer;
+  border-bottom: #0077b6 2px solid; 
+}
+
+.cart-container {
+  padding: 1em;
+}
+
+.cart-header h2 {
+  border-bottom: 2px solid #0077b6;
+  padding: 0.75em 0em;
+}
+
+.cart-main {
+  height: 50vh;
+}
+
+.cart-footer h3 {
+  border-top: 2px solid #0077b6;
+  padding: 0.75em 0em;
+  font-weight: 200;
+}
+
+.cart-container {
+    width: 80%;
+    margin: auto;
+}
+
+.cart-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    border-bottom: 1px solid black;
+    padding: 20px 0;
+}
+
+.cart-item img {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+}
+
+.cart-details {
+    flex-grow: 1;
+}
+
 /* Browse CSS */
 .header__top {
   display: flex;

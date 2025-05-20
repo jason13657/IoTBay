@@ -30,12 +30,22 @@
                     <p class="header__button-text">Log In</p>
                 </button>
             </form>
+            <form action="cart" method="get">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Cart</p>
+                </button>
+            </form>
         </div>
     <% } else { %>
         <div class="header__container">
             <form action="logout.jsp" method="post">
                 <button class="header__button" type="submit">
                     <p class="header__button-text">Log Out</p>
+                </button>
+            </form>
+            <form action="cart" method="get">
+                <button class="header__button" type="submit">
+                    <p class="header__button-text">Cart</p>
                 </button>
             </form>
 
