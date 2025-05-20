@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page isELIgnored="false" %>
 
 <html lang="en">
 <head>
@@ -116,11 +115,11 @@
 <div class="account__container">
     <!-- Sidebar -->
     <div class="account__sidebar">
-        <c:set var="userInfo" value="${sessionScope.user}" /> 
-
-        <!-- 세션에서 사용자 정보를 직접 가져옵니다 -->
-        <div class="account__name">${sessionScope.user.firstName} ${sessionScope.user.lastName}</div>
-        <div class="account__email">${sessionScope.user.email}</div>
+        <!-- 세션 또는 request 속성에서 사용자 정보를 가져옵니다 -->
+        <c:set var="userInfo" value="${requestScope.user != null ? requestScope.user : sessionScope.user}" />
+        
+        <div class="account__name">${fn:escapeXml(userInfo.firstName)} ${fn:escapeXml(userInfo.lastName)}</div>
+        <div class="account__email">${fn:escapeXml(userInfo.email)}</div>
 
         <nav class="account__nav">
             <a href="#profile" class="active">Profile</a>
@@ -153,24 +152,24 @@
             <table class="profile-details">
                 <tr>
                     <td><strong>Name:</strong></td>
-                    <td>${sessionScope.user.firstName} ${sessionScope.user.lastName}</td>
+                    <td>${fn:escapeXml(userInfo.firstName)} ${fn:escapeXml(userInfo.lastName)}</td>
                 </tr>
                 <tr>
                     <td><strong>Email:</strong></td>
-                    <td>${sessionScope.user.email}</td>
+                    <td>${fn:escapeXml(userInfo.email)}</td>
                 </tr>
                 <tr>
                     <td><strong>Phone:</strong></td>
-                    <td>${sessionScope.user.phone}</td>
+                    <td>${fn:escapeXml(userInfo.phone)}</td>
                 </tr>
                 <tr>
                     <td><strong>Address:</strong></td>
                     <td>
-                        ${sessionScope.user.addressLine1}
-                        <c:if test="${not empty sessionScope.user.addressLine2}">
-                            <br/>${sessionScope.user.addressLine2}
+                        ${fn:escapeXml(userInfo.addressLine1)}
+                        <c:if test="${not empty userInfo.addressLine2}">
+                            <br/>${fn:escapeXml(userInfo.addressLine2)}
                         </c:if>
-                        <br/>${sessionScope.user.postalCode}
+                        <br/>${fn:escapeXml(userInfo.postalCode)}
                     </td>
                 </tr>
             </table>

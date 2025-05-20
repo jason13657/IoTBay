@@ -36,9 +36,10 @@ public class UserProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                //brings user to profile page
         // Check if user is logged in
         HttpSession session = request.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute("user") : null;
+        User user = (session != null) ? (User) session.getAttribute("customer") : null;
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -46,15 +47,8 @@ public class UserProfileController extends HttpServlet {
         // update user info
         try {
             User freshUser = userDAO.getUserById(user.getId());
-
-            System.out.println("[DEBUG] Fresh User Data: " + freshUser); // ✅
-
-            // 세션에 최신 사용자 정보 업데이트
-            session.setAttribute("user", freshUser);
-            request.setAttribute("user", freshUser); // 
-
-            // 변경: JSP 파일의 실제 경로로 수정
-            request.getRequestDispatcher("/Profiles.jsp").forward(request, response);
+            request.setAttribute("user", freshUser);
+            request.getRequestDispatcher("/WEB-INF/views/Profiles.jsp").forward(request, response);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to load profile.");
         }
