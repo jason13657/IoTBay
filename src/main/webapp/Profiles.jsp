@@ -271,7 +271,7 @@
                 </tbody>
             </table>
         </div>
-
+        
         <!-- Activity Log Section -->
         <div class="account__section" id="activity">
             <div class="section__header">Recent Activity</div>
@@ -295,6 +295,30 @@
                 <a href="accessLog.jsp">View All Activity</a>
             </div>
         </div>
+
+        <div style="margin-top: 32px; text-align: right;">
+    <form action="${pageContext.request.contextPath}/deleteaccount.jsp" method="get" style="display:inline;">
+        <button type="submit"
+                style="
+                    background: linear-gradient(90deg, #ff5858 0%, #ff1e1e 100%);
+                    color: #fff;
+                    border: none;
+                    border-radius: 8px;
+                    padding: 12px 28px;
+                    font-size: 1.1em;
+                    font-weight: bold;
+                    letter-spacing: 1px;
+                    cursor: pointer;
+                    box-shadow: 0 2px 8px rgba(255,30,30,0.18);
+                    transition: background 0.2s, transform 0.2s;
+                "
+                onmouseover="this.style.background='linear-gradient(90deg, #c9302c 0%, #a90000 100%)'"
+                onmouseout="this.style.background='linear-gradient(90deg, #ff5858 0%, #ff1e1e 100%)'"
+        >
+            Delete Account
+        </button>
+    </form>
+</div>
     </div>
 </div>
 
