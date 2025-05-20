@@ -39,7 +39,7 @@ public class UserProfileController extends HttpServlet {
                 //brings user to profile page
         // Check if user is logged in
         HttpSession session = request.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute("customer") : null;
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;

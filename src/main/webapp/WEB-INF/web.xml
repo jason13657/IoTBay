@@ -87,6 +87,15 @@
         <url-pattern>/api/Profiles</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AccessLog</servlet-name>
+        <servlet-class>controller.AccesslogController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccessLog</servlet-name>
+        <url-pattern>/api/accessLog</url-pattern>
+    </servlet-mapping>
+
 
     
 </web-app>
