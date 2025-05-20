@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,16 +106,28 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         return logs;
     }
 
-    // ResultSet -> AccessLog 객체 변환 (포맷 자동 인식)
+    // ResultSet -> AccessLog 객체 변환 (모든 포맷 자동 인식)
     private AccessLog mapResultSetToAccessLog(ResultSet rs) throws SQLException {
         String ts = rs.getString("timestamp");
         LocalDateTime timestamp;
         try {
             // ISO-8601 ("2025-05-20T14:23:45")
             timestamp = LocalDateTime.parse(ts, ISO_FORMATTER);
-        } catch (Exception e) {
-            // 공백 구분 ("2025-05-20 14:23:45")
-            timestamp = LocalDateTime.parse(ts, SPACE_FORMATTER);
+        } catch (Exception e1) {
+            try {
+                // 공백 구분 ("2025-05-20 14:23:45")
+                timestamp = LocalDateTime.parse(ts, SPACE_FORMATTER);
+            } catch (Exception e2) {
+                try {
+                    // epoch milliseconds ("1747710292241")
+                    long epochMillis = Long.parseLong(ts);
+                    timestamp = Instant.ofEpochMilli(epochMillis)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime();
+                } catch (Exception e3) {
+                    throw new SQLException("Invalid timestamp format in DB: " + ts, e3);
+                }
+            }
         }
         return new AccessLog(
             rs.getInt("id"),
