@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>IoT Bay - My Account</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/styles.css" />
     <style>
         body { background: #f6f8fa; }
         .account__container {
