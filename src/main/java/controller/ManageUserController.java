@@ -70,29 +70,33 @@ public class ManageUserController extends HttpServlet {
             String password = request.getParameter("password");
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
-            String gender = request.getParameter("gender");
-            String favoriteColor = request.getParameter("favoriteColor");
+            String phone = request.getParameter("phone");
+            String postalCode = request.getParameter("postalCode");
+            String addressLine1 = request.getParameter("addressLine1");
+            String addressLine2 = request.getParameter("addressLine2");
+            String paymentMethod = request.getParameter("paymentMethod");
             String dob = request.getParameter("dateOfBirth");
             String role = request.getParameter("role");
 
-            if (email == null || password == null || firstName == null || lastName == null || gender == null || dob == null || role == null) {
+            // 필수 필드 체크
+            if (email == null || password == null || firstName == null || lastName == null || dob == null || role == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.getWriter().write("{\"error\": \"Missing required fields\"}");
                 return;
             }
 
             User user = new User(
-                    0, // ID will be auto-generated
+                    0, // id (auto-generated)
                     email,
                     password,
                     firstName,
                     lastName,
-                    null, // phone
-                    null, // postalCode
-                    null, // addressLine1
-                    null, // addressLine2
+                    phone,
+                    postalCode,
+                    addressLine1,
+                    addressLine2,
                     LocalDate.parse(dob),
-                    null, // paymentMethod
+                    paymentMethod,
                     LocalDateTime.now(),
                     LocalDateTime.now(),
                     role,
