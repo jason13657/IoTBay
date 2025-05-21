@@ -3,5 +3,5 @@ CREATE TABLE access_logs (
     user_id INTEGER NOT NULL,
     action TEXT NOT NULL,
     timestamp TEXT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES User(userID) ON DELETE CASCADE
 );

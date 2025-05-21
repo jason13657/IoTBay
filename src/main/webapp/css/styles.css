@@ -40,6 +40,7 @@ form {
   border-radius: 50px;
   padding: 13px 60px;
   background: none;
+  position: relative
 }
 
 .header__button:hover {
@@ -178,7 +179,7 @@ form {
 }
 
 .register__container {
-  max-width: 1240px;
+  max-width: 1300px;
   padding: 0px 40px;
   margin: auto;
   margin-top: 20px;
@@ -193,9 +194,13 @@ form {
 }
 
 .register__image {
-  object-fit: cover;
+  flex: 1 1 0;            /* flex-grow: 1, flex-shrink: 1, flex-basis: 0 */
+  width: 400px;           
+  min-width: 220px;
+  object-fit: cover;      /* 비율 유지하며 채움 */
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
+  display: block;
 }
 
 .register__form--container {
@@ -214,7 +219,7 @@ form {
 }
 
 .register__form {
-  width: 70%;
+  width: auto;
   display: flex;
   flex-direction: column;
   gap: 23px;
@@ -225,9 +230,10 @@ form {
 .register__contents {
   display: flex;
   justify-content: center;
-  height: 740px;
+  min-height: 740px;
   width: 100%;
-  align-items: center;
+  align-items: stretch
+
 }
 
 .register__form--title {
@@ -447,4 +453,42 @@ input[type="color"].register__input--favcol {
 #searchForm button:hover {
   background-color: #0056b3;
 }
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  max-width: 350px;
+  width: 90%;
+  text-align: center;
+}
+.modal-content h2 {
+  color: #e63946;
+  margin-bottom: 18px;
+}
+.modal-content button {
+  margin-top: 18px;
+  padding: 8px 24px;
+  background: #0077b6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.modal-content button:hover {
+  background: #005f87;
+}
+
 

@@ -1,16 +1,25 @@
 package dao;
 
-import model.AccessLog;
-import utils.DateTimeParser;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.interfaces.AccessLogDAO;
+import model.AccessLog;
 
 public class AccessLogDAOImpl implements AccessLogDAO {
     private final Connection connection;
+    // 포맷 상수
+    private static final DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // yyyy-MM-dd'T'HH:mm:ss
+    private static final DateTimeFormatter SPACE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public AccessLogDAOImpl(Connection connection) {
         this.connection = connection;
@@ -20,22 +29,12 @@ public class AccessLogDAOImpl implements AccessLogDAO {
     public void createAccessLog(AccessLog log) throws SQLException {
         String query = "INSERT INTO access_logs (user_id, action, timestamp) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            setAccessLogParams(statement, log);
+            statement.setInt(1, log.getUserId());
+            statement.setString(2, log.getAction());
+            // 항상 ISO-8601 포맷으로 저장
+            statement.setString(3, log.getTimestamp().format(ISO_FORMATTER));
             statement.executeUpdate();
         }
-    }
-
-    @Override
-    public List<AccessLog> getAllAccessLogs() throws SQLException {
-        String query = "SELECT id, user_id, action, timestamp FROM access_logs";
-        List<AccessLog> logs = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet rs = statement.executeQuery()) {
-            while (rs.next()) {
-                logs.add(mapResultSetToAccessLog(rs));
-            }
-        }
-        return logs;
     }
 
     @Override
@@ -54,7 +53,7 @@ public class AccessLogDAOImpl implements AccessLogDAO {
 
     @Override
     public List<AccessLog> getAccessLogsByUserId(int userId) throws SQLException {
-        String query = "SELECT id, user_id, action, timestamp FROM access_logs WHERE user_id = ?";
+        String query = "SELECT id, user_id, action, timestamp FROM access_logs WHERE user_id = ? ORDER BY timestamp DESC";
         List<AccessLog> logs = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
@@ -62,6 +61,19 @@ public class AccessLogDAOImpl implements AccessLogDAO {
                 while (rs.next()) {
                     logs.add(mapResultSetToAccessLog(rs));
                 }
+            }
+        }
+        return logs;
+    }
+
+    @Override
+    public List<AccessLog> getAllAccessLogs() throws SQLException {
+        String query = "SELECT id, user_id, action, timestamp FROM access_logs ORDER BY timestamp DESC";
+        List<AccessLog> logs = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                logs.add(mapResultSetToAccessLog(rs));
             }
         }
         return logs;
@@ -76,18 +88,52 @@ public class AccessLogDAOImpl implements AccessLogDAO {
         }
     }
 
-    private void setAccessLogParams(PreparedStatement statement, AccessLog log) throws SQLException {
-        statement.setInt(1, log.getUserId());
-        statement.setString(2, log.getAction());
-        statement.setString(3, DateTimeParser.toText(log.getTimestamp())); // Serialize LocalDateTime to text
+    @Override
+    public List<AccessLog> getAccessLogsByUserIdAndDateRange(int userId, LocalDate startDate, LocalDate endDate) throws SQLException {
+        String query = "SELECT id, user_id, action, timestamp FROM access_logs WHERE user_id = ? AND timestamp >= ? AND timestamp < ? ORDER BY timestamp DESC";
+        List<AccessLog> logs = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            // ISO-8601 포맷으로 비교
+            statement.setString(2, startDate.atStartOfDay().format(ISO_FORMATTER));
+            statement.setString(3, endDate.plusDays(1).atStartOfDay().format(ISO_FORMATTER));
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    logs.add(mapResultSetToAccessLog(rs));
+                }
+            }
+        }
+        return logs;
     }
 
+    // ResultSet -> AccessLog 객체 변환 (모든 포맷 자동 인식)
     private AccessLog mapResultSetToAccessLog(ResultSet rs) throws SQLException {
+        String ts = rs.getString("timestamp");
+        LocalDateTime timestamp;
+        try {
+            // ISO-8601 ("2025-05-20T14:23:45")
+            timestamp = LocalDateTime.parse(ts, ISO_FORMATTER);
+        } catch (Exception e1) {
+            try {
+                // 공백 구분 ("2025-05-20 14:23:45")
+                timestamp = LocalDateTime.parse(ts, SPACE_FORMATTER);
+            } catch (Exception e2) {
+                try {
+                    // epoch milliseconds ("1747710292241")
+                    long epochMillis = Long.parseLong(ts);
+                    timestamp = Instant.ofEpochMilli(epochMillis)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime();
+                } catch (Exception e3) {
+                    throw new SQLException("Invalid timestamp format in DB: " + ts, e3);
+                }
+            }
+        }
         return new AccessLog(
             rs.getInt("id"),
             rs.getInt("user_id"),
             rs.getString("action"),
-            DateTimeParser.parseLocalDateTime(rs.getString("timestamp")) // Parse text to LocalDateTime
+            timestamp
         );
     }
 }

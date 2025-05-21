@@ -60,6 +60,18 @@
     </servlet-mapping>
 
     <servlet>
+<<<<<<< HEAD
+=======
+        <servlet-name>Register</servlet-name>
+        <servlet-class>controller.RegisterController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/api/auth/register</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+>>>>>>> origin/main
         <servlet-name>MeController</servlet-name>
         <servlet-class>controller.MeController</servlet-class>
     </servlet>
@@ -70,6 +82,7 @@
     </servlet-mapping>
 
     <servlet>
+<<<<<<< HEAD
         <servlet-name>CartController</servlet-name>
         <servlet-class>controller.CartController</servlet-class>
     </servlet>
@@ -88,4 +101,44 @@
         <servlet-name>CheckoutController</servlet-name>
         <url-pattern>/checkout</url-pattern>
     </servlet-mapping>
+=======
+        <servlet-name>UserProfileController</servlet-name>
+        <servlet-class>controller.UserProfileController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserProfileController</servlet-name>
+        <url-pattern>/api/Profiles</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AccessLog</servlet-name>
+        <servlet-class>controller.AccesslogController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccessLog</servlet-name>
+        <url-pattern>/api/accessLog</url-pattern>
+    </servlet-mapping>
+
+
+    <error-page>
+    <error-code>400</error-code>
+    <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+    <error-code>500</error-code>
+    <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/error.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+
+
+    
+>>>>>>> origin/main
 </web-app>
