@@ -87,37 +87,44 @@ public class OrderDAO {
         }
     }
 
-    public List<Order> searchOrders(int userId, String orderId, String orderDate) throws SQLException {
+    public List<Order> searchOrders(int userId, Integer orderId, String orderDate) throws SQLException {
+        String query = "SELECT order_id, user_id, order_date, status, total_amount FROM \"order\" "
+                    + "WHERE user_id = ? "
+                    + "AND (? IS NULL OR order_id = ?) "
+                    + "AND (? IS NULL OR date(replace(order_date, 'T', ' ')) = ?) "
+                    + "ORDER BY order_date DESC";
+
         List<Order> orders = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT * FROM orders WHERE user_id = ?");
-        if (orderId != null && !orderId.isEmpty()) {
-            sql.append(" AND order_id = ?");
-        }
-        if (orderDate != null && !orderDate.isEmpty()) {
-            sql.append(" AND DATE(order_date) = ?");
-        }
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
-            int index = 1;
-            stmt.setInt(index++, userId);
-
-            if (orderId != null && !orderId.isEmpty()) {
-                stmt.setInt(index++, Integer.parseInt(orderId));
-            }
-            if (orderDate != null && !orderDate.isEmpty()) {
-                stmt.setString(index++, orderDate);
+            if (orderId == null) {
+                statement.setNull(2, Types.INTEGER);
+                statement.setNull(3, Types.INTEGER);
+            } else {
+                statement.setInt(2, orderId);
+                statement.setInt(3, orderId);
             }
 
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                orders.add(new Order(
-                    rs.getInt("order_id"),
-                    rs.getInt("user_id"),
-                    rs.getTimestamp("order_date").toLocalDateTime(),
-                    rs.getString("status"),
-                    rs.getDouble("total_amount")
-                ));
+            if (orderDate == null || orderDate.isEmpty()) {
+                statement.setNull(4, Types.VARCHAR);
+                statement.setNull(5, Types.VARCHAR);
+            } else {
+                statement.setString(4, orderDate);
+                statement.setString(5, orderDate);
+            }
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    orders.add(new Order(
+                        rs.getInt("order_id"),
+                        rs.getInt("user_id"),
+                        rs.getObject("order_date", LocalDateTime.class),
+                        rs.getString("status"),
+                        rs.getDouble("total_amount")
+                    ));
+                }
             }
         }
 

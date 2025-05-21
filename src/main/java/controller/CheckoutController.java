@@ -62,9 +62,9 @@ public class CheckoutController extends HttpServlet{
                 .mapToDouble(item -> item.getPrice() * item.getQuantity()) // You need getPrice() in CartItem
                 .sum();
 
-            // Create the order
+            // Create order
             Order order = new Order(0, userId, LocalDateTime.now(), "Pending", totalAmount);
-            orderDAO.createOrder(order); // If you need the generated ID, update this method
+            orderDAO.createOrder(order); 
 
             // Clear cart after checkout
             cartItemDao.clearCartByUserId(userId);

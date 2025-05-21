@@ -215,7 +215,7 @@
         <div class="account__section" id="orders">
             <div class="section__header">Order History</div>
             <div class="quick__actions">
-                <a href="orderList.jsp">View All Orders</a>
+                <a href="orderhistory">View All Orders</a>
             </div>
         </div>
 
