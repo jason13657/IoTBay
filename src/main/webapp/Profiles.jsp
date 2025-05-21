@@ -214,34 +214,6 @@
         <!-- Order History Section -->
         <div class="account__section" id="orders">
             <div class="section__header">Order History</div>
-            <table class="orders__table">
-                <thead>
-                    <tr>
-                        <th>Order #</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="order" items="${orderList}">
-                        <tr>
-                            <td>${order.id}</td>
-                            <td>${order.date}</td>
-                            <td>
-                                <span class="orders__status--${order.status}">
-                                    ${fn:toUpperCase(order.status)}
-                                </span>
-                            </td>
-                            <td>$${order.totalPrice}</td>
-                            <td>
-                                <a href="orderDetail.jsp?orderId=${order.id}">View</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
             <div class="quick__actions">
                 <a href="orderList.jsp">View All Orders</a>
             </div>

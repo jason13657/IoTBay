@@ -6,13 +6,15 @@ public class CartItem implements Serializable {
     private final int userId;
     private final int productId;
     private int quantity;
+    private double price; 
     private LocalDateTime addedAt;
 
     // Constructor
-    public CartItem(int userId, int productId, int quantity, LocalDateTime addedAt) {
+    public CartItem(int userId, int productId, int quantity, double price, LocalDateTime addedAt) {
         this.userId = userId;
         this.productId = productId;
         this.quantity = quantity;
+        this.price = price; 
         this.addedAt = addedAt;
     }
 
@@ -27,6 +29,10 @@ public class CartItem implements Serializable {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public double getPrice() {
+        return price; 
     }
 
     public void setQuantity(int quantity) {

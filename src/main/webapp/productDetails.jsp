@@ -1,4 +1,4 @@
-<%@ page import="model.Product" %>
+<%@ page import="model.Product, model.User" %>
 <%
     Product product = (Product) request.getAttribute("product");
 %>
@@ -27,7 +27,9 @@
                 </form>
     
                 <form method="post" action="cart">
+                    <input type="hidden" name="productPrice" value="<%= product.getPrice() %>" />
                     <input type="hidden" name="productId" value="<%= product.getId() %>" />
+                    <input type="hidden" name="quantity" value="1" />
                     <button type="submit" class="product__btn">Add to Cart</button>
                 </form>
             </div>

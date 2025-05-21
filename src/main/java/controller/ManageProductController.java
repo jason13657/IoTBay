@@ -64,7 +64,6 @@ public class ManageProductController extends HttpServlet {
             response.getWriter().write("{\"error\": \"Access denied\"}");
             return;
         }
-
         try {
             int categoryId = Integer.parseInt(request.getParameter("categoryId"));
             String name = request.getParameter("name");

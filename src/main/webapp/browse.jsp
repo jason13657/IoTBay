@@ -40,8 +40,4 @@
             </div>
         </section>
     </body>
-    </div>
-        </section>
-
-    </body>
 </html>

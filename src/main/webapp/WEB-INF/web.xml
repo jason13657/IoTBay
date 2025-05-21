@@ -79,9 +79,30 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>CartController</servlet-name>
+        <servlet-class>controller.CartController</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>CartController</servlet-name>
+        <url-pattern>/cart</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CheckoutController</servlet-name>
+        <servlet-class>controller.CheckoutController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CheckoutController</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>UserProfileController</servlet-name>
         <servlet-class>controller.UserProfileController</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>UserProfileController</servlet-name>
         <url-pattern>/api/Profiles</url-pattern>
@@ -91,9 +112,20 @@
         <servlet-name>AccessLog</servlet-name>
         <servlet-class>controller.AccesslogController</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>AccessLog</servlet-name>
         <url-pattern>/api/accessLog</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OrderHistoryController</servlet-name>
+        <servlet-class>controller.OrderHistoryController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OrderHistoryController</servlet-name>
+        <url-pattern>/orders-history</url-pattern>
     </servlet-mapping>
 
 
