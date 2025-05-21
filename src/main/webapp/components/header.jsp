@@ -66,29 +66,12 @@
         </div>
     <% } %>
     <script>
-    const path = window.location.pathname;
-    const params = new URLSearchParams(window.location.search);
-
-    if (
-        path === '/index.jsp' ||
-        path === '/' ||
-        (path === '/search' && params.has('query'))
-    ) {
-        document.getElementById('searchForm').style.display = 'flex';
-    } else {
-        document.getElementById('searchForm').style.display = 'none';
-    }
-
-    document.getElementById("searchForm").addEventListener("submit", function(e) {
-        const input = document.getElementById("searchInput");
-        input.value = input.value.trim();
-    });
-
-    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const path = window.location.pathname;
             const params = new URLSearchParams(window.location.search);
             const searchForm = document.getElementById('searchForm');
+
+            if (!searchForm) return;  // Safety check
 
             if (
                 path.endsWith('index.jsp') ||

@@ -24,11 +24,7 @@
                 %>
                 <a href="product?productId=<%= p.getId() %>" class="product__link">
                     <div class="product__card">
-<<<<<<< HEAD
-                        <img class="product__image" src="<%= p.getImageUrl() %>" alt="<%= p.getName() %>" />
-=======
                         <img class="product__image" src="<%= p.getImageUrl() %>" alt="<%= p.getName() %>" onerror="this.onerror=null;this.src='https://i.imgur.com/EJLFNOwg.jpg';" />
->>>>>>> origin/main
                         <h4 class="product__title"><%= p.getName() %></h4>
                         <p class="product__price">$<%= p.getPrice() %></p>
                     </div>
@@ -43,9 +39,5 @@
                 %>
             </div>
         </section>
-    </body>
-    </div>
-        </section>
-
     </body>
 </html>

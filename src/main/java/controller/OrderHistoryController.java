@@ -59,7 +59,7 @@ public class OrderHistoryController extends HttpServlet {
             }
 
             req.setAttribute("orders", orders);
-            req.getRequestDispatcher("OrderHistory.jsp").forward(req, resp);
+            req.getRequestDispatcher("Profiles.jsp").forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
             resp.sendRedirect("index.jsp?error=Could not load orders");

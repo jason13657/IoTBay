@@ -1,12 +1,21 @@
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\AccesslogController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\BrowseProductController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\CartController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\CheckoutController.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\DeleteProductController.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\DeleteUserController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\LoginController.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\LogoutController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\ManageAccessLogController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\ManageProductController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\ManageUserController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\MeController.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\OrderHistoryController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\ProductDetailsController.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\RegisterController.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\UpdateProductController.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\UpdateUserController.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\controller\UserProfileController.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\dao\AccessLogDAOImpl.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\dao\AddressDetailDAO.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\dao\CartItemDAO.java
@@ -45,3 +54,5 @@ C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\model\User.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\model\Wishlist.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\model\WishlistProduct.java
 C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\utils\DateTimeParser.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\utils\PasswordUtil.java
+C:\Users\Damaq\OneDrive\Desktop\IoTBay\src\main\java\utils\ValidationUtil.java

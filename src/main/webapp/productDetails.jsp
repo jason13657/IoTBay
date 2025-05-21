@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 <%@ page import="model.Product, model.User" %>
-=======
-<%@ page import="model.Product" %>
->>>>>>> origin/main
 <%
     Product product = (Product) request.getAttribute("product");
 %>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/main
 <html>
 <head>
     <title><%= product.getName() %></title>
@@ -22,11 +14,7 @@
     <section class="base__container">
         <div class="product__top">
             <div class="product__left">
-<<<<<<< HEAD
-                <img src="<%= product.getImageUrl() %>" alt="<%= product.getName() %>" class="product__image" />
-=======
                 <img src="<%= product.getImageUrl() %>" alt="<%= product.getName() %>" class="product__image" onerror="this.onerror=null;this.src='https://i.imgur.com/EJLFNOwg.jpg';"/>
->>>>>>> origin/main
             </div>
     
             <div class="product__right">
@@ -39,25 +27,18 @@
                 </form>
     
                 <form method="post" action="cart">
-<<<<<<< HEAD
                     <input type="hidden" name="productPrice" value="<%= product.getPrice() %>" />
                     <input type="hidden" name="productId" value="<%= product.getId() %>" />
                     <input type="hidden" name="quantity" value="1" />
-=======
-                    <input type="hidden" name="productId" value="<%= product.getId() %>" />
->>>>>>> origin/main
                     <button type="submit" class="product__btn">Add to Cart</button>
                 </form>
             </div>
         </div>
-<<<<<<< HEAD
-=======
     
         <div class="product__details-section">
             <h3 class="product__details-title">Product Details</h3>
             <p class="product__description"><%= product.getDescription() %></p>
         </div>
->>>>>>> origin/main
     </section>
     
 </body>
