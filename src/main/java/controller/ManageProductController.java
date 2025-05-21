@@ -35,33 +35,31 @@ public class ManageProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    
-        if (!isAdmin(request)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("{\"error\": \"Access denied\"}");
-            return;
-        }
-    
-        try {
-            List<Product> products = productDAO.getAllProducts(); // Get all products
-            request.setAttribute("products", products); // Add products to request attribute
-    
-            // Forward to JSP page to display products
-            request.getRequestDispatcher("/WEB-INF/views/manage-products.jsp").forward(request, response);
-    
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
-        }
-    }
-    
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
 
         if (!isAdmin(request)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("{\"error\": \"Access denied\"}");
+            request.setAttribute("errorMessage", "Access denied: You must be an admin to access the manage products page.");
+            request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            List<Product> products = productDAO.getAllProducts();
+            request.setAttribute("products", products);
+            request.getRequestDispatcher("/WEB-INF/views/manage-products.jsp").forward(request, response);
+
+        } catch (SQLException e) {
+            request.setAttribute("errorMessage", "Database error while retrieving products: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        if (!isAdmin(request)) {
+            request.setAttribute("errorMessage", "Access denied. You do not have permission to perform this action.");
+            request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
             return;
         }
 
@@ -72,23 +70,23 @@ public class ManageProductController extends HttpServlet {
             double price = Double.parseDouble(request.getParameter("price"));
             int stockQuantity = Integer.parseInt(request.getParameter("stockQuantity"));
             String imageUrl = request.getParameter("imageUrl");
-
             String createdAtStr = request.getParameter("created_at");
-            java.time.LocalDate createdAt = java.time.LocalDate.parse(createdAtStr); // expects yyyy-MM-dd
-    
-            Product product = new Product(0, categoryId, name, description, price, stockQuantity, imageUrl, createdAt);
+            java.time.LocalDate createdAt = java.time.LocalDate.parse(createdAtStr);
 
+            Product product = new Product(0, categoryId, name, description, price, stockQuantity, imageUrl, createdAt);
             productDAO.createProduct(product);
 
             response.sendRedirect(request.getContextPath() + "/manage/products");
 
-        } catch (SQLException | NumberFormatException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Failed to create product: " + e.getMessage() + "\"}");
+            request.setAttribute("errorMessage", "Database error while creating product: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Invalid number format in input fields: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
         }
-}
-
+    }
 
     private boolean isAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession(false);

@@ -9,6 +9,12 @@
 </head>
 <body>
     <h1>Manage Products</h1>
+    <div style="margin: 20px;">
+        <button onclick="location.href='/index.jsp'" style="padding: 8px 16px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            &larr; Back to Home
+        </button>
+    </div>
+    
     <div style="text-align: right;">
         <button id="main-create-btn" class="create-btn" onclick="openCreateModal()">Create New Product</button>
     </div>  

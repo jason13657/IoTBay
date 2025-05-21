@@ -34,20 +34,16 @@ public class ManageAccessLogController extends HttpServlet {
             throws ServletException, IOException {
 
         if (!isAdmin(request)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("{\"error\": \"Access denied\"}");
+            redirectToErrorPage(request, response, "Access denied: You must be an admin to view the access logs page.");
             return;
         }
 
         try {
             List<AccessLog> accessLogs = accessLogDAO.getAllAccessLogs();
             request.setAttribute("accessLogs", accessLogs);
-
             request.getRequestDispatcher("/WEB-INF/views/manage-access-logs.jsp").forward(request, response);
-
         } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\":\"Database error: " + e.getMessage() + "\"}");
+            redirectToErrorPage(request, response, "Database error: " + e.getMessage());
         }
     }
 
@@ -60,5 +56,11 @@ public class ManageAccessLogController extends HttpServlet {
 
         User user = (User) userObj;
         return "staff".equalsIgnoreCase(user.getRole());
+    }
+
+    private void redirectToErrorPage(HttpServletRequest request, HttpServletResponse response, String message)
+            throws ServletException, IOException {
+        request.setAttribute("errorMessage", message);
+        request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
     }
 }
