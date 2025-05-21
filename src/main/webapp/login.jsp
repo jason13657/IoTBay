@@ -18,6 +18,12 @@
                 <button type="submit" class="register__button">Log In</button>
                 <input type="hidden" name="source" value="logins" />
             </form> 
+
+            <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+            <% if (errorMessage != null) { %>
+            <div class="error-message"><%= errorMessage %></div>
+            <% } %>
+
         </section>
 
         <jsp:include page="components/footer.jsp" />
