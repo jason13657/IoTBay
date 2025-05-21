@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="css/styles.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
         <title>IoT Bay - Register</title>
     </head>
     <body>
@@ -18,6 +18,15 @@
                 <button type="submit" class="register__button">Log In</button>
                 <input type="hidden" name="source" value="logins" />
             </form> 
+
+        <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+        <% if (errorMessage != null) { %>
+        <div class="error-message" style="color:red; margin-bottom:10px;">
+        <%= errorMessage %>
+        </div>
+        <% } %>
+
+
         </section>
 
         <jsp:include page="components/footer.jsp" />

@@ -44,19 +44,71 @@ public class LoginController extends HttpServlet {
             String password = request.getParameter("password");
             User user = userDAO.getUserByEmail(email);
 
+            //if user is not in the database
+
             if (user == null) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"message\": \"User not found\"}");
-                return;
+            request.setAttribute("errorMessage", "User not found");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            return;
             }
 
             if (!user.getPassword().equals(password)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"message\": \"Incorrect password\"}");
-                return;
+            request.setAttribute("errorMessage", "Incorrect password");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            return;
             }
+
+
+            // =================Check if the user is active ======================
+
+            // 2. Account locked (too many failed attempts)
+            // if (user.isLocked()) {
+            //     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            //     response.getWriter().write("{\"message\": \"Your account is locked due to too many failed login attempts. Please reset your password or contact support.\"}");
+            //     return;
+            // }
+
+            // // 3. Account inactive or suspended
+            // if (!user.isActive()) {
+            //     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            //     response.getWriter().write("{\"message\": \"Your account is inactive or suspended. Please contact support.\"}");
+            //     return;
+            // }
+
+            // // 4. Email not verified
+            // if (!user.isEmailVerified()) {
+            //     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            //     response.getWriter().write("{\"message\": \"Please verify your email before logging in.\"}");
+            //     return;
+            // }
+
+            // // 5. Password expired
+            // if (user.isPasswordExpired()) {
+            //     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            //     response.getWriter().write("{\"message\": \"Your password has expired. Please reset your password.\"}");
+            //     return;
+            // }
+
+            // // 6. Password check (use hashed password)
+            // if (!PasswordUtil.checkPassword(password, user.getPassword())) {
+            //     // Optionally, increment failed login attempts here
+            //     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            //     response.getWriter().write(genericError);
+            //     return;
+            // }
+
+            // // 7. Multi-factor authentication required (stub, expand as needed)
+            // if (user.isMfaEnabled() && !user.isMfaVerified()) {
+            //     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            //     response.getWriter().write("{\"message\": \"Multi-factor authentication required.\"}");
+            //     // Optionally, redirect to MFA verification page.
+            //     return;
+            // }
+
+//=======================================================================
+
+
+
 
             // Create access log
             LocalDateTime now = LocalDateTime.now();
@@ -66,6 +118,7 @@ public class LoginController extends HttpServlet {
             // Successful login: set session
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            
 
             // Redirect to index.jsp (with context path!)
             response.sendRedirect(request.getContextPath() + "/index.jsp");
