@@ -1,6 +1,7 @@
 package model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Order implements Serializable {
     private final int id;
@@ -47,6 +48,11 @@ public class Order implements Serializable {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public String getOrderDateFormatted() {
+        if (orderDate == null) return "";
+        return orderDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public double calculateTotal() {

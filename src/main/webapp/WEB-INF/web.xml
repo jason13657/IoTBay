@@ -125,7 +125,7 @@
 
     <servlet-mapping>
         <servlet-name>OrderHistoryController</servlet-name>
-        <url-pattern>/orders-history</url-pattern>
+        <url-pattern>/orderhistory</url-pattern>
     </servlet-mapping>
 
 

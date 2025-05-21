@@ -1,5 +1,6 @@
 package controller;
 
+import dao.CartItemDAO;
 import dao.OrderDAO;
 import db.DBConnection;
 import model.Order;
@@ -7,62 +8,50 @@ import model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/order-history")
+@WebServlet("/orderhistory")
 public class OrderHistoryController extends HttpServlet {
     private OrderDAO orderDAO;
 
     @Override
     public void init() {
         try {
-            Connection conn = DBConnection.getConnection();
-            orderDAO = new OrderDAO(conn);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            Connection connection = DBConnection.getConnection();
+            orderDAO = new OrderDAO(connection);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException("Failed to initialize database connection", e);
         }
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        HttpSession session = req.getSession();
+        HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
+        // Redirect to login if user is not logged in
         if (user == null) {
-            resp.sendRedirect("login.jsp");
+            response.sendRedirect("login.jsp");
             return;
         }
 
-        int userId = user.getId();
-
-        // Optional filters
-        String orderIdParam = req.getParameter("orderId");
-        String orderDateParam = req.getParameter("orderDate");
-
-        List<Order> orders;
-
         try {
-            if ((orderIdParam != null && !orderIdParam.isEmpty()) ||
-                (orderDateParam != null && !orderDateParam.isEmpty())) {
-                orders = orderDAO.searchOrders(userId, orderIdParam, orderDateParam);
-            } else {
-                orders = orderDAO.getOrdersByUserId(userId);
-            }
+            // Fetch orders for the logged-in user
+            List<Order> orders = orderDAO.getOrdersByUserId(user.getId());
 
-            req.setAttribute("orders", orders);
-            req.getRequestDispatcher("Profiles.jsp").forward(req, resp);
-        } catch (Exception e) {
-            e.printStackTrace();
-            resp.sendRedirect("index.jsp?error=Could not load orders");
+
+            // Set orders as request attribute and forward to JSP
+            request.setAttribute("orders", orders);
+            request.getRequestDispatcher("orderList.jsp").forward(request, response);
+
+        } catch (SQLException e) {
+            // Handle SQL exceptions
+            throw new ServletException("Error retrieving orders for user " + user.getId(), e);
         }
     }
 }
