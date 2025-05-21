@@ -52,7 +52,6 @@ public class CartController extends HttpServlet {
                 // Clear all cart items for this user
                 cartItemDAO.clearCartByUserId(userId);
 
-                // Optionally redirect or send response
                 response.sendRedirect("cart"); // Redirect to show empty cart
                 return;
             }
@@ -73,7 +72,7 @@ public class CartController extends HttpServlet {
             }
 
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write("Item successfully added to cart.");
+            response.sendRedirect("product?productId=" + productId);
 
         } catch (Exception e) {
             e.printStackTrace();

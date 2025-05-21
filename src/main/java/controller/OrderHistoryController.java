@@ -1,6 +1,5 @@
 package controller;
 
-import dao.CartItemDAO;
 import dao.OrderDAO;
 import db.DBConnection;
 import model.Order;
@@ -12,6 +11,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/orderhistory")
@@ -28,30 +28,43 @@ public class OrderHistoryController extends HttpServlet {
         }
     }
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-
-        // Redirect to login if user is not logged in
+        User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
-        try {
-            // Fetch orders for the logged-in user
-            List<Order> orders = orderDAO.getOrdersByUserId(user.getId());
-
-
-            // Set orders as request attribute and forward to JSP
-            request.setAttribute("orders", orders);
-            request.getRequestDispatcher("orderList.jsp").forward(request, response);
-
-        } catch (SQLException e) {
-            // Handle SQL exceptions
-            throw new ServletException("Error retrieving orders for user " + user.getId(), e);
+        // Get parameters from the search form
+        String orderIdParam = request.getParameter("orderId");
+        Integer orderId = null;
+        if (orderIdParam != null && !orderIdParam.isEmpty()) {
+            try {
+                orderId = Integer.parseInt(orderIdParam);
+            } catch (NumberFormatException e) {
+                orderId = null;
+            }
         }
+
+        String orderDate = request.getParameter("orderDate");
+        if (orderDate != null && orderDate.isEmpty()) {
+            orderDate = null;
+        }
+
+        List<Order> orders = new ArrayList<>();
+        try {
+            orders = orderDAO.searchOrders(user.getId(), orderId, orderDate);
+        } catch (SQLException e) {
+            // Handle exception
+            e.printStackTrace();
+        }
+
+        // Pass results and original search parameters back to JSP
+        request.setAttribute("orders", orders);
+        request.setAttribute("orderId", orderIdParam); 
+        request.setAttribute("orderDate", orderDate);
+
+        request.getRequestDispatcher("orderList.jsp").forward(request, response);
     }
+
 }

@@ -20,7 +20,6 @@
         <link rel="stylesheet" href="css/styles.css"/>
         <title>Your Orders</title>
         <style>
-            /* Styles only for the orders page */
             .orders-container {
                 padding: 1em;
                 width: 80%;
@@ -70,6 +69,11 @@
                 text-align: center;
                 margin-top: 50px;
             }
+            form input, form button {
+                padding: 8px;
+                margin-right: 10px;
+                font-size: 14px;
+            }
         </style>
     </head>
     <body>
@@ -81,6 +85,11 @@
                 <div class="orders-header">
                     <h2>Your Orders</h2>
                 </div>
+                <form method="get" action="orderhistory" style="margin-bottom: 20px;">
+                    <input type="text" name="orderId" placeholder="Search by Order ID" value="<%= request.getParameter("orderId") != null ? request.getParameter("orderId") : "" %>"/>
+                    <input type="text" name="orderDate" placeholder="Search by Date (yyyy-mm-dd)" value="<%= request.getParameter("orderDate") != null ? request.getParameter("orderDate") : "" %>"/>
+                    <button type="submit">Search</button>
+                </form>
                 <div class="orders-main">
                     <%
                         if (orders != null && !orders.isEmpty()) {
