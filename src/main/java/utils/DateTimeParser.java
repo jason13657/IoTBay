@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 public class DateTimeParser {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
     // DB에 저장된 포맷: "yyyy-MM-dd HH:mm:ss"
-    private static final DateTimeFormatter DB_DATETIME_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    private static final DateTimeFormatter DB_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static String toText(LocalDate date) {
         return date != null ? date.format(DATE_FORMAT) : null;
