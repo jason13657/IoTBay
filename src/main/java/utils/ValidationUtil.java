@@ -5,9 +5,7 @@ import java.time.format.DateTimeParseException;
 
 public class ValidationUtil {
 
-
-    
-    // 이름 유효성 검사 (영문, 한글, 공백, 하이픈 허용)
+    // Name validation (English, Korean, spaces, hyphens allowed)
     public static String validateName(String name, String fieldName) {
         if (name == null || name.trim().isEmpty()) {
             return fieldName + " cannot be empty.";
@@ -21,7 +19,7 @@ public class ValidationUtil {
         return null;
     }
 
-    // 전화번호 유효성 검사 (호주 모바일 기준)
+    // Australian phone number validation
     public static String validateAustralianPhone(String phone) {
         if (phone == null || phone.trim().isEmpty()) {
             return "Phone number cannot be empty.";
@@ -32,7 +30,7 @@ public class ValidationUtil {
         return null;
     }
 
-    // 이메일 유효성 검사
+    // Email validation
     public static String validateEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
             return "Email cannot be empty.";
@@ -44,7 +42,7 @@ public class ValidationUtil {
         return null;
     }
 
-    // 비밀번호 유효성 검사
+    // Password validation
     public static String validatePasswordChange(String newPassword, String confirmPassword) {
         if (newPassword == null || newPassword.trim().isEmpty()) {
             return "New password cannot be empty.";
@@ -70,7 +68,7 @@ public class ValidationUtil {
         return null;
     }
 
-    // 호주 우편번호 유효성 검사 (4자리 숫자)
+    // Australian postal code validation (4 digits)
     public static String validateAustralianPostalCode(String postalCode) {
         if (postalCode == null || postalCode.trim().isEmpty()) {
             return "Postal code cannot be empty.";
@@ -81,7 +79,7 @@ public class ValidationUtil {
         return null;
     }
 
-    // 주소 라인1 유효성 검사
+    // Address line 1 validation
     public static String validateAddress(String address) {
         if (address == null || address.trim().isEmpty()) {
             return "Address cannot be empty.";
@@ -92,7 +90,7 @@ public class ValidationUtil {
         return null;
     }
 
-    // 생년월일 유효성 검사
+    // Date of birth validation
     public static String validateBirthDate(String birthDate) {
         if (birthDate == null || birthDate.trim().isEmpty()) {
             return "Birth date cannot be empty.";
@@ -108,10 +106,15 @@ public class ValidationUtil {
         return null;
     }
 
-    // 주문 플랫폼 사용자용 유효성 검사
-    public static String validateOrderUserProfile(String fullName, String phone, String postalCode, String addressLine1) {
-        String nameError = validateName(fullName, "Full name");
-        if (nameError != null) return nameError;
+    // User registration profile validation
+    public static String validateRegisterUserProfile(
+        String firstName, String lastName, String phone, String postalCode, String addressLine1
+    ) {
+        String firstError = validateName(firstName, "First name");
+        if (firstError != null) return firstError;
+
+        String lastError = validateName(lastName, "Last name");
+        if (lastError != null) return lastError;
 
         String phoneError = validateAustralianPhone(phone);
         if (phoneError != null) return phoneError;
@@ -122,45 +125,10 @@ public class ValidationUtil {
         String addressError = validateAddress(addressLine1);
         if (addressError != null) return addressError;
 
-        return null; // All good
-    }
-
-    // 기본 프로필 업데이트 유효성 검사
-    public static String validateProfileUpdate(String firstName, String lastName, String phone) {
-        String firstError = validateName(firstName, "First name");
-        if (firstError != null) return firstError;
-
-        String lastError = validateName(lastName, "Last name");
-        if (lastError != null) return lastError;
-
-        String phoneError = validateAustralianPhone(phone);
-        if (phoneError != null) return phoneError;
-
         return null;
     }
 
-    public static String validateRegisterUserProfile(
-    String firstName, String lastName, String phone, String postalCode, String addressLine1) {
-
-    String firstError = validateName(firstName, "First name");
-    if (firstError != null) return firstError;
-
-    String lastError = validateName(lastName, "Last name");
-    if (lastError != null) return lastError;
-
-    String phoneError = validateAustralianPhone(phone);
-    if (phoneError != null) return phoneError;
-
-    String postalError = validateAustralianPostalCode(postalCode);
-    if (postalError != null) return postalError;
-
-    String addressError = validateAddress(addressLine1);
-    if (addressError != null) return addressError;
-
-    return null;
-}
-
-    // 결제 금액 유효성 검사
+    // Payment amount validation
     public static String validatePaymentAmount(String amountStr) {
         if (amountStr == null || amountStr.trim().isEmpty()) {
             return "Amount cannot be empty.";
@@ -176,12 +144,11 @@ public class ValidationUtil {
         return null;
     }
 
-    // 결제 수단 유효성 검사 (예: Credit Card, PayPal, Bank Transfer)
+    // Payment method validation (e.g., Credit Card, PayPal, Bank Transfer)
     public static String validatePaymentMethod(String method) {
         if (method == null || method.trim().isEmpty()) {
             return "Payment method cannot be empty.";
         }
-
         String[] validMethods = {"Credit Card", "PayPal", "Bank Transfer"};
         for (String valid : validMethods) {
             if (valid.equalsIgnoreCase(method.trim())) {
@@ -191,12 +158,11 @@ public class ValidationUtil {
         return "Invalid payment method. Valid methods: Credit Card, PayPal, Bank Transfer.";
     }
 
-    // 결제 상태 유효성 검사 (예: Pending, Completed, Failed)
+    // Payment status validation (e.g., Pending, Completed, Failed)
     public static String validatePaymentStatus(String status) {
         if (status == null || status.trim().isEmpty()) {
             return "Payment status cannot be empty.";
         }
-
         String[] validStatuses = {"Pending", "Completed", "Failed"};
         for (String valid : validStatuses) {
             if (valid.equalsIgnoreCase(status.trim())) {
@@ -206,7 +172,7 @@ public class ValidationUtil {
         return "Invalid payment status. Valid statuses: Pending, Completed, Failed.";
     }
 
-    // 전체 결제 정보 유효성 검사
+    // Complete payment validation
     public static String validatePayment(String amountStr, String method, String status) {
         String amountError = validatePaymentAmount(amountStr);
         if (amountError != null) return amountError;
@@ -217,8 +183,6 @@ public class ValidationUtil {
         String statusError = validatePaymentStatus(status);
         if (statusError != null) return statusError;
 
-        return null; // All good
+        return null;
     }
-
-
 }
