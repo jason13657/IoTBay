@@ -9,15 +9,22 @@
 </head>
 <body>
     <h1>Manage Products</h1>
+    <div class="btn-container">
     <div style="margin: 20px;">
         <button onclick="location.href='/index.jsp'" style="padding: 8px 16px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
             &larr; Back to Home
         </button>
     </div>
+    <div style="text-align: center; margin: 20px;">
+        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search products..." style="width: 300px; padding: 8px; font-size: 16px;">
+    </div>
     
     <div style="text-align: right;">
         <button id="main-create-btn" class="create-btn" onclick="openCreateModal()">Create New Product</button>
-    </div>  
+    </div>
+    </div>
+    </body>
+</div>
     <table>
         <thead>
             <tr>
@@ -89,13 +96,13 @@
                 <textarea name="description" required></textarea><br>
     
                 <label>Price:</label>
-                <input type="number" name="price" step="0.01" required><br>
+                <input type="number" name="price" step="0.01" required min="0.01"><br>
     
                 <label>Stock Quantity:</label>
                 <input type="number" name="stockQuantity" required min="1"><br>
     
                 <label>Category ID:</label>
-                <input type="number" name="categoryId" required><br>
+                <input type="number" name="categoryId" required min="1" max="5"><br>
     
                 <label>Image URL:</label>
                 <input type="text" name="imageUrl"><br>
@@ -107,7 +114,6 @@
             </form>
         </div>
     </div>
-        <!-- EDIT PRODUCT MODAL -->
         <div id="editProductModal" class="modal" style="display:none;">
             <div class="modal-content">
                 <span class="close" onclick="closeEditModal()">&times;</span>
@@ -120,13 +126,13 @@
                     <textarea name="description" id="edit_description" required></textarea>
     
                     <label>Price:</label>
-                    <input type="number" name="price" step="0.01" id="edit_price" required>
+                    <input type="number" name="price" step="0.01" id="edit_price" required min="0.01">
     
                     <label>Stock Quantity:</label>
                     <input type="number" name="stockQuantity" id="edit_stockQuantity" required min="1">
     
                     <label>Category ID:</label>
-                    <input type="number" name="categoryId" id="edit_categoryId" required>
+                    <input type="number" name="categoryId" id="edit_categoryId" required min="1" max="5">
     
                     <label>Image URL:</label>
                     <input type="text" name="imageUrl" id="edit_imageUrl">
@@ -342,7 +348,9 @@
             background-color: #004494;
             box-shadow: 0 2px 5px rgba(0,68,148,0.8);
         }
-
+        .btn-container {
+            display: flex; justify-content: space-between; align-items: center; margin: 20px;
+        }
           </style>
     <script>
         function openCreateModal() {
@@ -380,6 +388,25 @@
         const createdAtInput = document.getElementById('edit_created_at');
         createdAtInput.max = today;
     });
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector("table");
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let match = false;
+            for (let j = 0; j < cells.length - 1; j++) { // Skip action buttons
+                const cell = cells[j];
+                if (cell.textContent.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+            rows[i].style.display = match ? "" : "none";
+        }
+    }
     </script>
     
 </body>

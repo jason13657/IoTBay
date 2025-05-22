@@ -9,14 +9,19 @@
 </head>
 <body>
     <h1>Manage Users</h1>
-    <div style="margin: 20px;">
-        <button onclick="location.href='/index.jsp'" style="padding: 8px 16px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
-            &larr; Back to Home
-        </button>
+    <div class="btn-container">
+        <div style="margin: 20px;">
+            <button onclick="location.href='/index.jsp'" style="padding: 8px 16px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                &larr; Back to Home
+            </button>
+        </div>
+        <div style="text-align: center; margin: 20px;">
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search users..." style="width: 300px; padding: 8px; font-size: 16px;">
+        </div>
+        <div style="text-align: right;">
+            <button id="main-create-btn" class="create-btn" onclick="openCreateModal()">Create New User</button>
+        </div>
     </div>
-    <div style="text-align: right;">
-        <button id="main-create-btn" class="create-btn" onclick="openCreateModal()">Create New User</button>
-    </div>  
     <table>
         <thead>
             <tr>
@@ -125,7 +130,6 @@
             </form>            
         </div>
     </div>
-        <!-- EDIT PRODUCT MODAL -->
         <div id="editUserModal" class="modal" style="display:none;">
             <div class="modal-content">
                 <span class="close" onclick="closeEditModal()">&times;</span>
@@ -381,7 +385,9 @@
             background-color: #004494;
             box-shadow: 0 2px 5px rgba(0,68,148,0.8);
         }
-
+        .btn-container {
+            display: flex; justify-content: space-between; align-items: center; margin: 20px;
+        }
           </style>
     <script>
         function openCreateModal() {
@@ -421,6 +427,25 @@
             if (createDOB) createDOB.max = today;
             if (editDOB) editDOB.max = today;
         });
+        function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector("table");
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let match = false;
+            for (let j = 0; j < cells.length - 1; j++) { // Skip action buttons
+                const cell = cells[j];
+                if (cell.textContent.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+            rows[i].style.display = match ? "" : "none";
+        }
+    }
 </script>
     
 </body>

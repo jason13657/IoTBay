@@ -9,11 +9,17 @@
 </head>
 <body>
     <h1>Access Logs</h1>
-    <div style="margin: 20px;">
-        <button onclick="location.href='/index.jsp'" style="padding: 8px 16px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
-            &larr; Back to Home
-        </button>
+    <div class="btn-container">
+        <div style="margin: 20px;">
+            <button onclick="location.href='/index.jsp'" style="padding: 8px 16px; font-size: 16px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                &larr; Back to Home
+            </button>
+        </div>
+        <div style="text-align: center; margin: 20px;">
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search access logs..." style="width: 300px; padding: 8px; font-size: 16px;">
+        </div>
     </div>
+</div>
     <table>
         <thead>
             <tr>
@@ -117,6 +123,30 @@
             background-color: #f2f2f2;
             font-weight: bold;
         }
+        .btn-container {
+            display: flex; justify-content: space-between; align-items: center; margin: 20px;
+        }
           </style>
+          <script>
+                    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector("table");
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let match = false;
+            for (let j = 0; j < cells.length - 1; j++) { // Skip action buttons
+                const cell = cells[j];
+                if (cell.textContent.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+            rows[i].style.display = match ? "" : "none";
+        }
+    }
+          </script>
 </body>
 </html>
