@@ -65,10 +65,7 @@
                         '<%= product.getImageUrl() %>',
                         '<%= product.getCreatedAt() %>'
                     )">Edit</button>
-                    <form action="<%=request.getContextPath()%>/manage/products/delete" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= product.getId() %>">
-                        <button type="submit" class="delete-btn">Delete</button>
-                    </form>                    
+                    <button class="delete-btn" onclick="openDeleteModal(<%= product.getId() %>)">Delete</button>
                 </td>
             </tr>
         <%
@@ -144,6 +141,20 @@
                 </form>
             </div>
         </div>
+        <div id="deleteConfirmModal" class="modal" style="display: none;">
+            <div class="modal-content">
+              <span class="close" onclick="closeDeleteModal()">&times;</span>
+              <h2>Confirm Delete</h2>
+              <p>Are you sure you want to delete this user?</p>
+              <form id="deleteForm" method="post" action="<%=request.getContextPath()%>/manage/products/delete">
+                <input type="hidden" name="id" id="deleteUserId">
+                <div class="modal-actions">
+                  <button type="button" id="delete-cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+                  <button type="submit" class="delete-btn">Delete</button>
+                </div>
+              </form>
+            </div>
+          </div>
         <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -351,6 +362,16 @@
         .btn-container {
             display: flex; justify-content: space-between; align-items: center; margin: 20px;
         }
+        #delete-cancel-btn {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
           </style>
     <script>
         function openCreateModal() {
@@ -407,7 +428,22 @@
             rows[i].style.display = match ? "" : "none";
         }
     }
+    function openDeleteModal(userId) {
+    document.getElementById('deleteUserId').value = userId;
+    document.getElementById('deleteConfirmModal').style.display = 'block';
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('deleteConfirmModal').style.display = 'none';
+  }
+
+  // Optional: Close modal if clicked outside
+  window.onclick = function(event) {
+    const modal = document.getElementById('deleteConfirmModal');
+    if (event.target == modal) {
+      closeDeleteModal();
+    }
+  }
     </script>
-    
 </body>
 </html>

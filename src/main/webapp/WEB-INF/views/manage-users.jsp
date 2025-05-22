@@ -1,6 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.User" %>
+<%! 
+    public String escapeJs(String input) {
+        if (input == null) return "";
+        return input.replace("'", "\\'");
+    }
+%>
 
 <!DOCTYPE html>
 <html>
@@ -60,22 +66,20 @@
                 <td class="actionbtns">
                     <button class="edit-btn" onclick="openEditModal(
                         '<%= user.getId() %>',
-                        '<%= user.getEmail().replace("'", "\\'") %>',
-                        '<%= user.getPassword().replace("'", "\\'") %>',
-                        '<%= user.getFirstName().replace("'", "\\'") %>',
-                        '<%= user.getLastName().replace("'", "\\'") %>',
-                        '<%= user.getGender().replace("'", "\\'") %>',
-                        '<%= user.getFavoriteColor().replace("'", "\\'") %>',
+                        '<%= escapeJs(user.getEmail()) %>',
+                        '<%= escapeJs(user.getPassword()) %>',
+                        '<%= escapeJs(user.getFirstName()) %>',
+                        '<%= escapeJs(user.getLastName()) %>',
+                        '<%= escapeJs(user.getGender()) %>',
+                        '<%= escapeJs(user.getFavoriteColor()) %>',
                         '<%= user.getDateOfBirth() %>',
                         '<%= user.getCreatedAt() %>',
                         '<%= user.getUpdatedAt() %>',
-                        '<%= user.getRole().replace("'", "\\'") %>'
-                    )">Edit</button>                    
-                    <form action="<%=request.getContextPath()%>/manage/users/delete" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= user.getId() %>">
-                        <button type="submit" class="delete-btn">Delete</button>
-                    </form>                    
-                </td>
+                        '<%= escapeJs(user.getRole()) %>'
+                    )">Edit</button>
+                    <button type="button" class="delete-btn" onclick="openDeleteModal('<%= user.getId() %>')">Delete</button>
+                                
+                </td>                
             </tr>
         <%
                 }
@@ -174,6 +178,20 @@
                 </form>                
             </div>
         </div>
+        <div id="deleteConfirmModal" class="modal" style="display: none;">
+            <div class="modal-content">
+              <span class="close" onclick="closeDeleteModal()">&times;</span>
+              <h2>Confirm Delete</h2>
+              <p>Are you sure you want to delete this user?</p>
+              <form id="deleteForm" method="post" action="<%=request.getContextPath()%>/manage/users/delete">
+                <input type="hidden" name="id" id="deleteUserId">
+                <div class="modal-actions">
+                  <button type="button" id="delete-cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+                  <button type="submit" class="delete-btn">Delete</button>
+                </div>
+              </form>
+            </div>
+          </div>
         <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -388,6 +406,16 @@
         .btn-container {
             display: flex; justify-content: space-between; align-items: center; margin: 20px;
         }
+        #delete-cancel-btn {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
           </style>
     <script>
         function openCreateModal() {
@@ -446,6 +474,22 @@
             rows[i].style.display = match ? "" : "none";
         }
     }
+  function openDeleteModal(userId) {
+    document.getElementById('deleteUserId').value = userId;
+    document.getElementById('deleteConfirmModal').style.display = 'block';
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('deleteConfirmModal').style.display = 'none';
+  }
+
+  // Optional: Close modal if clicked outside
+  window.onclick = function(event) {
+    const modal = document.getElementById('deleteConfirmModal');
+    if (event.target == modal) {
+      closeDeleteModal();
+    }
+  }
 </script>
     
 </body>
