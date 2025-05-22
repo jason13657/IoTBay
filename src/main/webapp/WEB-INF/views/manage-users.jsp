@@ -119,7 +119,16 @@
                 </select><br>
             
                 <label>Favourite Color:</label>
-                <input type="text" name="favouriteColor"><br>
+                <select name="favoriteColor" required>
+                    <option value="">-- Select a Color --</option>
+                    <option value="Red">Red</option>
+                    <option value="Green">Green</option>
+                    <option value="Blue">Blue</option>
+                    <option value="Teal">Teal</option>
+                    <option value="Purple">Purple</option>
+                    <option value="Orange">Orange</option>
+                </select><br>
+                
             
                 <label>Date of Birth:</label>
                 <input type="date" id="create_dateOfBirth" name="dateOfBirth" required><br>
@@ -160,7 +169,15 @@
                     </select>
                 
                     <label>Favourite Color:</label>
-                    <input type="text" name="favoriteColor" id="edit_favoriteColor">
+                    <select name="favoriteColor" id="edit_favoriteColor" required>
+                        <option value="">-- Select a Color --</option>
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Teal">Teal</option>
+                        <option value="Purple">Purple</option>
+                        <option value="Orange">Orange</option>
+                    </select>                    
                 
                     <label>Date of Birth:</label>
                     <input type="date" name="dateOfBirth" id="edit_dateOfBirth" required>
