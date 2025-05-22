@@ -261,7 +261,6 @@
             display: block;
         }
 
-        /* Modal Styling */
         .modal {
             position: fixed;
             top: 0;
@@ -281,14 +280,12 @@
             border-radius: 10px;
             width: 400px;
             max-width: 90%;
-            max-height: 92vh; /* prevents it from exceeding screen height */
+            max-height: 92vh;
             overflow-y: auto;
             box-shadow: 0 4px 10px rgba(0,0,0,0.25);
             position: relative;
         }
 
-
-        /* Close Button */
         .close {
             position: absolute;
             top: 12px;
@@ -302,7 +299,6 @@
             color: #000;
         }
 
-        /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -326,7 +322,6 @@
             font-weight: bold;
         }
 
-        /* Action Button Styling Inside Table */
         .table-actions button {
             margin-right: 6px;
             font-size: 12px;
@@ -338,7 +333,7 @@
             background-color: #dc3545;
         }
         .create-btn {
-            background-color: #007BFF; /* Blue */
+            background-color: #007BFF;
             color: white;
             border: none;
             padding: 8px 20px;
@@ -379,7 +374,7 @@
             }
           
             .delete-btn {
-              background-color: #f44336; /* Red */
+              background-color: #f44336;
               color: white;
               border: none;
               padding: 6px 14px;
@@ -392,13 +387,12 @@
               background-color: #d32f2f;
             }
           
-            /* Optional: add spacing between buttons */
             .edit-btn, .delete-btn {
               margin-right: 8px;
             }
 
             .update-btn {
-            background-color: #007BFF; /* Blue */
+            background-color: #007BFF;
             color: white;
             border: none;
             padding: 8px 20px;
@@ -481,7 +475,7 @@
         for (let i = 1; i < rows.length; i++) {
             const cells = rows[i].getElementsByTagName("td");
             let match = false;
-            for (let j = 0; j < cells.length - 1; j++) { // Skip action buttons
+            for (let j = 0; j < cells.length - 1; j++) {
                 const cell = cells[j];
                 if (cell.textContent.toLowerCase().includes(filter)) {
                     match = true;
@@ -500,7 +494,6 @@
     document.getElementById('deleteConfirmModal').style.display = 'none';
   }
 
-  // Optional: Close modal if clicked outside
   window.onclick = function(event) {
     const modal = document.getElementById('deleteConfirmModal');
     if (event.target == modal) {
